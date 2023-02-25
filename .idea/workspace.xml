@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dd8c25c1-d2fa-4ba8-a3d2-eeba9e37df6e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/response/FailedResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/response/Response.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/response/SuccessfulResponse.java" afterDir="false" />
+    <list default="true" id="dd8c25c1-d2fa-4ba8-a3d2-eeba9e37df6e" name="Changes" comment="parse user input and select a command accordingly">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/CommandLineInterface.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/iespring1402/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/Main.java" afterDir="false" />
     </list>
@@ -61,7 +58,7 @@
       <option name="presentableId" value="Default" />
       <updated>1677256565955</updated>
       <workItem from="1677256568532" duration="3116000" />
-      <workItem from="1677341996331" duration="5127000" />
+      <workItem from="1677341996331" duration="12322000" />
     </task>
     <servers />
   </component>
@@ -78,5 +75,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="parse user input and select a command accordingly" />
+    <option name="LAST_COMMIT_MESSAGE" value="parse user input and select a command accordingly" />
   </component>
 </project>
