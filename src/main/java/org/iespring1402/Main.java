@@ -6,6 +6,7 @@ import org.iespring1402.response.Response;
 import java.util.Scanner;
 
 public class Main {
+    static Baloot baloot;
     public static final String ADD_USER = "addUser";
     public static final String ADD_PROVIDER = "addProvider";
     public static final String ADD_COMMODITY = "addCommodity";
@@ -19,6 +20,8 @@ public class Main {
     public static final String EXIT = "exit";
 
     public static void main(String[] args) {
+        baloot = new Baloot();
+
         Scanner scanner = new Scanner(System.in);
         String input;
 
