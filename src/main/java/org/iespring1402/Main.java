@@ -1,5 +1,6 @@
 package org.iespring1402;
 
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -28,7 +29,7 @@ public class Main {
     public static final String GET_BUY_LIST = "getBuyList";
     public static final String EXIT = "exit";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         baloot = new Baloot();
 
         Scanner scanner = new Scanner(System.in);
@@ -73,11 +74,21 @@ public class Main {
         return result;
     }
 
-    static Response runCommand(String command, String jsonData) {
+    static Response runCommand(String command, String jsonData) throws Exception {
+        Response response = new FailedResponse();
+        ObjectMapper mapper = new ObjectMapper();
+
         switch (command) {
             case ADD_USER:
-                // TODO: Add User Command
-                break;
+                if (jsonData == null || jsonData.isEmpty()) {
+                    return new FailedResponse("Please enter the user JSON data.");
+                } else {
+                    User newUser = mapper.readValue(jsonData, User.class);
+                    if (baloot.addUser(newUser))
+                        return new SuccessfulResponse();
+                    else
+                        return new FailedResponse("Invalid username!");
+                }
             case ADD_PROVIDER:
                 // TODO: Add Provider Command
                 break;
