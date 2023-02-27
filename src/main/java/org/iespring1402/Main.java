@@ -81,16 +81,13 @@ public class Main {
                 ObjectMapper mapper = new ObjectMapper();
                 try {
                     Commodity commodity = mapper.readValue(jsonData, Commodity.class);
-                    if(baloot.IfCommodityExist(commodity.getId())){
-                            // ObjectMapper respond = new ObjectMapper();
-                            // ObjectNode rootNode = respond.createObjectNode();
-                            Response response = new FailedResponse("This commodity is duplicated.");
-                            return response;
-                    }
-                    else {
+                    if (baloot.IfCommodityExist(commodity.getId())) {
+                        Response response = new FailedResponse("This commodity is duplicated.");
+                        return response;
+                    } else {
                         baloot.addCommodity(commodity);
                         Response response = new SuccessfulResponse();
-                        return  response;
+                        return response;
                     }
                 } catch (JsonMappingException e) {
                     e.printStackTrace();
@@ -125,6 +122,6 @@ public class Main {
             default:
                 break;
         }
-        return  null; // TODO: There is nothing to be  sent(each statement handle its return value)
+        return null; // TODO: There is nothing to be  sent(each statement handle its return value)
     }
 }
