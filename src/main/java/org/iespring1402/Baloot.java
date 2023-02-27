@@ -53,7 +53,7 @@ public class Baloot {
         commodities.add(commodity);
     }
 
-    public boolean IfCommodityExist(int id) {
+    public boolean commodityExist(int id) {
         if(commodities.isEmpty())
         {
             return false;

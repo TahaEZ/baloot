@@ -4,11 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dd8c25c1-d2fa-4ba8-a3d2-eeba9e37df6e" name="Changes" comment="Add Baloot and User class">
+    <list default="true" id="dd8c25c1-d2fa-4ba8-a3d2-eeba9e37df6e" name="Changes" comment="Remove try catch statements and fix some typos">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/BuyList.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/iespring1402/Baloot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/Baloot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/iespring1402/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/iespring1402/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/iespring1402/response/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/response/Response.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -107,17 +107,7 @@
     <MESSAGE value="Remove CommandLineInterface class" />
     <MESSAGE value="Remove CommandLineInterface class and add exit command" />
     <MESSAGE value="Add Baloot and User class" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add Baloot and User class" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/iespring1402/Main.java</url>
-          <line>89</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Remove try catch statements and fix some typos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove try catch statements and fix some typos" />
   </component>
 </project>
