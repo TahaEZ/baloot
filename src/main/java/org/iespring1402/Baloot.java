@@ -5,10 +5,11 @@ import java.util.ArrayList;
 
 public class Baloot {
     ArrayList<User> users;
-    ArrayList<Commodity> commodities;
+    ArrayList<Commodity> commodities ;
 
     public Baloot() {
         this.users = new ArrayList<User>();
+        this.commodities = new ArrayList<Commodity>();
     }
 
     public ArrayList<User> getUsers() {
@@ -25,6 +26,10 @@ public class Baloot {
     }
 
     public boolean IfCommodityExist(int id) {
+        if(commodities.isEmpty())
+        {
+            return false;
+        }
         ListIterator<Commodity> it = commodities.listIterator();
         while (it.hasNext()) {
             if (it.next().getId() == id) {

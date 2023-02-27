@@ -1,10 +1,13 @@
 package org.iespring1402;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import org.iespring1402.response.FailedResponse;
 import org.iespring1402.response.Response;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.iespring1402.response.SuccessfulResponse;
 
@@ -79,6 +82,8 @@ public class Main {
                 break;
             case ADD_COMMODITY:
                 ObjectMapper mapper = new ObjectMapper();
+               mapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+                mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
                 try {
                     Commodity commodity = mapper.readValue(jsonData, Commodity.class);
                     if (baloot.IfCommodityExist(commodity.getId())) {
