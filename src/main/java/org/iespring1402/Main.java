@@ -1,8 +1,14 @@
 package org.iespring1402;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.iespring1402.response.FailedResponse;
 import org.iespring1402.response.Response;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import org.iespring1402.response.SuccessfulResponse;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
@@ -64,7 +70,6 @@ public class Main {
     }
 
     static Response runCommand(String command, String jsonData) {
-        Response response = new FailedResponse();
         switch (command) {
             case ADD_USER:
                 // TODO: Add User Command
@@ -73,6 +78,27 @@ public class Main {
                 // TODO: Add Provider Command
                 break;
             case ADD_COMMODITY:
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    Commodity commodity = mapper.readValue(jsonData, Commodity.class);
+                    if(baloot.IfCommodityExist(commodity.getId())){
+                            // ObjectMapper respond = new ObjectMapper();
+                            // ObjectNode rootNode = respond.createObjectNode();
+                            Response response = new FailedResponse("This commodity is duplicated.");
+                            return response;
+                    }
+                    else {
+                        baloot.addCommodity(commodity);
+                        Response response = new SuccessfulResponse();
+                        return  response;
+                    }
+                } catch (JsonMappingException e) {
+                    e.printStackTrace();
+                } catch (JsonGenerationException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 // TODO: Add Commodity Command
                 break;
             case GET_COMMODITIES_LIST:
@@ -99,6 +125,6 @@ public class Main {
             default:
                 break;
         }
-        return response; // TODO: to be removed (we return in each case statements)
+        return  null; // TODO: There is nothing to be  sent(each statement handle its return value)
     }
 }

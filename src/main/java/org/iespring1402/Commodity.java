@@ -18,4 +18,10 @@ public class Commodity {
         this.rating = rating;
         this.inStock = inStock;
     }
+
+    public int getId() {
+        return  this.id;
+    }
+
+
 }

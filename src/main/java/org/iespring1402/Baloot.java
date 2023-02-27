@@ -1,5 +1,6 @@
 package org.iespring1402;
 
+import java.util.*;
 import java.util.ArrayList;
 
 public class Baloot {
@@ -19,8 +20,17 @@ public class Baloot {
         users.add(newUser);
     }
 
-    public  void addCommodity(int id, String name, int providerId , int price, ArrayList<String> categories, float rating, int inStock) {
-        Commodity newCommodity = new Commodity(id, name, providerId , price, categories, rating,inStock);
-        commodities.add(newCommodity);
+    public void addCommodity(Commodity commodity) {
+        commodities.add(commodity);
+    }
+
+    public boolean IfCommodityExist(int id) {
+        ListIterator<Commodity> it = commodities.listIterator();
+        while (it.hasNext()) {
+            if (it.next().getId() == id) {
+                return true;
+            }
+        }
+        return false;
     }
 }
