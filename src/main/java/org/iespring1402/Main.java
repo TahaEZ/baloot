@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import org.iespring1402.response.FailedResponse;
 import org.iespring1402.response.Response;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.iespring1402.response.SuccessfulResponse;
 
@@ -51,7 +50,7 @@ public class Main {
             jsonData = parseInputResult[1];
 
             Response response = runCommand(command, jsonData);
-            Response.PrintSerializeRes(response);
+            Response.printSerializeRes(response);
         }
     }
 
@@ -93,18 +92,17 @@ public class Main {
                 // TODO: Add Provider Command
                 break;
             case ADD_COMMODITY:
-                ObjectMapper mapper = new ObjectMapper();
                 mapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
                 mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
                 try {
                     Commodity commodity = mapper.readValue(jsonData, Commodity.class);
-                    if (baloot.IfCommodityExist(commodity.getId())) {
-                        Response response = new FailedResponse("This commodity is duplicated.");
-                        return response;
+                    if (baloot.ifCommodityExist(commodity.getId())) {
+                       Response failedResponse =new FailedResponse( "This commodity is duplicated.");
+                        return failedResponse;
                     } else {
                         baloot.addCommodity(commodity);
-                        Response response = new SuccessfulResponse();
-                        return response;
+                        Response successfulResponseresponse = new SuccessfulResponse();
+                        return successfulResponseresponse;
                     }
                 } catch (JsonMappingException e) {
                     e.printStackTrace();

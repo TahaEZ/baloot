@@ -16,7 +16,7 @@ public class Response {
         this.data = data;
     }
 
-    public static void PrintSerializeRes(Response response) {
+    public static void printSerializeRes(Response response) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             String jsonResponse = objectMapper.writeValueAsString(response);
