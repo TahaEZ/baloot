@@ -49,7 +49,8 @@ public class Main {
             command = parseInputResult[0];
             jsonData = parseInputResult[1];
 
-            runCommand(command, jsonData);
+            Response response = runCommand(command, jsonData);
+            Response.PrintSerializeRes(response);
         }
     }
 
@@ -82,7 +83,7 @@ public class Main {
                 break;
             case ADD_COMMODITY:
                 ObjectMapper mapper = new ObjectMapper();
-               mapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+                mapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
                 mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
                 try {
                     Commodity commodity = mapper.readValue(jsonData, Commodity.class);
