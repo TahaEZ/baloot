@@ -111,7 +111,6 @@ public class Main {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                // TODO: Add Commodity Command
                 break;
             case GET_COMMODITIES_LIST:
                 // TODO: Get Commodities List Command
