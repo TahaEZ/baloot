@@ -1,13 +1,15 @@
 package org.iespring1402;
 
+import java.util.*;
 import java.util.ArrayList;
 
 public class Baloot {
     ArrayList<User> users;
-    ArrayList<Commodity> commodities;
+    ArrayList<Commodity> commodities ;
 
     public Baloot() {
         this.users = new ArrayList<User>();
+        this.commodities = new ArrayList<Commodity>();
     }
 
     public ArrayList<User> getUsers() {
@@ -19,8 +21,21 @@ public class Baloot {
         users.add(newUser);
     }
 
-    public  void addCommodity(int id, String name, int providerId , int price, ArrayList<String> categories, float rating, int inStock) {
-        Commodity newCommodity = new Commodity(id, name, providerId , price, categories, rating,inStock);
-        commodities.add(newCommodity);
+    public void addCommodity(Commodity commodity) {
+        commodities.add(commodity);
+    }
+
+    public boolean IfCommodityExist(int id) {
+        if(commodities.isEmpty())
+        {
+            return false;
+        }
+        ListIterator<Commodity> it = commodities.listIterator();
+        while (it.hasNext()) {
+            if (it.next().getId() == id) {
+                return true;
+            }
+        }
+        return false;
     }
 }
