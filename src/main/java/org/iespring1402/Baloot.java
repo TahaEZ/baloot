@@ -13,8 +13,36 @@ public class Baloot {
         return users;
     }
 
-    public void addUser(String username, String password, String email, String birthDate, String address, long credit) {
-        User newUser = new User(username, password, email, birthDate, address, credit);
-        users.add(newUser);
+    public boolean addUser(User newUser) {
+        String username = newUser.username;
+
+        if (!isUsernameValid(username))
+            return false;
+
+        boolean alreadyExists = false;
+
+        for (User user : users) {
+            if (user.username.equals(username)) {
+                alreadyExists = true;
+
+                String password = newUser.password;
+                String email = newUser.email;
+                String birthDate = newUser.birthDate;
+                String address = newUser.address;
+                long credit = newUser.credit;
+
+                user.updateUser(password, email, birthDate, address, credit);
+                break;
+            }
+        }
+
+        if (!alreadyExists)
+            users.add(newUser);
+
+        return true;
+    }
+
+    private boolean isUsernameValid(String username) {
+        return !username.matches(".*[@!#$%^&*()\\u0020\\u200C].*"); // false if username contains any special character.
     }
 }

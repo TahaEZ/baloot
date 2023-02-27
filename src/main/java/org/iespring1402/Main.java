@@ -1,7 +1,9 @@
 package org.iespring1402;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.iespring1402.response.FailedResponse;
 import org.iespring1402.response.Response;
+import org.iespring1402.response.SuccessfulResponse;
 
 import java.util.Scanner;
 
@@ -19,7 +21,7 @@ public class Main {
     public static final String GET_BUY_LIST = "getBuyList";
     public static final String EXIT = "exit";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         baloot = new Baloot();
 
         Scanner scanner = new Scanner(System.in);
@@ -40,7 +42,8 @@ public class Main {
             command = parseInputResult[0];
             jsonData = parseInputResult[1];
 
-            runCommand(command, jsonData);
+            ObjectMapper mapper = new ObjectMapper();
+            System.out.print(mapper.writeValueAsString(runCommand(command, jsonData)));
         }
     }
 
@@ -63,12 +66,21 @@ public class Main {
         return result;
     }
 
-    static Response runCommand(String command, String jsonData) {
+    static Response runCommand(String command, String jsonData) throws Exception {
         Response response = new FailedResponse();
+        ObjectMapper mapper = new ObjectMapper();
+
         switch (command) {
             case ADD_USER:
-                // TODO: Add User Command
-                break;
+                if (jsonData == null || jsonData.isEmpty()) {
+                    return new FailedResponse("Please enter the user JSON data.");
+                } else {
+                    User newUser = mapper.readValue(jsonData, User.class);
+                    if (baloot.addUser(newUser))
+                        return new SuccessfulResponse();
+                    else
+                        return new FailedResponse("Invalid username!");
+                }
             case ADD_PROVIDER:
                 // TODO: Add Provider Command
                 break;
