@@ -26,7 +26,7 @@ public class BuyList {
         if (index != -1) {
             list.remove(index);
             return new SuccessfulResponse();
-        } else return new FailedResponse("No commodity found with that commodity id in your buy list!");
+        } else return new FailedResponse("No commodity found with this commodity id in your buy list!");
     }
 
     public ArrayList<Integer> getList() {

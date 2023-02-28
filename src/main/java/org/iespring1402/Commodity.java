@@ -1,6 +1,9 @@
 package org.iespring1402;
 
-import java.util.ArrayList; // import the ArrayList class
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Commodity {
     private int id;
@@ -11,8 +14,11 @@ public class Commodity {
     private float rating;
     private int inStock;
 
+    private HashMap<String, Integer> ratings;
+
     public Commodity() {
         super();
+        this.ratings = new HashMap<>();
     }
 
     public Commodity(int id, String name, int providerId, int price, ArrayList<String> categories, float rating, int inStock) {
@@ -23,6 +29,22 @@ public class Commodity {
         this.categories = categories;
         this.rating = rating;
         this.inStock = inStock;
+        this.ratings = new HashMap<>();
+    }
+
+    public void addRating(String username, int score) {
+        ratings.put(username, score);
+        updateRating();
+    }
+
+    private void updateRating() {
+        float sum = 0;
+
+        for (int rating : ratings.values()) {
+            sum += rating;
+        }
+
+        this.rating = sum / ratings.size();
     }
 
     public int getId() {
@@ -32,6 +54,7 @@ public class Commodity {
     public String getName() {
         return name;
     }
+
     public int getProviderId() {
         return providerId;
     }
@@ -56,4 +79,8 @@ public class Commodity {
         return inStock != 0;
     }
 
+    @JsonIgnore
+    public HashMap<String, Integer> getRatings() {
+        return ratings;
+    }
 }

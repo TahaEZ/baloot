@@ -114,8 +114,27 @@ public class Main {
                     return new SuccessfulResponse(commoditiesList);
                 }
             case RATE_COMMODITY:
-                // TODO: Rate Commodity Command
-                break;
+                if (jsonData == null || jsonData.isEmpty()) {
+                    return new FailedResponse("Please enter the user JSON data.");
+                } else {
+                    Map<String, Object> parsedJsonData = mapper.readValue(jsonData, new TypeReference<Map<String, Object>>() {
+                    });
+                    if (parsedJsonData.get("username") instanceof String username) {
+                        if (parsedJsonData.get("commodityId") instanceof Integer) {
+                            int commodityId = (Integer) parsedJsonData.get("commodityId");
+                            if (parsedJsonData.get("score") instanceof Integer) {
+                                int score = (Integer) parsedJsonData.get("score");
+                                if (score >= 1 && score <= 10) {
+                                    baloot.rateCommodity(username, commodityId, score);
+                                } else
+                                    return new FailedResponse("Score must be an integer from 1 to 10!");
+                            } else
+                                return new FailedResponse("Score must be an integer!");
+                        } else
+                            return new FailedResponse("Commodity ID must be an integer!");
+                    } else
+                        return new FailedResponse("Username must be a string!");
+                }
             case ADD_TO_BUY_LIST:
                 if (jsonData == null || jsonData.isEmpty()) {
                     return new FailedResponse("Please enter the user JSON data.");
