@@ -28,8 +28,13 @@ public class Commodity {
     public int getId() {
         return this.id;
     }
+
     public String getName() {
         return name;
+    }
+
+    public boolean isInStock() {
+        return inStock != 0;
     }
 
 }

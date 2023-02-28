@@ -1,11 +1,14 @@
 package org.iespring1402;
 
+import org.iespring1402.response.FailedResponse;
+import org.iespring1402.response.Response;
+
 import java.util.*;
 import java.util.ArrayList;
 
 public class Baloot {
     ArrayList<User> users;
-    ArrayList<Commodity> commodities ;
+    ArrayList<Commodity> commodities;
 
     public Baloot() {
         this.users = new ArrayList<User>();
@@ -16,30 +19,32 @@ public class Baloot {
         return users;
     }
 
+    User findUserByUsername(String username) {
+        for (User user : users) {
+            if (user.username.equals(username)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
     public boolean addUser(User newUser) {
         String username = newUser.username;
 
         if (!isUsernameValid(username))
             return false;
 
-        boolean alreadyExists = false;
+        User toBeUpdatedUser = findUserByUsername(username);
 
-        for (User user : users) {
-            if (user.username.equals(username)) {
-                alreadyExists = true;
+        if (toBeUpdatedUser != null) {
+            String password = newUser.password;
+            String email = newUser.email;
+            String birthDate = newUser.birthDate;
+            String address = newUser.address;
+            long credit = newUser.credit;
 
-                String password = newUser.password;
-                String email = newUser.email;
-                String birthDate = newUser.birthDate;
-                String address = newUser.address;
-                long credit = newUser.credit;
-
-                user.updateUser(password, email, birthDate, address, credit);
-                break;
-            }
-        }
-
-        if (!alreadyExists)
+            toBeUpdatedUser.updateUser(password, email, birthDate, address, credit);
+        } else
             users.add(newUser);
 
         return true;
@@ -53,9 +58,17 @@ public class Baloot {
         commodities.add(commodity);
     }
 
+    Commodity findCommodityById(int commodityId) {
+        for (Commodity commodity : commodities) {
+            if (commodity.getId() == commodityId) {
+                return commodity;
+            }
+        }
+        return null;
+    }
+
     public boolean commodityExist(int id) {
-        if(commodities.isEmpty())
-        {
+        if (commodities.isEmpty()) {
             return false;
         }
         ListIterator<Commodity> it = commodities.listIterator();
@@ -65,5 +78,28 @@ public class Baloot {
             }
         }
         return false;
+    }
+
+    public Response addToBuyList(String username, int commodityId) {
+        User user = findUserByUsername(username);
+        if (user == null)
+            return new FailedResponse("No user found with this username!");
+        else {
+            Commodity commodity = findCommodityById(commodityId);
+            if (commodity == null)
+                return new FailedResponse("No commodity found with that commodity id!");
+            else if (!commodity.isInStock())
+                return new FailedResponse("This commodity is out of stock!");
+            else
+                return user.addToBuyList(commodityId);
+        }
+    }
+
+    public Response removeFromBuyList(String username, int commodityId) {
+        User user = findUserByUsername(username);
+        if (user == null)
+            return new FailedResponse("No user found with this username!");
+        else
+            return user.removeFromBuyList(commodityId);
     }
 }

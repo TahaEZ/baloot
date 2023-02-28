@@ -2,6 +2,7 @@ package org.iespring1402;
 
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
@@ -9,6 +10,7 @@ import org.iespring1402.response.FailedResponse;
 import org.iespring1402.response.Response;
 import org.iespring1402.response.SuccessfulResponse;
 
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -94,12 +96,11 @@ public class Main {
                 Commodity commodity = mapper.readValue(jsonData, Commodity.class);
                 if (baloot.commodityExist(commodity.getId())) {
                     response = new FailedResponse("This commodity is duplicated.");
-                    return response;
                 } else {
                     baloot.addCommodity(commodity);
                     response = new SuccessfulResponse();
-                    return response;
                 }
+                return response;
             case GET_COMMODITIES_LIST:
                 // TODO: Get Commodities List Command
                 break;
@@ -107,11 +108,25 @@ public class Main {
                 // TODO: Rate Commodity Command
                 break;
             case ADD_TO_BUY_LIST:
-                // TODO: Add to Buy List Command
-                break;
+                if (jsonData == null || jsonData.isEmpty()) {
+                    return new FailedResponse("Please enter the user JSON data.");
+                } else {
+                    Map<String, Object> parsedJsonData = mapper.readValue(jsonData, new TypeReference<Map<String, Object>>() {
+                    });
+                    String username = (String) parsedJsonData.get("username");
+                    int commodityId = (Integer) parsedJsonData.get("commodityId");
+                    return baloot.addToBuyList(username, commodityId);
+                }
             case REMOVE_FROM_BUY_LIST:
-                // TODO: Remove From Buy List Command
-                break;
+                if (jsonData == null || jsonData.isEmpty()) {
+                    return new FailedResponse("Please enter the user JSON data.");
+                } else {
+                    Map<String, Object> parsedJsonData = mapper.readValue(jsonData, new TypeReference<>() {
+                    });
+                    String username = (String) parsedJsonData.get("username");
+                    int commodityId = (Integer) parsedJsonData.get("commodityId");
+                    return baloot.removeFromBuyList(username, commodityId);
+                }
             case GET_COMMODITY_BY_ID:
                 // TODO: Get Commodities By Id Command
                 break;
