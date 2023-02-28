@@ -1,5 +1,7 @@
 package org.iespring1402;
 
+import java.util.HashMap;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -73,6 +75,9 @@ public class Main {
     static Response runCommand(String command, String jsonData) throws Exception {
         Response response;
         ObjectMapper mapper = new ObjectMapper();
+        mapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+        mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+
 
         switch (command) {
             case ADD_USER:
@@ -94,15 +99,19 @@ public class Main {
                 Commodity commodity = mapper.readValue(jsonData, Commodity.class);
                 if (baloot.commodityExist(commodity.getId())) {
                     response = new FailedResponse("This commodity is duplicated.");
-                    return response;
                 } else {
                     baloot.addCommodity(commodity);
                     response = new SuccessfulResponse();
-                    return response;
                 }
+                return response;
             case GET_COMMODITIES_LIST:
-                // TODO: Get Commodities List Command
-                break;
+                if (baloot.commodities.isEmpty()) {
+                    return new FailedResponse();
+                } else {
+                    Map commoditiesList = new HashMap();
+                    commoditiesList.put("commoditiesList", baloot.commodities);
+                    return new SuccessfulResponse(commoditiesList);
+                }
             case RATE_COMMODITY:
                 // TODO: Rate Commodity Command
                 break;

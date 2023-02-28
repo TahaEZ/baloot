@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Response {
     public boolean success;
-    public String data;
+    public Object data;
 
-    public Response(boolean success, String data) {
+    public Response(boolean success, Object data) {
         this.success = success;
         this.data = data;
     }
