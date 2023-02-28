@@ -28,4 +28,8 @@ public class BuyList {
             return new SuccessfulResponse();
         } else return new FailedResponse("No commodity found with that commodity id in your buy list!");
     }
+
+    public ArrayList<Integer> getList() {
+        return list;
+    }
 }

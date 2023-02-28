@@ -41,4 +41,8 @@ public class User {
     public Response removeFromBuyList(int commodityId) {
         return buyList.remove(commodityId);
     }
+
+    public BuyList getBuyList() {
+        return buyList;
+    }
 }

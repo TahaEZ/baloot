@@ -1,8 +1,5 @@
 package org.iespring1402;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -12,6 +9,8 @@ import org.iespring1402.response.FailedResponse;
 import org.iespring1402.response.Response;
 import org.iespring1402.response.SuccessfulResponse;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -131,7 +130,7 @@ public class Main {
                 if (jsonData == null || jsonData.isEmpty()) {
                     return new FailedResponse("Please enter the user JSON data.");
                 } else {
-                    Map<String, Object> parsedJsonData = mapper.readValue(jsonData, new TypeReference<>() {
+                    Map<String, Object> parsedJsonData = mapper.readValue(jsonData, new TypeReference<Map<String, Object>>() {
                     });
                     String username = (String) parsedJsonData.get("username");
                     int commodityId = (Integer) parsedJsonData.get("commodityId");
@@ -144,8 +143,16 @@ public class Main {
                 // TODO: Get Commodities By Category Command
                 break;
             case GET_BUY_LIST:
-                // TODO: Get Buy List Command
-                break;
+                Map<String, String> parsedJsonData = mapper.readValue(jsonData, new TypeReference<Map<String, String>>() {
+                });
+                String username = parsedJsonData.get("username");
+                ArrayList<Map<String, Object>> userBuyList = baloot.getBuyList(username);
+                if (userBuyList != null) {
+                    Map result = new HashMap();
+                    result.put("buyList", userBuyList);
+                    return new SuccessfulResponse(result);
+                } else
+                    return new FailedResponse("No user found with this username!");
             default:
                 break;
         }

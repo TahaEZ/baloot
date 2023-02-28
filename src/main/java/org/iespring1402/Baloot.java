@@ -102,4 +102,29 @@ public class Baloot {
         else
             return user.removeFromBuyList(commodityId);
     }
+
+    public ArrayList<Map<String, Object>> getBuyList(String username) {
+        User user = findUserByUsername(username);
+
+        if (user != null) {
+            ArrayList<Integer> BuyList = user.getBuyList().getList();
+            ArrayList<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+
+            for (int commodityId : BuyList) {
+                Commodity commodity = findCommodityById(commodityId);
+
+                Map<String, Object> commodityWithNoInStockField = new HashMap<>();
+                commodityWithNoInStockField.put("id", commodity.getId());
+                commodityWithNoInStockField.put("name", commodity.getName());
+                commodityWithNoInStockField.put("providerId", commodity.getProviderId());
+                commodityWithNoInStockField.put("price", commodity.getPrice());
+                commodityWithNoInStockField.put("categories", commodity.getCategories());
+                commodityWithNoInStockField.put("rating", commodity.getRating());
+
+                result.add(commodityWithNoInStockField);
+            }
+            return result;
+        } else
+            return null;
+    }
 }
