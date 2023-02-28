@@ -95,14 +95,18 @@ public class Main {
                 // TODO: Add Provider Command
                 break;
             case ADD_COMMODITY:
-                mapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
-                mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-                Commodity commodity = mapper.readValue(jsonData, Commodity.class);
-                if (baloot.commodityExist(commodity.getId())) {
-                    response = new FailedResponse("This commodity is duplicated.");
+                if (jsonData == null || jsonData.isEmpty()) {
+                    response = new FailedResponse("Please enter the user JSON data.");
                 } else {
-                    baloot.addCommodity(commodity);
-                    response = new SuccessfulResponse();
+                    mapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+                    mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+                    Commodity commodity = mapper.readValue(jsonData, Commodity.class);
+                    if (baloot.commodityExist(commodity.getId())) {
+                        response = new FailedResponse("This commodity is duplicated.");
+                    } else {
+                        baloot.addCommodity(commodity);
+                        response = new SuccessfulResponse();
+                    }
                 }
                 return response;
             case GET_COMMODITIES_LIST:
@@ -137,8 +141,33 @@ public class Main {
                     return baloot.removeFromBuyList(username, commodityId);
                 }
             case GET_COMMODITY_BY_ID:
-                // TODO: Get Commodities By Id Command
-                break;
+                if (jsonData == null || jsonData.isEmpty()) {
+                    return new FailedResponse("Please enter the user JSON data.");
+                } else {
+                    Map<String, Integer> parsedJsonData = mapper.readValue(jsonData, new TypeReference<Map<String, Integer>>() {
+                    });
+                    int commodityId = parsedJsonData.get("id");
+                    Commodity commodity = baloot.findCommodityById(commodityId);
+
+                    if (commodity != null) {
+                        Map<String, Object> result = new HashMap<>();
+                        result.put("id", commodity.getId());
+                        result.put("name", commodity.getName());
+                        /* TODO: Provider provider = findProviderById(commodity.getProviderId());
+                            if(provider == null)
+                                return new FailedResponse("No provider found with this provider id!");
+                            else {
+                                result.put("provider": provider.getName())
+                            }
+                         */
+                        result.put("price", commodity.getPrice());
+                        result.put("categories", commodity.getCategories());
+                        result.put("rating", commodity.getRating());
+
+                        return new SuccessfulResponse(result);
+                    } else
+                        return new FailedResponse("No commodity found with this commodity id!");
+                }
             case GET_COMMODITIES_BY_CATEGORY:
                 // TODO: Get Commodities By Category Command
                 break;
