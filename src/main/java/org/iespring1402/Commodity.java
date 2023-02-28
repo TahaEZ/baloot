@@ -31,5 +31,24 @@ public class Commodity {
     public String getName() {
         return name;
     }
+    public int getProviderId() {
+        return providerId;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public ArrayList<String> getCategories() {
+        return categories;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public int getInStock() {
+        return inStock;
+    }
 
 }

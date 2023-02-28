@@ -1,18 +1,22 @@
 package org.iespring1402;
 
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import org.iespring1402.response.FailedResponse;
 import org.iespring1402.response.Response;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.iespring1402.response.SuccessfulResponse;
 
 import java.io.IOException;
+import java.net.spi.InetAddressResolver;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
@@ -51,7 +55,7 @@ public class Main {
             jsonData = parseInputResult[1];
 
             Response response = runCommand(command, jsonData);
-            Response.PrintSerializeRes(response);
+            Response.printSerializeRes(response);
         }
     }
 
@@ -77,6 +81,9 @@ public class Main {
     static Response runCommand(String command, String jsonData) throws Exception {
         Response response = new FailedResponse();
         ObjectMapper mapper = new ObjectMapper();
+        mapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+        mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+
 
         switch (command) {
             case ADD_USER:
@@ -93,18 +100,15 @@ public class Main {
                 // TODO: Add Provider Command
                 break;
             case ADD_COMMODITY:
-                ObjectMapper mapper = new ObjectMapper();
-                mapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
-                mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
                 try {
                     Commodity commodity = mapper.readValue(jsonData, Commodity.class);
-                    if (baloot.IfCommodityExist(commodity.getId())) {
-                        Response response = new FailedResponse("This commodity is duplicated.");
-                        return response;
+                    if (baloot.ifCommodityExist(commodity.getId())) {
+                        Response failedResponse = new FailedResponse("This commodity is duplicated.");
+                        return failedResponse;
                     } else {
                         baloot.addCommodity(commodity);
-                        Response response = new SuccessfulResponse();
-                        return response;
+                        Response successfulResponseresponse = new SuccessfulResponse();
+                        return successfulResponseresponse;
                     }
                 } catch (JsonMappingException e) {
                     e.printStackTrace();
@@ -113,11 +117,17 @@ public class Main {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                // TODO: Add Commodity Command
                 break;
             case GET_COMMODITIES_LIST:
-                // TODO: Get Commodities List Command
-                break;
+                if (baloot.commodities.isEmpty()) {
+                    Response failedResponse = new FailedResponse();
+                    return failedResponse;
+                } else {
+                    Map commoditiesList = new HashMap();
+                    commoditiesList.put("commoditiesList", baloot.commodities);
+                    Response successfulResponse = new SuccessfulResponse(commoditiesList);
+                    return successfulResponse;
+                }
             case RATE_COMMODITY:
                 // TODO: Rate Commodity Command
                 break;
