@@ -2,6 +2,7 @@ package org.iespring1402;
 
 import org.iespring1402.response.FailedResponse;
 import org.iespring1402.response.Response;
+import org.iespring1402.response.SuccessfulResponse;
 
 import java.util.*;
 import java.util.ArrayList;
@@ -87,7 +88,7 @@ public class Baloot {
         else {
             Commodity commodity = findCommodityById(commodityId);
             if (commodity == null)
-                return new FailedResponse("No commodity found with that commodity id!");
+                return new FailedResponse("No commodity found with this commodity id!");
             else if (!commodity.isInStock())
                 return new FailedResponse("This commodity is out of stock!");
             else
@@ -126,5 +127,14 @@ public class Baloot {
             return result;
         } else
             return null;
+    }
+
+    public Response rateCommodity(String username, int commodityId, int score) {
+        Commodity commodity = findCommodityById(commodityId);
+        if (commodity != null) {
+            commodity.addRating(username, score);
+            return new SuccessfulResponse();
+        } else
+            return new FailedResponse("No commodity found with this commodity id!");
     }
 }
