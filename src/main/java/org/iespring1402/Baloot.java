@@ -1,11 +1,14 @@
 package org.iespring1402;
 
+import org.iespring1402.response.FailedResponse;
+import org.iespring1402.response.Response;
+
 import java.util.*;
 import java.util.ArrayList;
 
 public class Baloot {
     ArrayList<User> users;
-    ArrayList<Commodity> commodities ;
+    ArrayList<Commodity> commodities;
 
     public Baloot() {
         this.users = new ArrayList<User>();
@@ -16,30 +19,32 @@ public class Baloot {
         return users;
     }
 
+    User findUserByUsername(String username) {
+        for (User user : users) {
+            if (user.username.equals(username)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
     public boolean addUser(User newUser) {
         String username = newUser.username;
 
         if (!isUsernameValid(username))
             return false;
 
-        boolean alreadyExists = false;
+        User toBeUpdatedUser = findUserByUsername(username);
 
-        for (User user : users) {
-            if (user.username.equals(username)) {
-                alreadyExists = true;
+        if (toBeUpdatedUser != null) {
+            String password = newUser.password;
+            String email = newUser.email;
+            String birthDate = newUser.birthDate;
+            String address = newUser.address;
+            long credit = newUser.credit;
 
-                String password = newUser.password;
-                String email = newUser.email;
-                String birthDate = newUser.birthDate;
-                String address = newUser.address;
-                long credit = newUser.credit;
-
-                user.updateUser(password, email, birthDate, address, credit);
-                break;
-            }
-        }
-
-        if (!alreadyExists)
+            toBeUpdatedUser.updateUser(password, email, birthDate, address, credit);
+        } else
             users.add(newUser);
 
         return true;
@@ -53,9 +58,17 @@ public class Baloot {
         commodities.add(commodity);
     }
 
-    public boolean ifCommodityExist(int id) {
-        if(commodities.isEmpty())
-        {
+    Commodity findCommodityById(int commodityId) {
+        for (Commodity commodity : commodities) {
+            if (commodity.getId() == commodityId) {
+                return commodity;
+            }
+        }
+        return null;
+    }
+
+    public boolean commodityExist(int id) {
+        if (commodities.isEmpty()) {
             return false;
         }
         ListIterator<Commodity> it = commodities.listIterator();
@@ -65,5 +78,53 @@ public class Baloot {
             }
         }
         return false;
+    }
+
+    public Response addToBuyList(String username, int commodityId) {
+        User user = findUserByUsername(username);
+        if (user == null)
+            return new FailedResponse("No user found with this username!");
+        else {
+            Commodity commodity = findCommodityById(commodityId);
+            if (commodity == null)
+                return new FailedResponse("No commodity found with that commodity id!");
+            else if (!commodity.isInStock())
+                return new FailedResponse("This commodity is out of stock!");
+            else
+                return user.addToBuyList(commodityId);
+        }
+    }
+
+    public Response removeFromBuyList(String username, int commodityId) {
+        User user = findUserByUsername(username);
+        if (user == null)
+            return new FailedResponse("No user found with this username!");
+        else
+            return user.removeFromBuyList(commodityId);
+    }
+
+    public ArrayList<Map<String, Object>> getBuyList(String username) {
+        User user = findUserByUsername(username);
+
+        if (user != null) {
+            ArrayList<Integer> BuyList = user.getBuyList().getList();
+            ArrayList<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+
+            for (int commodityId : BuyList) {
+                Commodity commodity = findCommodityById(commodityId);
+
+                Map<String, Object> commodityWithNoInStockField = new HashMap<>();
+                commodityWithNoInStockField.put("id", commodity.getId());
+                commodityWithNoInStockField.put("name", commodity.getName());
+                commodityWithNoInStockField.put("providerId", commodity.getProviderId());
+                commodityWithNoInStockField.put("price", commodity.getPrice());
+                commodityWithNoInStockField.put("categories", commodity.getCategories());
+                commodityWithNoInStockField.put("rating", commodity.getRating());
+
+                result.add(commodityWithNoInStockField);
+            }
+            return result;
+        } else
+            return null;
     }
 }

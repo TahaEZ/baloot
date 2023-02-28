@@ -1,22 +1,17 @@
 package org.iespring1402;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import org.iespring1402.response.FailedResponse;
 import org.iespring1402.response.Response;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import org.iespring1402.response.SuccessfulResponse;
 
-import java.io.IOException;
-import java.net.spi.InetAddressResolver;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -55,7 +50,7 @@ public class Main {
             jsonData = parseInputResult[1];
 
             Response response = runCommand(command, jsonData);
-            Response.printSerializeRes(response);
+            Response.printSerializedRes(response);
         }
     }
 
@@ -79,7 +74,7 @@ public class Main {
     }
 
     static Response runCommand(String command, String jsonData) throws Exception {
-        Response response = new FailedResponse();
+        Response response;
         ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
         mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
@@ -100,43 +95,47 @@ public class Main {
                 // TODO: Add Provider Command
                 break;
             case ADD_COMMODITY:
-                try {
-                    Commodity commodity = mapper.readValue(jsonData, Commodity.class);
-                    if (baloot.ifCommodityExist(commodity.getId())) {
-                        Response failedResponse = new FailedResponse("This commodity is duplicated.");
-                        return failedResponse;
-                    } else {
-                        baloot.addCommodity(commodity);
-                        Response successfulResponseresponse = new SuccessfulResponse();
-                        return successfulResponseresponse;
-                    }
-                } catch (JsonMappingException e) {
-                    e.printStackTrace();
-                } catch (JsonGenerationException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                mapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+                mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+                Commodity commodity = mapper.readValue(jsonData, Commodity.class);
+                if (baloot.commodityExist(commodity.getId())) {
+                    response = new FailedResponse("This commodity is duplicated.");
+                } else {
+                    baloot.addCommodity(commodity);
+                    response = new SuccessfulResponse();
                 }
-                break;
+                return response;
             case GET_COMMODITIES_LIST:
                 if (baloot.commodities.isEmpty()) {
-                    Response failedResponse = new FailedResponse();
-                    return failedResponse;
+                    return new FailedResponse();
                 } else {
                     Map commoditiesList = new HashMap();
                     commoditiesList.put("commoditiesList", baloot.commodities);
-                    Response successfulResponse = new SuccessfulResponse(commoditiesList);
-                    return successfulResponse;
+                    return new SuccessfulResponse(commoditiesList);
                 }
             case RATE_COMMODITY:
                 // TODO: Rate Commodity Command
                 break;
             case ADD_TO_BUY_LIST:
-                // TODO: Add to Buy List Command
-                break;
+                if (jsonData == null || jsonData.isEmpty()) {
+                    return new FailedResponse("Please enter the user JSON data.");
+                } else {
+                    Map<String, Object> parsedJsonData = mapper.readValue(jsonData, new TypeReference<Map<String, Object>>() {
+                    });
+                    String username = (String) parsedJsonData.get("username");
+                    int commodityId = (Integer) parsedJsonData.get("commodityId");
+                    return baloot.addToBuyList(username, commodityId);
+                }
             case REMOVE_FROM_BUY_LIST:
-                // TODO: Remove From Buy List Command
-                break;
+                if (jsonData == null || jsonData.isEmpty()) {
+                    return new FailedResponse("Please enter the user JSON data.");
+                } else {
+                    Map<String, Object> parsedJsonData = mapper.readValue(jsonData, new TypeReference<Map<String, Object>>() {
+                    });
+                    String username = (String) parsedJsonData.get("username");
+                    int commodityId = (Integer) parsedJsonData.get("commodityId");
+                    return baloot.removeFromBuyList(username, commodityId);
+                }
             case GET_COMMODITY_BY_ID:
                 // TODO: Get Commodities By Id Command
                 break;
@@ -144,8 +143,16 @@ public class Main {
                 // TODO: Get Commodities By Category Command
                 break;
             case GET_BUY_LIST:
-                // TODO: Get Buy List Command
-                break;
+                Map<String, String> parsedJsonData = mapper.readValue(jsonData, new TypeReference<Map<String, String>>() {
+                });
+                String username = parsedJsonData.get("username");
+                ArrayList<Map<String, Object>> userBuyList = baloot.getBuyList(username);
+                if (userBuyList != null) {
+                    Map result = new HashMap();
+                    result.put("buyList", userBuyList);
+                    return new SuccessfulResponse(result);
+                } else
+                    return new FailedResponse("No user found with this username!");
             default:
                 break;
         }
