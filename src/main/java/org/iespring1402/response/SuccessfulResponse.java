@@ -6,7 +6,7 @@ public class SuccessfulResponse extends Response {
         super(true, "Your request was successfully done");
     }
 
-    public SuccessfulResponse(String data) {
+    public SuccessfulResponse(Object data) {
         super(true, data);
     }
 }

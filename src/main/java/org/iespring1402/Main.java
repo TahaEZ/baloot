@@ -1,5 +1,7 @@
 package org.iespring1402;
 
+import java.util.HashMap;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -75,6 +77,9 @@ public class Main {
     static Response runCommand(String command, String jsonData) throws Exception {
         Response response;
         ObjectMapper mapper = new ObjectMapper();
+        mapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+        mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+
 
         switch (command) {
             case ADD_USER:
@@ -102,8 +107,13 @@ public class Main {
                 }
                 return response;
             case GET_COMMODITIES_LIST:
-                // TODO: Get Commodities List Command
-                break;
+                if (baloot.commodities.isEmpty()) {
+                    return new FailedResponse();
+                } else {
+                    Map commoditiesList = new HashMap();
+                    commoditiesList.put("commoditiesList", baloot.commodities);
+                    return new SuccessfulResponse(commoditiesList);
+                }
             case RATE_COMMODITY:
                 // TODO: Rate Commodity Command
                 break;
