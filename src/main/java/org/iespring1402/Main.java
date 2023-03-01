@@ -92,8 +92,13 @@ public class Main {
                         return new FailedResponse("Invalid username!");
                 }
             case ADD_PROVIDER:
-                // TODO: Add Provider Command
-                break;
+                if (jsonData == null || jsonData.isEmpty()) {
+                    return new FailedResponse("Please enter the user JSON data.");
+                } else {
+                    Provider newProvider = mapper.readValue(jsonData, Provider.class);
+                    baloot.addProvider(newProvider);
+                    return new SuccessfulResponse(baloot.getProviders());
+                }
             case ADD_COMMODITY:
                 mapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
                 mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
