@@ -2,7 +2,7 @@
 
 ## Baloot - University of Tehran Internet Engineering Course Project
 
-## Commands:
+### Commands:
 
 <br/>
 
