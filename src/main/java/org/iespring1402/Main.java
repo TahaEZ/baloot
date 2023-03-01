@@ -193,7 +193,16 @@ public class Main {
                         return new FailedResponse("No commodity found with this commodity id!");
                 }
             case GET_COMMODITIES_BY_CATEGORY:
-                // TODO: Get Commodities By Category Command
+                if (jsonData == null || jsonData.isEmpty()) {
+                    response = new FailedResponse("Please enter the user JSON data.");
+                } else {
+                    mapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+                    mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+                    CategoryFilter filter = mapper.readValue(jsonData, CategoryFilter.class);
+                    Map filteredCommoditiesList = new HashMap();
+                    filteredCommoditiesList.put("commoditiesListByCategory", filter.applyFilter(baloot.commodities));
+                    return new SuccessfulResponse(filteredCommoditiesList);
+                }
                 break;
             case GET_BUY_LIST:
                 Map<String, String> parsedJsonData = mapper.readValue(jsonData, new TypeReference<Map<String, String>>() {

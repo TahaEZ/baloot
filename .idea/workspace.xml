@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd8c25c1-d2fa-4ba8-a3d2-eeba9e37df6e" name="Changes" comment="Remove try catch statements and fix some typos">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/CategoryFilter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/iespring1402/Baloot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/Baloot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/iespring1402/Commodity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/Commodity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/iespring1402/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
