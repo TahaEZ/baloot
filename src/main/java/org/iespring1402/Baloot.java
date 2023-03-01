@@ -67,6 +67,14 @@ public class Baloot {
         return null;
     }
 
+    public void updateCommodity(int commodityId, Commodity update) {
+        for (int i = 0; i < commodities.size(); i++) {
+            if (commodities.get(i).getId() == commodityId) {
+                commodities.set(i, update);
+            }
+        }
+    }
+
     public boolean commodityExist(int id) {
         if (commodities.isEmpty()) {
             return false;
