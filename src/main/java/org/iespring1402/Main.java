@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import org.iespring1402.response.FailedResponse;
 import org.iespring1402.response.Response;
 import org.iespring1402.response.SuccessfulResponse;
+import org.iespring1402.views.CommodityNoInStock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -200,6 +201,15 @@ public class Main {
                     mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
                     CategoryFilter filter = mapper.readValue(jsonData, CategoryFilter.class);
                     Map filteredCommoditiesList = new HashMap();
+                    ArrayList<Commodity> filteredWithStock =  filter.applyFilter(baloot.getCommodities());
+                    ArrayList<CommodityNoInStock>  filteredWithoutInStock = new ArrayList<CommodityNoInStock>();
+                    for (Commodity commodity: filteredWithStock)
+                    {
+                        CommodityNoInStock oneCommodityWithNoInStock = new CommodityNoInStock();
+                        oneCommodityWithNoInStock.setId(commodity.getId());
+                        oneCommodityWithNoInStock.setName(commodity.getName());
+                        oneCommodityWithNoInStock.setPrice(commodity.getPrice());
+                    }
                     filteredCommoditiesList.put("commoditiesListByCategory", filter.applyFilter(baloot.getCommodities()));
                     return new SuccessfulResponse(filteredCommoditiesList);
                 }
