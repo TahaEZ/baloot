@@ -107,7 +107,8 @@ public class Main {
                     mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
                     Commodity commodity = mapper.readValue(jsonData, Commodity.class);
                     if (baloot.commodityExist(commodity.getId())) {
-                        response = new FailedResponse("This commodity is duplicated.");
+                        baloot.updateCommodity(commodity.getId(), commodity);
+                        response = new SuccessfulResponse("The commodity was updated.");
                     } else {
                         baloot.addCommodity(commodity);
                         response = new SuccessfulResponse();
@@ -178,11 +179,11 @@ public class Main {
                         result.put("id", commodity.getId());
                         result.put("name", commodity.getName());
                         Provider provider = baloot.findProviderByProviderId(commodity.getProviderId());
-                            if(provider == null)
-                                return new FailedResponse("No provider found with this provider id!");
-                            else {
-                                result.put("provider", provider.getName());
-                            }
+                        if (provider == null)
+                            return new FailedResponse("No provider found with this provider id!");
+                        else {
+                            result.put("provider", provider.getName());
+                        }
                         result.put("price", commodity.getPrice());
                         result.put("categories", commodity.getCategories());
                         result.put("rating", commodity.getRating());
