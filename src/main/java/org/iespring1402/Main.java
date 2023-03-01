@@ -209,8 +209,12 @@ public class Main {
                         oneCommodityWithNoInStock.setId(commodity.getId());
                         oneCommodityWithNoInStock.setName(commodity.getName());
                         oneCommodityWithNoInStock.setPrice(commodity.getPrice());
+                        oneCommodityWithNoInStock.setCategories(commodity.getCategories());
+                        oneCommodityWithNoInStock.setProviderId(commodity.getProviderId());
+                        oneCommodityWithNoInStock.setRating(commodity.getRating());
+                        filteredWithoutInStock.add(oneCommodityWithNoInStock);
                     }
-                    filteredCommoditiesList.put("commoditiesListByCategory", filter.applyFilter(baloot.getCommodities()));
+                    filteredCommoditiesList.put("commoditiesListByCategory", filteredWithoutInStock);
                     return new SuccessfulResponse(filteredCommoditiesList);
                 }
                 break;

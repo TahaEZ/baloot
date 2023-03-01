@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd8c25c1-d2fa-4ba8-a3d2-eeba9e37df6e" name="Changes" comment="Remove try catch statements and fix some typos">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/iespring1402/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,11 +47,19 @@
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
   }
 }</component>
-  <component name="RunManager" selected="JUnit.BalootTest">
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Main" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="org.iespring1402.Main" />
+      <module name="Baloot" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="BalootTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Baloot" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="BalootTest" />
+      <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -97,6 +105,14 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.Main" />
+      <item itemvalue="JUnit.BalootTest" />
+      <item itemvalue="JUnit.BalootTest.testAddTobuyList" />
+      <item itemvalue="JUnit.BalootTest.testGetCommoditiesByCategory" />
+      <item itemvalue="JUnit.BalootTest.testGetCommodityById" />
+      <item itemvalue="JUnit.BalootTest.testRateCommodity" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.BalootTest" />
