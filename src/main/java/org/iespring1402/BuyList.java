@@ -14,8 +14,9 @@ public class BuyList {
     }
 
     public Response add(int commodityId) {
-        if (list.contains(commodityId))
+        if (list.contains(commodityId)) {
             return new FailedResponse("This commodity already exists in your buy list!");
+        }
 
         list.add(commodityId);
         return new SuccessfulResponse();

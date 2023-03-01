@@ -8,10 +8,10 @@ import java.util.*;
 import java.util.ArrayList;
 
 public class Baloot {
-    ArrayList<User> users;
-    ArrayList<Commodity> commodities;
+    private ArrayList<User> users;
+    private ArrayList<Commodity> commodities;
 
-    ArrayList<Provider> providers;
+    private ArrayList<Provider> providers;
 
     public Baloot() {
         this.users = new ArrayList<User>();
@@ -26,6 +26,10 @@ public class Baloot {
             }
         }
         return null;
+    }
+
+    public ArrayList<Commodity> getCommodities() {
+        return commodities;
     }
 
     public boolean addUser(User newUser) {
@@ -58,7 +62,7 @@ public class Baloot {
         commodities.add(commodity);
     }
 
-    Commodity findCommodityById(int commodityId) {
+    public Commodity findCommodityById(int commodityId) {
         for (Commodity commodity : commodities) {
             if (commodity.getId() == commodityId) {
                 return commodity;
@@ -94,11 +98,11 @@ public class Baloot {
             return new FailedResponse("No user found with this username!");
         else {
             Commodity commodity = findCommodityById(commodityId);
-            if (commodity == null)
+            if (commodity == null) {
                 return new FailedResponse("No commodity found with this commodity id!");
-            else if (!commodity.isInStock())
+            } else if (!commodity.isInStock()) {
                 return new FailedResponse("This commodity is out of stock!");
-            else
+            } else
                 return user.addToBuyList(commodityId);
         }
     }
@@ -113,7 +117,6 @@ public class Baloot {
 
     public ArrayList<Map<String, Object>> getBuyList(String username) {
         User user = findUserByUsername(username);
-
         if (user != null) {
             ArrayList<Integer> BuyList = user.getBuyList().getList();
             ArrayList<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
