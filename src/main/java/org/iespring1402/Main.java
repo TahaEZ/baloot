@@ -177,13 +177,12 @@ public class Main {
                         Map<String, Object> result = new HashMap<>();
                         result.put("id", commodity.getId());
                         result.put("name", commodity.getName());
-                        /* TODO: Provider provider = findProviderById(commodity.getProviderId());
+                        Provider provider = baloot.findProviderByProviderId(commodity.getProviderId());
                             if(provider == null)
                                 return new FailedResponse("No provider found with this provider id!");
                             else {
-                                result.put("provider": provider.getName())
+                                result.put("provider", provider.getName());
                             }
-                         */
                         result.put("price", commodity.getPrice());
                         result.put("categories", commodity.getCategories());
                         result.put("rating", commodity.getRating());
