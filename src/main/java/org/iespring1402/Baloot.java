@@ -11,13 +11,12 @@ public class Baloot {
     ArrayList<User> users;
     ArrayList<Commodity> commodities;
 
+    ArrayList<Provider> providers;
+
     public Baloot() {
         this.users = new ArrayList<User>();
         this.commodities = new ArrayList<Commodity>();
-    }
-
-    public ArrayList<User> getUsers() {
-        return users;
+        this.providers = new ArrayList<Provider>();
     }
 
     User findUserByUsername(String username) {
@@ -132,9 +131,41 @@ public class Baloot {
     public Response rateCommodity(String username, int commodityId, int score) {
         Commodity commodity = findCommodityById(commodityId);
         if (commodity != null) {
-            commodity.addRating(username, score);
-            return new SuccessfulResponse();
+            int providerId = commodity.getProviderId();
+            Provider provider = findProviderByProviderId(providerId);
+            if (provider != null) {
+                commodity.addRating(username, score);
+
+                float commodityRating = commodity.getRating();
+                provider.addRating(commodityId, commodityRating);
+
+                return new SuccessfulResponse();
+            } else
+                return new FailedResponse("No provider found for this commodity!");
         } else
             return new FailedResponse("No commodity found with this commodity id!");
+    }
+
+    Provider findProviderByProviderId(int providerId) {
+        for (Provider provider : providers) {
+            if (provider.getId() == providerId) {
+                return provider;
+            }
+        }
+        return null;
+    }
+
+    public void addProvider(Provider newProvider) {
+        int providerId = newProvider.getId();
+        Provider toBeUpdatedProvider = findProviderByProviderId(providerId);
+
+        if (toBeUpdatedProvider != null) {
+            String name = newProvider.getName();
+            String registryDate = newProvider.getRegistryDate();
+            HashMap<Integer, Float> ratings = newProvider.getRatings();
+
+            toBeUpdatedProvider.updateProvider(name, registryDate, ratings);
+        } else
+            providers.add(newProvider);
     }
 }

@@ -92,8 +92,13 @@ public class Main {
                         return new FailedResponse("Invalid username!");
                 }
             case ADD_PROVIDER:
-                // TODO: Add Provider Command
-                break;
+                if (jsonData == null || jsonData.isEmpty()) {
+                    return new FailedResponse("Please enter the user JSON data.");
+                } else {
+                    Provider newProvider = mapper.readValue(jsonData, Provider.class);
+                    baloot.addProvider(newProvider);
+                    return new SuccessfulResponse();
+                }
             case ADD_COMMODITY:
                 if (jsonData == null || jsonData.isEmpty()) {
                     response = new FailedResponse("Please enter the user JSON data.");
