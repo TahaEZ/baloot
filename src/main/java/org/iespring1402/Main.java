@@ -9,6 +9,7 @@ import org.iespring1402.response.FailedResponse;
 import org.iespring1402.response.Response;
 import org.iespring1402.response.SuccessfulResponse;
 import org.iespring1402.views.CommodityNoInStock;
+import org.iespring1402.views.CommodityByIdView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -174,28 +175,22 @@ public class Main {
                     });
                     int commodityId = parsedJsonData.get("id");
                     Commodity commodity = baloot.findCommodityById(commodityId);
-
+                    CommodityByIdView result;
                     if (commodity != null) {
-                        Map<String, Object> result = new HashMap<>();
-                        result.put("id", commodity.getId());
-                        result.put("name", commodity.getName());
                         Provider provider = baloot.findProviderByProviderId(commodity.getProviderId());
                         if (provider == null)
                             return new FailedResponse("No provider found with this provider id!");
                         else {
-                            result.put("provider", provider.getName());
+                            result = new CommodityByIdView(commodity.getId(), commodity.getName(), provider.getName(),
+                                    commodity.getPrice(), commodity.getCategories(), commodity.getRating());
                         }
-                        result.put("price", commodity.getPrice());
-                        result.put("categories", commodity.getCategories());
-                        result.put("rating", commodity.getRating());
-
                         return new SuccessfulResponse(result);
                     } else
                         return new FailedResponse("No commodity found with this commodity id!");
                 }
             case GET_COMMODITIES_BY_CATEGORY:
                 if (jsonData == null || jsonData.isEmpty()) {
-                    response = new FailedResponse("Please enter the user JSON data.");
+                    return new FailedResponse("Please enter the user JSON data.");
                 } else {
                     mapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
                     mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
@@ -217,7 +212,6 @@ public class Main {
                     filteredCommoditiesList.put("commoditiesListByCategory", filteredWithoutInStock);
                     return new SuccessfulResponse(filteredCommoditiesList);
                 }
-                break;
             case GET_BUY_LIST:
                 Map<String, String> parsedJsonData = mapper.readValue(jsonData, new TypeReference<Map<String, String>>() {
                 });
@@ -230,8 +224,7 @@ public class Main {
                 } else
                     return new FailedResponse("No user found with this username!");
             default:
-                break;
+                return new FailedResponse("Wrong Command");
         }
-        return null; // TODO: There is nothing to be  sent(each statement handle its return value)
     }
 }

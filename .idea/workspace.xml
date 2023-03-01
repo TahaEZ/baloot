@@ -5,6 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd8c25c1-d2fa-4ba8-a3d2-eeba9e37df6e" name="Changes" comment="Remove try catch statements and fix some typos">
+<<<<<<< HEAD
+=======
+      <change afterPath="$PROJECT_DIR$/src/test/java/BalootTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/iespring1402/Baloot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/Baloot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/iespring1402/BuyList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/BuyList.java" afterDir="false" />
+>>>>>>> af592f74351cfa6b9fa2aa8cd65a98dd0b79557c
       <change beforePath="$PROJECT_DIR$/src/main/java/org/iespring1402/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
