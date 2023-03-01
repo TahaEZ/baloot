@@ -11,6 +11,18 @@ public class CommodityNoInStock {
     private ArrayList<String> categories;
     private float rating;
 
+    public CommodityNoInStock() {
+
+    }
+
+    public CommodityNoInStock(int id, String name, int providerId, int price, ArrayList<String> categories, float rating) {
+        this.id = id;
+        this.name = name;
+        this.providerId = providerId;
+        this.price = price;
+        this.categories = categories;
+        this.rating = rating;
+    }
 
     public ArrayList<String> getCategories() {
         return categories;
@@ -59,7 +71,4 @@ public class CommodityNoInStock {
     public void setRating(float rating) {
         this.rating = rating;
     }
-
-
 }
-

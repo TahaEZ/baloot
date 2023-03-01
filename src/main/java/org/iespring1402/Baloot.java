@@ -3,6 +3,7 @@ package org.iespring1402;
 import org.iespring1402.response.FailedResponse;
 import org.iespring1402.response.Response;
 import org.iespring1402.response.SuccessfulResponse;
+import org.iespring1402.views.CommodityNoInStock;
 
 import java.util.*;
 import java.util.ArrayList;
@@ -115,22 +116,16 @@ public class Baloot {
             return user.removeFromBuyList(commodityId);
     }
 
-    public ArrayList<Map<String, Object>> getBuyList(String username) {
+    public ArrayList<CommodityNoInStock> getBuyList(String username) {
         User user = findUserByUsername(username);
         if (user != null) {
             ArrayList<Integer> BuyList = user.getBuyList().getList();
-            ArrayList<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-
+            ArrayList<CommodityNoInStock> result = new ArrayList<CommodityNoInStock>();
             for (int commodityId : BuyList) {
                 Commodity commodity = findCommodityById(commodityId);
 
-                Map<String, Object> commodityWithNoInStockField = new HashMap<>();
-                commodityWithNoInStockField.put("id", commodity.getId());
-                commodityWithNoInStockField.put("name", commodity.getName());
-                commodityWithNoInStockField.put("providerId", commodity.getProviderId());
-                commodityWithNoInStockField.put("price", commodity.getPrice());
-                commodityWithNoInStockField.put("categories", commodity.getCategories());
-                commodityWithNoInStockField.put("rating", commodity.getRating());
+                CommodityNoInStock commodityWithNoInStockField = new CommodityNoInStock(commodity.getId(), commodity.getName(),
+                        commodity.getProviderId(), commodity.getPrice(), commodity.getCategories(), commodity.getRating());
 
                 result.add(commodityWithNoInStockField);
             }

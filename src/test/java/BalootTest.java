@@ -1,4 +1,5 @@
 import org.iespring1402.*;
+import org.iespring1402.views.CommodityNoInStock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -66,12 +67,12 @@ public class BalootTest {
     @Test
     void testAddTobuyList() {
         baloot.addToBuyList("ali", 2);
-        ArrayList<Map<String, Object>> buyList = baloot.getBuyList("ali");
+        ArrayList<CommodityNoInStock> buyList = baloot.getBuyList("ali");
         assertTrue(buyList.isEmpty());
 
         baloot.addToBuyList("ali", 3);
         buyList = baloot.getBuyList("ali");
-        assertEquals(3, buyList.get(0).get("id"));
+        assertEquals(3, buyList.get(0).getId());
     }
 
     @Test

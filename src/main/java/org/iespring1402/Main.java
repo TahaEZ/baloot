@@ -216,7 +216,7 @@ public class Main {
                 Map<String, String> parsedJsonData = mapper.readValue(jsonData, new TypeReference<Map<String, String>>() {
                 });
                 String username = parsedJsonData.get("username");
-                ArrayList<Map<String, Object>> userBuyList = baloot.getBuyList(username);
+                ArrayList<CommodityNoInStock> userBuyList = baloot.getBuyList(username);
                 if (userBuyList != null) {
                     Map result = new HashMap();
                     result.put("buyList", userBuyList);
