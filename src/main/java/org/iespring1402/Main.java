@@ -116,11 +116,11 @@ public class Main {
                 }
                 return response;
             case GET_COMMODITIES_LIST:
-                if (baloot.commodities.isEmpty()) {
+                if (baloot.getCommodities().isEmpty()) {
                     return new FailedResponse();
                 } else {
                     Map commoditiesList = new HashMap();
-                    commoditiesList.put("commoditiesList", baloot.commodities);
+                    commoditiesList.put("commoditiesList", baloot.getCommodities());
                     return new SuccessfulResponse(commoditiesList);
                 }
             case RATE_COMMODITY:
@@ -200,7 +200,7 @@ public class Main {
                     mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
                     CategoryFilter filter = mapper.readValue(jsonData, CategoryFilter.class);
                     Map filteredCommoditiesList = new HashMap();
-                    filteredCommoditiesList.put("commoditiesListByCategory", filter.applyFilter(baloot.commodities));
+                    filteredCommoditiesList.put("commoditiesListByCategory", filter.applyFilter(baloot.getCommodities()));
                     return new SuccessfulResponse(filteredCommoditiesList);
                 }
                 break;

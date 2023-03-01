@@ -5,9 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd8c25c1-d2fa-4ba8-a3d2-eeba9e37df6e" name="Changes" comment="Remove try catch statements and fix some typos">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/CategoryFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/BalootTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/iespring1402/Commodity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/Commodity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/iespring1402/Baloot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/Baloot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/iespring1402/BuyList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/BuyList.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/iespring1402/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/iespring1402/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -50,6 +51,66 @@
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
   }
 }</component>
+  <component name="RunManager" selected="JUnit.BalootTest">
+    <configuration name="BalootTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Baloot" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="BalootTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BalootTest.testAddTobuyList" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Baloot" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="BalootTest" />
+      <option name="METHOD_NAME" value="testAddTobuyList" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BalootTest.testGetCommoditiesByCategory" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Baloot" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="BalootTest" />
+      <option name="METHOD_NAME" value="testGetCommoditiesByCategory" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BalootTest.testGetCommodityById" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Baloot" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="BalootTest" />
+      <option name="METHOD_NAME" value="testGetCommodityById" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BalootTest.testRateCommodity" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Baloot" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="BalootTest" />
+      <option name="METHOD_NAME" value="testRateCommodity" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.BalootTest" />
+        <item itemvalue="JUnit.BalootTest.testGetCommodityById" />
+        <item itemvalue="JUnit.BalootTest.testAddTobuyList" />
+        <item itemvalue="JUnit.BalootTest.testGetCommoditiesByCategory" />
+        <item itemvalue="JUnit.BalootTest.testRateCommodity" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -108,6 +169,21 @@
     <MESSAGE value="Add Baloot and User class" />
     <MESSAGE value="Remove try catch statements and fix some typos" />
     <option name="LAST_COMMIT_MESSAGE" value="Remove try catch statements and fix some typos" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/test/java/BalootTest.java</url>
+          <line>66</line>
+          <properties class="BalootTest" method="testAddTobuyList">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
