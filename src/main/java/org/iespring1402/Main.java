@@ -131,7 +131,8 @@ public class Main {
                 } else {
                     Map<String, Object> parsedJsonData = mapper.readValue(jsonData, new TypeReference<Map<String, Object>>() {
                     });
-                    if (parsedJsonData.get("username") instanceof String username) {
+                    if (parsedJsonData.get("username") instanceof String) {
+                        String username = (String) parsedJsonData.get("username");
                         if (parsedJsonData.get("commodityId") instanceof Integer) {
                             int commodityId = (Integer) parsedJsonData.get("commodityId");
                             if (parsedJsonData.get("score") instanceof Integer) {
