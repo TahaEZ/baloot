@@ -196,17 +196,11 @@ public class Main {
                     mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
                     CategoryFilter filter = mapper.readValue(jsonData, CategoryFilter.class);
                     Map filteredCommoditiesList = new HashMap();
-                    ArrayList<Commodity> filteredWithStock =  filter.applyFilter(baloot.getCommodities());
-                    ArrayList<CommodityNoInStock>  filteredWithoutInStock = new ArrayList<CommodityNoInStock>();
-                    for (Commodity commodity: filteredWithStock)
-                    {
-                        CommodityNoInStock oneCommodityWithNoInStock = new CommodityNoInStock();
-                        oneCommodityWithNoInStock.setId(commodity.getId());
-                        oneCommodityWithNoInStock.setName(commodity.getName());
-                        oneCommodityWithNoInStock.setPrice(commodity.getPrice());
-                        oneCommodityWithNoInStock.setCategories(commodity.getCategories());
-                        oneCommodityWithNoInStock.setProviderId(commodity.getProviderId());
-                        oneCommodityWithNoInStock.setRating(commodity.getRating());
+                    ArrayList<Commodity> filteredWithStock = filter.applyFilter(baloot.getCommodities());
+                    ArrayList<CommodityNoInStock> filteredWithoutInStock = new ArrayList<CommodityNoInStock>();
+                    for (Commodity commodity : filteredWithStock) {
+                        CommodityNoInStock oneCommodityWithNoInStock = new CommodityNoInStock(commodity.getId(), commodity.getName(),
+                                commodity.getProviderId(), commodity.getPrice(), commodity.getCategories(), commodity.getRating());
                         filteredWithoutInStock.add(oneCommodityWithNoInStock);
                     }
                     filteredCommoditiesList.put("commoditiesListByCategory", filteredWithoutInStock);
