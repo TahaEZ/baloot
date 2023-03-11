@@ -12,6 +12,18 @@
         <jsp-file>/provider.jsp</jsp-file>
     </servlet>
     <servlet>
+        <servlet-name>AddToBuyList</servlet-name>
+        <jsp-file>/addToBuyList.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>OK</servlet-name>
+        <jsp-file>/ok.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>Forbidden</servlet-name>
+        <jsp-file>/forbidden.jsp</jsp-file>
+    </servlet>
+    <servlet>
         <servlet-name>NotFound</servlet-name>
         <jsp-file>/not-found.jsp</jsp-file>
     </servlet>
@@ -27,6 +39,18 @@
     <servlet-mapping>
         <servlet-name>Provider</servlet-name>
         <url-pattern>/providers/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddToBuyList</servlet-name>
+        <url-pattern>/addToBuyList/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OK</servlet-name>
+        <url-pattern>/ok</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Forbidden</servlet-name>
+        <url-pattern>/forbidden</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>NotFound</servlet-name>

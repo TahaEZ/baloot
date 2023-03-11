@@ -4,8 +4,8 @@
 <%@ page import="org.iespring1402.Commodity" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<% String[] requestURI = request.getRequestURI().split("/"); %>
-<% int providerId = Integer.parseInt(requestURI[requestURI.length - 1]); %>
+<% String[] pathInfo = request.getPathInfo().split("/"); %>
+<% int providerId = Integer.parseInt(pathInfo[pathInfo.length - 1]); %>
 <% Provider provider = Baloot.getInstance().findProviderByProviderId(providerId); %>
 
 <% if (provider == null) response.sendRedirect(request.getContextPath() + "/not-found.jsp");

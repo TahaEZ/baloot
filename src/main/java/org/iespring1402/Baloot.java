@@ -55,7 +55,7 @@ public class Baloot {
         return instance;
     }
 
-    User findUserByUsername(String username) {
+    public User findUserByUsername(String username) {
         for (User user : users) {
             if (user.username.equals(username)) {
                 return user;
