@@ -22,6 +22,10 @@
         <jsp-file>/addToBuyList.jsp</jsp-file>
     </servlet>
     <servlet>
+        <servlet-name>RateCommodity</servlet-name>
+        <jsp-file>/rateCommodity.jsp</jsp-file>
+    </servlet>
+    <servlet>
         <servlet-name>OK</servlet-name>
         <jsp-file>/ok.jsp</jsp-file>
     </servlet>
@@ -55,6 +59,10 @@
     <servlet-mapping>
         <servlet-name>AddToBuyList</servlet-name>
         <url-pattern>/addToBuyList/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RateCommodity</servlet-name>
+        <url-pattern>/rateCommodity/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>OK</servlet-name>
