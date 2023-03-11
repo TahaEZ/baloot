@@ -7,6 +7,14 @@
         <servlet-name>Commodities</servlet-name>
         <jsp-file>/commodities.jsp</jsp-file>
     </servlet>
+    <servlet>
+        <servlet-name>Provider</servlet-name>
+        <jsp-file>/provider.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>NotFound</servlet-name>
+        <jsp-file>/not-found.jsp</jsp-file>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>Commodities</servlet-name>
@@ -15,5 +23,13 @@
     <servlet-mapping>
         <servlet-name>Hello</servlet-name>
         <url-pattern>/hello</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Provider</servlet-name>
+        <url-pattern>/providers/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NotFound</servlet-name>
+        <url-pattern>/not-found</url-pattern>
     </servlet-mapping>
 </web-app>

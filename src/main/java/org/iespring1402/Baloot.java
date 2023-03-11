@@ -17,9 +17,16 @@ public class Baloot {
 
     public Baloot() {
         this.users = new ArrayList<User>();
+
+        //////////////////////////////////////////////////////////////////// TODO: mock data - should be removed later
+        this.users.add(new User("ali", "12345", "ali@gmail.com", "2000-09-01", "Tehran", 5000));
+        this.users.add(new User("taha", "4512", "taha@gmail.com", "2001-03-31", "Rey", 3000));
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         this.commodities = new ArrayList<Commodity>();
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        this.commodities.add(new Commodity(4, "Onion", 3, 200, // TODO: mock data - should be removed later
+
+        //////////////////////////////////////////////////////////////////// TODO: mock data - should be removed later
+        this.commodities.add(new Commodity(4, "Onion", 3, 200,
                 new ArrayList<>(Arrays.asList("Vegetables")), 8.3F, 1000));
         this.commodities.add(new Commodity(1, "Headphone A", 1, 5200,
                 new ArrayList<>(Arrays.asList("Technology", "Headphone")), 8.3F, 20));
@@ -28,7 +35,18 @@ public class Baloot {
         this.commodities.add(new Commodity(3, "Bugatti", 2, 10000000,
                 new ArrayList<>(Arrays.asList("Car")), 8.3F, 2));
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         this.providers = new ArrayList<Provider>();
+
+        //////////////////////////////////////////////////////////////////// TODO: mock data - should be removed later
+        this.providers.add(new Provider(1, "Headphone Provider", "2000-01-01"));
+        this.providers.add(new Provider(2, "Car Provider", "2010-10-10"));
+        this.providers.add(new Provider(3, "Vegetable Provider", "1900-09-09"));
+        rateCommodity("ali", 4, 8);
+        rateCommodity("taha", 4, 6);
+        rateCommodity("taha", 2, 3);
+        rateCommodity("ali", 1, 5);
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     public static Baloot getInstance() {
@@ -169,7 +187,7 @@ public class Baloot {
             return new FailedResponse("No commodity found with this commodity id!");
     }
 
-    Provider findProviderByProviderId(int providerId) {
+    public Provider findProviderByProviderId(int providerId) {
         for (Provider provider : providers) {
             if (provider.getId() == providerId) {
                 return provider;
