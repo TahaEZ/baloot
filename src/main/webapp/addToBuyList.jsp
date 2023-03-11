@@ -7,9 +7,7 @@
 <%
     String[] pathInfo = request.getPathInfo().split("/");
     int commodityId = Integer.parseInt(pathInfo[pathInfo.length - 1]);
-    System.out.println(commodityId);
     String username = pathInfo[pathInfo.length - 2];
-    System.out.println(username);
     User user = Baloot.getInstance().findUserByUsername(username);
     Commodity commodity = Baloot.getInstance().findCommodityById(commodityId);
     if (user == null || commodity == null) response.sendRedirect(request.getContextPath() + "/not-found.jsp");
