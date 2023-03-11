@@ -4,6 +4,8 @@ target/
 !**/src/test/**/target/
 
 ### IntelliJ IDEA ###
+.idea/artifacts/Baloot_war.xml
+.idea/artifacts/Baloot_war_exploded.xml
 .idea/misc.xml
 .idea/modules.xml
 .idea/workspace.xml
