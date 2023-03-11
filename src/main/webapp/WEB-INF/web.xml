@@ -3,7 +3,15 @@
         <servlet-name>Hello</servlet-name>
         <jsp-file>/hello.jsp</jsp-file>
     </servlet>
+    <servlet>
+        <servlet-name>Commodities</servlet-name>
+        <jsp-file>/commodities.jsp</jsp-file>
+    </servlet>
 
+    <servlet-mapping>
+        <servlet-name>Commodities</servlet-name>
+        <url-pattern>/commodities</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Hello</servlet-name>
         <url-pattern>/hello</url-pattern>

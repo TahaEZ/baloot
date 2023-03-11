@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.ArrayList;
 
 public class Baloot {
+    private static Baloot instance;
     private ArrayList<User> users;
     private ArrayList<Commodity> commodities;
 
@@ -17,7 +18,23 @@ public class Baloot {
     public Baloot() {
         this.users = new ArrayList<User>();
         this.commodities = new ArrayList<Commodity>();
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        this.commodities.add(new Commodity(4, "Onion", 3, 200, // TODO: mock data - should be removed later
+                new ArrayList<>(Arrays.asList("Vegetables")), 8.3F, 1000));
+        this.commodities.add(new Commodity(1, "Headphone A", 1, 5200,
+                new ArrayList<>(Arrays.asList("Technology", "Headphone")), 8.3F, 20));
+        this.commodities.add(new Commodity(2, "Headphone B", 1, 3200,
+                new ArrayList<>(Arrays.asList("Technology", "Headphone")), 10F, 0));
+        this.commodities.add(new Commodity(3, "Bugatti", 2, 10000000,
+                new ArrayList<>(Arrays.asList("Car")), 8.3F, 2));
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         this.providers = new ArrayList<Provider>();
+    }
+
+    public static Baloot getInstance() {
+        if (instance == null)
+            instance = new Baloot();
+        return instance;
     }
 
     User findUserByUsername(String username) {
