@@ -4,6 +4,7 @@
 <%@ page import="java.util.Map" %>
 <%@ page import="org.iespring1402.Commodity" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import ="java.util.ArrayList"%>
 
 <% String[] requestURI = request.getRequestURI().split("/"); %>
 <% String category = requestURI[requestURI.length - 1]; %>
