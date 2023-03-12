@@ -21,6 +21,19 @@ public class WebServer {
             }
         });
 
+        app.get("/addToBuyList/{username}/{commodity-id}", context -> {
+            try {
+                String username = context.pathParam("username");
+                int commodityId = Integer.parseInt(context.pathParam("commodity-id"));
+                context.html(AddToBuyListPage.result(username, commodityId));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                context.html(ForbiddenPage.result());
+            }
+        });
+
+        app.get("200", context -> context.html(OKPage.result()));
+
         app.get("/403", context -> context.html(ForbiddenPage.result()));
 
         app.get("/404", context -> context.html(NotFoundPage.result()));
