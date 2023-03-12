@@ -4,13 +4,7 @@ import java.util.ArrayList;
 
 public class CategoryFilter {
     private Object category;
-    private static CategoryFilter instance;
 
-    public static CategoryFilter getInstance() {
-        if (instance == null)
-            instance = new CategoryFilter();
-        return instance;
-    }
     public CategoryFilter(ArrayList<String> categoryListItemItem) {
         this.category = categoryListItemItem;
     }

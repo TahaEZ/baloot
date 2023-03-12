@@ -44,6 +44,11 @@ public class WebServer {
             }
         });
 
+        app.get("/commodities/search/{categories}", context -> {
+            String categories = context.pathParam("categories");
+            context.html(SearchCommodityByCategoryPage.result(categories));
+        });
+
         app.get("200", context -> context.html(OKPage.result()));
 
         app.get("/403", context -> context.html(ForbiddenPage.result()));

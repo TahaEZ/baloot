@@ -11,12 +11,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class CommoditiesPage extends Page {
-    public static String result() throws IOException {
+    public static Document createCommoditiesDocument(ArrayList<Commodity> commodities) throws IOException {
         String dir = System.getProperty("user.dir");
         File commoditiesTemplate = new File(dir + "/src/main/java/org/iespring1402/webserver/pages/templates/Commodities.html");
         Document commoditiesDocument = Jsoup.parse(commoditiesTemplate, "UTF-8");
         Element table = commoditiesDocument.select("table").first();
-        ArrayList<Commodity> commodities = Baloot.getInstance().getCommodities();
 
         for (Commodity commodity : commodities) {
             Element tableRow = commoditiesDocument.createElement("tr");
@@ -33,7 +32,12 @@ public class CommoditiesPage extends Page {
 
             table.appendChild(tableRow);
         }
+        return commoditiesDocument;
+    }
 
+    public static String result() throws IOException {
+        ArrayList<Commodity> commodities = Baloot.getInstance().getCommodities();
+        Document commoditiesDocument = createCommoditiesDocument(commodities);
         return commoditiesDocument.outerHtml();
     }
 }
