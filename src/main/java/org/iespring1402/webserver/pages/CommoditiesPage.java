@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Commodities extends Page {
+public class CommoditiesPage extends Page {
     public static String result() throws IOException {
         String dir = System.getProperty("user.dir");
         File commoditiesTemplate = new File(dir + "/src/main/java/org/iespring1402/webserver/pages/templates/Commodities.html");
@@ -33,6 +33,6 @@ public class Commodities extends Page {
             table.appendChild(tableRow);
         }
 
-        return table.outerHtml();
+        return commoditiesDocument.outerHtml();
     }
 }

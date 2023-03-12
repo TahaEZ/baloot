@@ -4,7 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-public class Hello extends Page {
+public class HelloPage extends Page {
     public static String result() {
         Document document = Jsoup.parse("<html><head><title>Hello Page</title></head><body></body></html>");
         Element heading = document.createElement("h1");

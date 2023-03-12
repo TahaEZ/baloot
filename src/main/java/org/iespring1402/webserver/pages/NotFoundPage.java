@@ -6,7 +6,7 @@ import org.jsoup.nodes.Document;
 import java.io.File;
 import java.io.IOException;
 
-public class NotFound extends Page {
+public class NotFoundPage extends Page {
     public static String result() throws IOException {
         String dir = System.getProperty("user.dir");
         File notFoundFile = new File(dir + "/src/main/java/org/iespring1402/webserver/pages/templates/404.html");
