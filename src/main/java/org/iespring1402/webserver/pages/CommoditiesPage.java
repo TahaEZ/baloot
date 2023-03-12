@@ -28,6 +28,7 @@ public class CommoditiesPage extends Page {
             tableRow.append("<td>" + commodity.getPrice() + "</td>");
             tableRow.append("<td>" + String.join(", ", categories) + "</td>");
             tableRow.append("<td>" + commodity.getRating() + "</td>");
+            tableRow.append("<td>" + commodity.getInStock() + "</td>");
             tableRow.append("<td><a href=/commodities/" + commodity.getId() + ">Link</a></td>");
 
             table.appendChild(tableRow);
