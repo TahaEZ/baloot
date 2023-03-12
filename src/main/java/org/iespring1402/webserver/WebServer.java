@@ -32,6 +32,18 @@ public class WebServer {
             }
         });
 
+        app.get("/rateCommodity/{username}/{commodity-id}/{rate}", context -> {
+            try {
+                String username = context.pathParam("username");
+                int commodityId = Integer.parseInt(context.pathParam("commodity-id"));
+                int rate = Integer.parseInt(context.pathParam("rate"));
+                context.html(RateCommodityPage.result(username, commodityId, rate));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                context.html(ForbiddenPage.result());
+            }
+        });
+
         app.get("200", context -> context.html(OKPage.result()));
 
         app.get("/403", context -> context.html(ForbiddenPage.result()));
