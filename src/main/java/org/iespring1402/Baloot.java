@@ -29,7 +29,7 @@ public class Baloot {
             String usersJson = fetchData("/api/users");
             users = new ArrayList<>(Arrays.asList(mapper.readValue(usersJson, User[].class)));
             String commoditiesJson = fetchData("/api/commodities");
-            System.out.println(commoditiesJson);
+            System.out.println(comments.get(0).getId());
             commodities = new ArrayList<>(Arrays.asList(mapper.readValue(commoditiesJson, Commodity[].class)));
             String providersJson = fetchData("/api/providers");
             providers = new ArrayList<>(Arrays.asList(mapper.readValue(providersJson, Provider[].class)));

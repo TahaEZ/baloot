@@ -2,6 +2,8 @@ package org.iespring1402.webserver;
 
 import io.javalin.Javalin;
 import org.iespring1402.Baloot;
+import org.iespring1402.Comment;
+import org.iespring1402.User;
 import org.iespring1402.webserver.pages.*;
 
 public class WebServer {
@@ -45,6 +47,17 @@ public class WebServer {
         app.get("/commodities/search/{categories}", context -> {
             String categories = context.pathParam("categories");
             context.html(SearchCommodityByCategoryPage.result(categories));
+        });
+        app.get("/voteComment/{username}/{comment-id}/{vote}", context -> {
+            try {
+                String username = context.pathParam("username");
+                String commentId = context.pathParam("comment-id");
+                int vote = Integer.parseInt(context.pathParam("vote"));
+                context.html(VoteCommentPage.result(username, commentId, vote));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                context.html(ForbiddenPage.result());
+            }
         });
         app.get("200", context -> context.html(OKPage.result()));
         app.get("/403", context -> context.html(ForbiddenPage.result()));
