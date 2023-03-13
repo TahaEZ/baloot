@@ -212,10 +212,19 @@ public class Baloot {
         return null;
     }
 
+    public Comment findCommentById(String commentId) {
+        for (Comment comment : comments) {
+            if (comment.getId().equals(commentId)) {
+                return comment;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<Comment> getFilteredCommentsByCommodityId(int commodityId) {
         ArrayList<Comment> filteredComments = new ArrayList<>();
-        for(Comment comment: comments) {
-            if(comment.getCommodityId() == commodityId) {
+        for (Comment comment : comments) {
+            if (comment.getCommodityId() == commodityId) {
                 filteredComments.add(comment);
             }
         }

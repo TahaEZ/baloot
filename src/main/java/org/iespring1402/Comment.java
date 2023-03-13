@@ -1,8 +1,10 @@
 package org.iespring1402;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class Comment {
+    private String id;
     private String userEmail;
     private int commodityId;
     private String text;
@@ -13,6 +15,7 @@ public class Comment {
     public Comment() {
         super();
         this.votes = new HashMap<>();
+        id = UUID.randomUUID().toString();
     }
 
     public Comment(String userEmail, int commodityId, String text, String date) {
@@ -21,10 +24,15 @@ public class Comment {
         this.text = text;
         this.date = date;
         this.votes = new HashMap<>();
+        id = UUID.randomUUID().toString();
     }
 
     public void voteComment(String username, int vote) {
         votes.put(username, vote);
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getUserEmail() {
