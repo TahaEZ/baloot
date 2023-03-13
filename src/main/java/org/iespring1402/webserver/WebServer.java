@@ -1,16 +1,17 @@
 package org.iespring1402.webserver;
 
 import io.javalin.Javalin;
+import org.iespring1402.Baloot;
 import org.iespring1402.webserver.pages.*;
 
 public class WebServer {
     public static void main(String[] args) {
+        Baloot.getInstance();
+
         Javalin app = Javalin.create().start(8080);
 
         app.get("/", context -> context.html(HelloPage.result()));
-
         app.get("/commodities", context -> context.html(CommoditiesPage.result()));
-
         app.get("/providers/{provider-id}", context -> {
             try {
                 int providerId = Integer.parseInt(context.pathParam("provider-id"));
@@ -20,7 +21,6 @@ public class WebServer {
                 context.html(ForbiddenPage.result());
             }
         });
-
         app.get("/addToBuyList/{username}/{commodity-id}", context -> {
             try {
                 String username = context.pathParam("username");
@@ -31,7 +31,6 @@ public class WebServer {
                 context.html(ForbiddenPage.result());
             }
         });
-
         app.get("/rateCommodity/{username}/{commodity-id}/{rate}", context -> {
             try {
                 String username = context.pathParam("username");
@@ -43,18 +42,13 @@ public class WebServer {
                 context.html(ForbiddenPage.result());
             }
         });
-
         app.get("/commodities/search/{categories}", context -> {
             String categories = context.pathParam("categories");
             context.html(SearchCommodityByCategoryPage.result(categories));
         });
-
         app.get("200", context -> context.html(OKPage.result()));
-
         app.get("/403", context -> context.html(ForbiddenPage.result()));
-
         app.get("/404", context -> context.html(NotFoundPage.result()));
-
         app.error(404, context -> context.html(NotFoundPage.result()));
     }
 }

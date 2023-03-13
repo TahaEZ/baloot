@@ -1,52 +1,41 @@
 package org.iespring1402;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.iespring1402.response.FailedResponse;
 import org.iespring1402.response.Response;
 import org.iespring1402.response.SuccessfulResponse;
 import org.iespring1402.views.CommodityNoInStock;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 import java.util.ArrayList;
 
 public class Baloot {
+    private static final String API_URL = "http://5.253.25.110:5000";
     private static Baloot instance;
     private ArrayList<User> users;
     private ArrayList<Commodity> commodities;
-
     private ArrayList<Provider> providers;
+    private ArrayList<Comment> comments;
 
     public Baloot() {
-        this.users = new ArrayList<User>();
-
-        //////////////////////////////////////////////////////////////////// TODO: mock data - should be removed later
-        this.users.add(new User("ali", "12345", "ali@gmail.com", "2000-09-01", "Tehran", 5000));
-        this.users.add(new User("taha", "4512", "taha@gmail.com", "2001-03-31", "Rey", 3000));
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        this.commodities = new ArrayList<Commodity>();
-
-        //////////////////////////////////////////////////////////////////// TODO: mock data - should be removed later
-        this.commodities.add(new Commodity(4, "Onion", 3, 200,
-                new ArrayList<>(Arrays.asList("Vegetables")), 8.3F, 1000));
-        this.commodities.add(new Commodity(1, "Headphone A", 1, 5200,
-                new ArrayList<>(Arrays.asList("Technology", "Headphone")), 8.3F, 20));
-        this.commodities.add(new Commodity(2, "Headphone B", 1, 3200,
-                new ArrayList<>(Arrays.asList("Technology", "Headphone")), 10F, 0));
-        this.commodities.add(new Commodity(3, "Bugatti", 2, 10000000,
-                new ArrayList<>(Arrays.asList("Car")), 8.3F, 2));
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        this.providers = new ArrayList<Provider>();
-
-        //////////////////////////////////////////////////////////////////// TODO: mock data - should be removed later
-        this.providers.add(new Provider(1, "Headphone Provider", "2000-01-01"));
-        this.providers.add(new Provider(2, "Car Provider", "2010-10-10"));
-        this.providers.add(new Provider(3, "Vegetable Provider", "1900-09-09"));
-        rateCommodity("ali", 4, 8);
-        rateCommodity("taha", 4, 6);
-        rateCommodity("taha", 2, 3);
-        rateCommodity("ali", 1, 5);
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String commentsJson = fetchData("/api/comments");
+            comments = new ArrayList<>(Arrays.asList(mapper.readValue(commentsJson, Comment[].class)));
+            String usersJson = fetchData("/api/users");
+            users = new ArrayList<>(Arrays.asList(mapper.readValue(usersJson, User[].class)));
+            String commoditiesJson = fetchData("/api/commodities");
+            System.out.println(commoditiesJson);
+            commodities = new ArrayList<>(Arrays.asList(mapper.readValue(commoditiesJson, Commodity[].class)));
+            String providersJson = fetchData("/api/providers");
+            providers = new ArrayList<>(Arrays.asList(mapper.readValue(providersJson, Provider[].class)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static Baloot getInstance() {
@@ -66,6 +55,33 @@ public class Baloot {
 
     public ArrayList<Commodity> getCommodities() {
         return commodities;
+    }
+
+    private String fetchData(String path) {
+        try {
+            URL url = new URL(API_URL + path);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(
+                        connection.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                return response.toString();
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public boolean addUser(User newUser) {
@@ -194,6 +210,16 @@ public class Baloot {
             }
         }
         return null;
+    }
+
+    public ArrayList<Comment> getFilteredCommentsByCommodityId(int commodityId) {
+        ArrayList<Comment> filteredComments = new ArrayList<>();
+        for(Comment comment: comments) {
+            if(comment.getCommodityId() == commodityId) {
+                filteredComments.add(comment);
+            }
+        }
+        return filteredComments;
     }
 
     public void addProvider(Provider newProvider) {
