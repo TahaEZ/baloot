@@ -45,4 +45,24 @@ public class User {
     public BuyList getBuyList() {
         return buyList;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public long getCredit() {
+        return credit;
+    }
 }

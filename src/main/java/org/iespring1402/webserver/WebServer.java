@@ -20,6 +20,15 @@ public class WebServer {
                 context.html(ForbiddenPage.result());
             }
         });
+        app.get("/users/{user-id}", context -> {
+            try {
+                String userId = context.pathParam("user-id");
+                context.html(UserPage.result(userId));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                context.html(ForbiddenPage.result());
+            }
+        });
         app.post("addToBuyList", context -> {
             String username = context.formParam("username");
             String commodityId = context.formParam("commodity-id");
