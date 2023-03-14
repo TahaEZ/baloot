@@ -2,8 +2,6 @@ package org.iespring1402.webserver;
 
 import io.javalin.Javalin;
 import org.iespring1402.Baloot;
-import org.iespring1402.Comment;
-import org.iespring1402.User;
 import org.iespring1402.webserver.pages.*;
 
 public class WebServer {
