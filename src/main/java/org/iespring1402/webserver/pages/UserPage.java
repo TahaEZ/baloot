@@ -75,10 +75,6 @@ public class UserPage extends Page{
 
             purchasedListTable.appendChild(tableRow);
         }
-
-
-
-
         return userDocument.outerHtml();
     }
 }
