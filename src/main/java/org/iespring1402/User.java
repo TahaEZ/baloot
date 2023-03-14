@@ -11,6 +11,8 @@ public class User {
     public long credit;
     private BuyList buyList;
 
+    private PurchasedList purchasedList;
+
     public User() {
         super();
         this.buyList = new BuyList();
@@ -38,6 +40,8 @@ public class User {
         return buyList.add(commodityId);
     }
 
+    public Response addToPurchasedList(Commodity commodity){return purchasedList.add(commodity);}
+
     public Response removeFromBuyList(int commodityId) {
         return buyList.remove(commodityId);
     }
@@ -64,5 +68,9 @@ public class User {
 
     public long getCredit() {
         return credit;
+    }
+
+    public PurchasedList getPurchasedList() {
+        return purchasedList;
     }
 }
