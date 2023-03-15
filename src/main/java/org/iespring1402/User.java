@@ -42,9 +42,7 @@ public class User {
 
     public Response addToPurchasedList(Commodity commodity){return purchasedList.add(commodity);}
 
-    public Response removeFromBuyList(int commodityId) {
-        return buyList.remove(commodityId);
-    }
+    public Response removeFromBuyList(int commodityId) {return buyList.remove(commodityId);}
 
     public BuyList getBuyList() {
         return buyList;
@@ -72,5 +70,9 @@ public class User {
 
     public PurchasedList getPurchasedList() {
         return purchasedList;
+    }
+
+    public void setCredit(long credit) {
+        this.credit = credit;
     }
 }
