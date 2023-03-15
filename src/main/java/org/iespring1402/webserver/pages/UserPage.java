@@ -15,7 +15,7 @@ public class UserPage extends Page{
         String dir = System.getProperty("user.dir");
         File userTemplate = new File(dir + "/src/main/java/org/iespring1402/webserver/pages/templates/User.html");
         Document userDocument = Jsoup.parse(userTemplate, "UTF-8");
-        Element userInfoElement = userDocument.body().select("li").first();
+        Element paymentForm = userDocument.body().select("form#payment").first();
         Element userUserNameElement = userDocument.body().select("li#username").first();
         Element userEmailElement = userDocument.body().select("li#email").first();
         Element userBirthDateElement = userDocument.body().select("li#birthDate").first();
@@ -33,11 +33,8 @@ public class UserPage extends Page{
         userBirthDateElement.text("Birth Date: " + user.getBirthDate());
         userAddressElement.text(user.getAddress());
         userCreditElement.text("Credit: "+user.getCredit());
-        userInfoElement.append("<form id = \"payment\" method=\"POST\" action=\"/buyListPayment\" >"
-                + "<label>Buy List Payment</label>"
-                +"<input id=\"form_payment\" type=\"hidden\" name=\"userId\" value=\" " + user.getUsername() + "\">"
-                +" <button type=\"submit\">Payment</button>"
-                +"</form>");
+        paymentForm.select("input[name=\"userId\"]").val(user.getUsername()+ "");
+
 
 
         BuyList userBuyList = user.getBuyList();
