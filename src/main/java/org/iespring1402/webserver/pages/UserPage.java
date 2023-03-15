@@ -21,8 +21,8 @@ public class UserPage extends Page{
         Element userBirthDateElement = userDocument.body().select("li#birthDate").first();
         Element userAddressElement = userDocument.body().select("li#address").first();
         Element userCreditElement = userDocument.body().select("li#credit").first();
-        Element buyListTable = userDocument.select("table").first();
-        Element purchasedListTable = userDocument.select("table").first();
+        Element buyListTable = userDocument.select("table#buyList").first();
+        Element purchasedListTable = userDocument.select("table#purchasedList").first();
 
         User user = Baloot.getInstance().findUserByUsername(userId);
         if (user == null)
@@ -53,8 +53,7 @@ public class UserPage extends Page{
             tableRow.append("<td><a href=/commodities/" + commodity.getId() + ">Link</a></td>");
             tableRow.append("<td>"
                     +"<form id=\"removeFromBuyList\"  method=\"POST\" action= \"/RemoveFromBuyList\" >"
-                    +"<input type=\"text\" name=\"remove\" />"
-                    + "<input type=\"hidden\" name=\"commodityId\" value=\" " + commodity.getId()  + "\" />"
+                    + "<input type=\"hidden\" name=\"commodityId\" value=\"" + commodity.getId()  + "\" />"
                     + "<input type=\"hidden\" name=\"userId\" value=\" " + user.getUsername()  + "\" />"
                     + "<button type=\"submit\">Remove</button>"
                     + "</form>"

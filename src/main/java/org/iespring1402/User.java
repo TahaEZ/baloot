@@ -16,6 +16,7 @@ public class User {
     public User() {
         super();
         this.buyList = new BuyList();
+        this.purchasedList = new PurchasedList();
     }
 
     public User(String username, String password, String email, String birthDate, String address, long credit) {
@@ -26,6 +27,7 @@ public class User {
         this.address = address;
         this.credit = credit;
         this.buyList = new BuyList();
+        this.purchasedList = new PurchasedList();
     }
 
     public void updateUser(String password, String email, String birthDate, String address, long credit) {

@@ -40,6 +40,17 @@ public class WebServer {
             }
         });
 
+        app.post("/RemoveFromBuyList",context -> {
+            try {
+                String userId = context.formParam("userId");
+                int commodityId = Integer.parseInt(context.formParam("commodityId"));
+                context.html(RemoveFromBuyListPage.result(userId,commodityId));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                context.html(ForbiddenPage.result());
+            }
+        });
+
         app.post("addToBuyList", context -> {
             String username = context.formParam("username");
             String commodityId = context.formParam("commodity-id");

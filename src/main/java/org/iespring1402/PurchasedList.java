@@ -7,10 +7,13 @@ import org.iespring1402.response.SuccessfulResponse;
 import java.util.ArrayList;
 
 public class PurchasedList {
-    private ArrayList<Commodity> purchasedItems;
+    private ArrayList<Commodity> purchasedItems = new ArrayList<>();
 
-    public PurchasedList(int id, String name, int providerId, int price, ArrayList<String> categories, float rating, int inStock) {
-        purchasedItems = new ArrayList<Commodity>();
+    public PurchasedList(ArrayList<Commodity> purchased) {
+        purchasedItems = purchased;
+    }
+    public PurchasedList(){
+        purchasedItems = new ArrayList<>();
     }
 
     public Response add(Commodity commodity) {
