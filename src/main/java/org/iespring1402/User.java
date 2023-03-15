@@ -1,6 +1,8 @@
 package org.iespring1402;
 
+import org.iespring1402.response.FailedResponse;
 import org.iespring1402.response.Response;
+import org.iespring1402.response.SuccessfulResponse;
 
 public class User {
     public String username;
@@ -36,6 +38,13 @@ public class User {
         this.birthDate = birthDate;
         this.address = address;
         this.credit = credit;
+    }
+
+    public Response addCredit(long creditToAdd){
+        if(creditToAdd <= 0)
+            return new FailedResponse("Invalid credit value!");
+        credit += creditToAdd;
+        return new SuccessfulResponse();
     }
 
     public Response addToBuyList(int commodityId) {
