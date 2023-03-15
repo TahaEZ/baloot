@@ -11,9 +11,12 @@ public class User {
     public long credit;
     private BuyList buyList;
 
+    private PurchasedList purchasedList;
+
     public User() {
         super();
         this.buyList = new BuyList();
+        this.purchasedList = new PurchasedList();
     }
 
     public User(String username, String password, String email, String birthDate, String address, long credit) {
@@ -24,6 +27,7 @@ public class User {
         this.address = address;
         this.credit = credit;
         this.buyList = new BuyList();
+        this.purchasedList = new PurchasedList();
     }
 
     public void updateUser(String password, String email, String birthDate, String address, long credit) {
@@ -38,11 +42,39 @@ public class User {
         return buyList.add(commodityId);
     }
 
-    public Response removeFromBuyList(int commodityId) {
-        return buyList.remove(commodityId);
-    }
+    public Response addToPurchasedList(Commodity commodity){return purchasedList.add(commodity);}
+
+    public Response removeFromBuyList(int commodityId) {return buyList.remove(commodityId);}
 
     public BuyList getBuyList() {
         return buyList;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public long getCredit() {
+        return credit;
+    }
+
+    public PurchasedList getPurchasedList() {
+        return purchasedList;
+    }
+
+    public void setCredit(long credit) {
+        this.credit = credit;
     }
 }

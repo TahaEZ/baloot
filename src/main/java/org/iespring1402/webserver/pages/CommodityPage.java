@@ -41,7 +41,7 @@ public class CommodityPage extends Page {
             commodityInStockElement.text("In Stock: " + commodity.getInStock());
 
             rateCommodityForm.select("input[name=\"commodity-id\"]").val(commodityId + "");
-            addToBuyListForm.select("input[name=\"commodity-id\"]").val(commodityId + "");
+                addToBuyListForm.select("input[name=\"commodity-id\"]").val(commodityId + "");
 
             ArrayList<Comment> commodityComments = baloot.getFilteredCommentsByCommodityId(commodityId);
             for (Comment comment : commodityComments) {
