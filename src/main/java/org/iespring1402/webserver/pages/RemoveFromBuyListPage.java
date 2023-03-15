@@ -11,6 +11,6 @@ public class RemoveFromBuyListPage  extends  Page{
         if ( true == response.success )
             return OKPage.result();
         else
-            return null;
+            return ForbiddenPage.result();
         }
 }

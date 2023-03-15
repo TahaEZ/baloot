@@ -54,7 +54,7 @@ public class UserPage extends Page{
             tableRow.append("<td>"
                     +"<form id=\"removeFromBuyList\"  method=\"POST\" action= \"/RemoveFromBuyList\" >"
                     + "<input type=\"hidden\" name=\"commodityId\" value=\"" + commodity.getId()  + "\" />"
-                    + "<input type=\"hidden\" name=\"userId\" value=\" " + user.getUsername()  + "\" />"
+                    + "<input type=\"hidden\" name=\"userId\" value=\"" + user.getUsername()  + "\" />"
                     + "<button type=\"submit\">Remove</button>"
                     + "</form>"
                     + "</td>");
