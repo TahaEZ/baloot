@@ -16,6 +16,7 @@ public class UserPage extends Page{
         File userTemplate = new File(dir + "/src/main/java/org/iespring1402/webserver/pages/templates/User.html");
         Document userDocument = Jsoup.parse(userTemplate, "UTF-8");
         Element paymentForm = userDocument.body().select("form#payment").first();
+        Element addCreditForm = userDocument.body().select("form#add-credit").first();
         Element userUserNameElement = userDocument.body().select("li#username").first();
         Element userEmailElement = userDocument.body().select("li#email").first();
         Element userBirthDateElement = userDocument.body().select("li#birthDate").first();
@@ -34,6 +35,8 @@ public class UserPage extends Page{
         userAddressElement.text(user.getAddress());
         userCreditElement.text("Credit: "+user.getCredit());
         paymentForm.select("input[name=\"userId\"]").val(user.getUsername()+ "");
+        addCreditForm.select("input[name=\"username\"]").val(user.getUsername()+ "");
+
 
 
 

@@ -40,9 +40,25 @@ public class WebServer {
             }
         });
 
-        app.get("/addCredit/{user-id}/{credit}",context -> {
+        app.post("/addCredit", context -> {
             try {
-                String userId = context.pathParam("user-id");
+                String username = context.formParam("username");
+                long creditToAdd = Long.parseLong(context.formParam("credit"));
+                if(creditToAdd <= 0 )
+                    context.html(ForbiddenPage.result());
+                else
+                    context.redirect("/addCredit/" + username + "/" + creditToAdd);
+            }
+            catch (NumberFormatException e)
+            {
+                e.printStackTrace();
+                context.html(ForbiddenPage.result());
+            }
+        });
+
+        app.get("/addCredit/{username}/{credit}",context -> {
+            try {
+                String userId = context.pathParam("username");
                 long creditToAdd = Long.parseLong(context.pathParam("credit"));
                 if(creditToAdd <= 0 )
                     context.html(ForbiddenPage.result());
