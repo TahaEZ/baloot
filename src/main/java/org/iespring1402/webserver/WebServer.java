@@ -20,6 +20,80 @@ public class WebServer {
                 context.html(ForbiddenPage.result());
             }
         });
+        app.get("/users/{user-id}", context -> {
+            try {
+                String userId = context.pathParam("user-id");
+                context.html(UserPage.result(userId));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                context.html(ForbiddenPage.result());
+            }
+        });
+
+        app.post("/buyListPayment",context -> {
+            try {
+                String userId = context.formParam("userId");
+                context.html(BuyListPaymentPage.result(userId));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                context.html(ForbiddenPage.result());
+            }
+        });
+
+        app.post("/addCredit", context -> {
+            try {
+                String username = context.formParam("username");
+                long creditToAdd = Long.parseLong(context.formParam("credit"));
+                if(creditToAdd <= 0 )
+                    context.html(ForbiddenPage.result());
+                else
+                    context.redirect("/addCredit/" + username + "/" + creditToAdd);
+            }
+            catch (NumberFormatException e)
+            {
+                e.printStackTrace();
+                context.html(ForbiddenPage.result());
+            }
+        });
+
+        app.get("/addCredit/{username}/{credit}",context -> {
+            try {
+                String userId = context.pathParam("username");
+                long creditToAdd = Long.parseLong(context.pathParam("credit"));
+                if(creditToAdd <= 0 )
+                    context.html(ForbiddenPage.result());
+                else
+                    context.html(AddToCreditPage.result(userId,creditToAdd));
+            }
+            catch (NumberFormatException e)
+            {
+                e.printStackTrace();
+                context.html(ForbiddenPage.result());
+            }
+        });
+
+        app.post("/removeFromBuyList",context -> {
+            try {
+                String username = context.formParam("userId");
+                int commodityId = Integer.parseInt(context.formParam("commodityId"));
+                context.redirect("/removeFromBuyList/" + username + "/" + commodityId);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                context.html(ForbiddenPage.result());
+            }
+        });
+
+        app.get("/removeFromBuyList/{username}/{commodityId}", context -> {
+                try {
+                    String userId = context.pathParam("username");
+                    int commodityId = Integer.parseInt(context.pathParam("commodityId"));
+                    context.html(RemoveFromBuyListPage.result(userId,commodityId));
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    context.html(ForbiddenPage.result());
+                }
+        });
+
         app.post("addToBuyList", context -> {
             String username = context.formParam("username");
             String commodityId = context.formParam("commodity-id");
@@ -52,6 +126,13 @@ public class WebServer {
                 context.html(ForbiddenPage.result());
             }
         });
+
+        app.get("/commodities/search/{start_price}/{end_price}" , context -> {
+            long startPrice = Long.parseLong(context.pathParam("start_price"));
+            long endPrice = Long.parseLong(context.pathParam("end_price"));
+            context.html(FindCommodityByPriceRangePage.result(startPrice,endPrice));
+        });
+
         app.get("/commodities/search/{categories}", context -> {
             String categories = context.pathParam("categories");
             context.html(SearchCommodityByCategoryPage.result(categories));
