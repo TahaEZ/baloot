@@ -52,7 +52,7 @@ public class UserPage extends Page{
             tableRow.append("<td>" + commodity.getInStock() + "</td>");
             tableRow.append("<td><a href=/commodities/" + commodity.getId() + ">Link</a></td>");
             tableRow.append("<td>"
-                    +"<form id=\"removeFromBuyList\"  method=\"POST\" action= \"/RemoveFromBuyList\" >"
+                    +"<form id=\"removeFromBuyList\"  method=\"POST\" action= \"/removeFromBuyList\" >"
                     + "<input type=\"hidden\" name=\"commodityId\" value=\"" + commodity.getId()  + "\" />"
                     + "<input type=\"hidden\" name=\"userId\" value=\"" + user.getUsername()  + "\" />"
                     + "<button type=\"submit\">Remove</button>"
