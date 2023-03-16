@@ -28,10 +28,14 @@ public class Baloot {
             comments = new ArrayList<>(Arrays.asList(mapper.readValue(commentsJson, Comment[].class)));
             String usersJson = fetchData("/api/users");
             users = new ArrayList<>(Arrays.asList(mapper.readValue(usersJson, User[].class)));
-            String commoditiesJson = fetchData("/api/commodities");
-            commodities = new ArrayList<>(Arrays.asList(mapper.readValue(commoditiesJson, Commodity[].class)));
             String providersJson = fetchData("/api/providers");
             providers = new ArrayList<>(Arrays.asList(mapper.readValue(providersJson, Provider[].class)));
+            String commoditiesJson = fetchData("/api/commodities");
+            ArrayList<Commodity> commodityArrayList = new ArrayList<>(Arrays.asList(mapper.readValue(commoditiesJson, Commodity[].class)));
+            commodities = new ArrayList<>();
+            for (Commodity commodity : commodityArrayList) {
+                addCommodity(commodity);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -109,8 +113,13 @@ public class Baloot {
         return !username.matches(".*[@!#$%^&*()\\u0020\\u200C].*"); // false if username contains any special character.
     }
 
-    public void addCommodity(Commodity commodity) {
+    public boolean addCommodity(Commodity commodity) {
+        int providerId = commodity.getProviderId();
+        Provider provider = findProviderByProviderId(providerId);
+        if (provider == null) return false;
+        provider.addRating(commodity.getId(), commodity.getRating());
         commodities.add(commodity);
+        return true;
     }
 
     public Commodity findCommodityById(int commodityId) {
