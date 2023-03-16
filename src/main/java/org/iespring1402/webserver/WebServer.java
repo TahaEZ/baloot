@@ -56,15 +56,26 @@ public class WebServer {
             }
         });
 
-        app.post("/RemoveFromBuyList",context -> {
+        app.post("/removeFromBuyList",context -> {
             try {
-                String userId = context.formParam("userId");
+                String username = context.formParam("userId");
                 int commodityId = Integer.parseInt(context.formParam("commodityId"));
-                context.html(RemoveFromBuyListPage.result(userId,commodityId));
+                context.redirect("/removeFromBuyList/" + username + "/" + commodityId);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
                 context.html(ForbiddenPage.result());
             }
+        });
+
+        app.get("/removeFromBuyList/{username}/{commodityId}", context -> {
+                try {
+                    String userId = context.pathParam("username");
+                    int commodityId = Integer.parseInt(context.pathParam("commodityId"));
+                    context.html(RemoveFromBuyListPage.result(userId,commodityId));
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    context.html(ForbiddenPage.result());
+                }
         });
 
         app.post("addToBuyList", context -> {
