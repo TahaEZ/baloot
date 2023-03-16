@@ -99,6 +99,13 @@ public class WebServer {
                 context.html(ForbiddenPage.result());
             }
         });
+
+        app.get("/commodities/search/{start_price}/{end_price}" , context -> {
+            long startPrice = Long.parseLong(context.pathParam("start_price"));
+            long endPrice = Long.parseLong(context.pathParam("end_price"));
+            context.html(FindCommodityByPriceRangePage.result(startPrice,endPrice));
+        });
+
         app.get("/commodities/search/{categories}", context -> {
             String categories = context.pathParam("categories");
             context.html(SearchCommodityByCategoryPage.result(categories));
