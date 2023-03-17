@@ -99,7 +99,7 @@ public class WebServer {
             String commodityId = context.formParam("commodity-id");
             context.redirect("/addToBuyList/" + username + "/" + commodityId);
         });
-        app.get("/addToBuyList/{username}/{commodity-id}", context -> {
+            app.get("/addToBuyList/{username}/{commodity-id}", context -> {
             try {
                 String username = context.pathParam("username");
                 int commodityId = Integer.parseInt(context.pathParam("commodity-id"));
