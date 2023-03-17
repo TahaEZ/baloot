@@ -2,6 +2,7 @@ import org.iespring1402.Baloot;
 
 import org.iespring1402.BuyList;
 import org.iespring1402.Commodity;
+import org.iespring1402.response.Response;
 import org.iespring1402.webserver.pages.AddToBuyListPage;
 import org.iespring1402.webserver.pages.FindCommodityByPriceRangePage;
 import org.iespring1402.webserver.pages.RemoveFromBuyListPage;
@@ -16,8 +17,8 @@ import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class WebServerTest {
 
@@ -95,5 +96,22 @@ public class WebServerTest {
         assertEquals(0, filtered.size());
     }
 
+
+    @Test
+    public void testRateCommodity() {
+        Commodity commodity = baloot.findCommodityById(2);
+        Response response;
+
+        baloot.rateCommodity("amir", 2, 7);
+        assertEquals(commodity.getRating(), 7);
+        baloot.rateCommodity("hamid", 2, 2);
+        assertEquals(commodity.getRating(), 4.5);
+        baloot.rateCommodity("amir", 2, 3);
+        assertEquals(commodity.getRating(), 2.5);
+        response = baloot.rateCommodity("SOME_INVALID_USERNAME", 2, 9);
+        assertFalse(response.success);
+        response = baloot.rateCommodity("amir", 2, 11);
+        assertFalse(response.success);
+    }
 
 }

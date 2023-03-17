@@ -47,8 +47,7 @@ public class Baloot {
         return instance;
     }
 
-    public static void removeInstance()
-    {
+    public static void removeInstance() {
         instance = null;
     }
 
@@ -201,17 +200,26 @@ public class Baloot {
     public Response rateCommodity(String username, int commodityId, int score) {
         Commodity commodity = findCommodityById(commodityId);
         if (commodity != null) {
-            int providerId = commodity.getProviderId();
-            Provider provider = findProviderByProviderId(providerId);
-            if (provider != null) {
-                commodity.addRating(username, score);
+            User user = findUserByUsername(username);
+            if (user != null) {
+                int providerId = commodity.getProviderId();
+                Provider provider = findProviderByProviderId(providerId);
+                if (provider != null) {
+                    if (score >= 1 && score <= 10) {
+                        commodity.addRating(username, score);
 
-                float commodityRating = commodity.getRating();
-                provider.addRating(commodityId, commodityRating);
+                        float commodityRating = commodity.getRating();
+                        provider.addRating(commodityId, commodityRating);
 
-                return new SuccessfulResponse();
-            } else
-                return new FailedResponse("No provider found for this commodity!");
+                        return new SuccessfulResponse();
+                    }else {
+                        return new FailedResponse("Score must be an integer from 1 to 10!");
+                    }
+                } else
+                    return new FailedResponse("No provider found for this commodity!");
+            } else {
+                return new FailedResponse("No user found with this username!");
+            }
         } else
             return new FailedResponse("No commodity found with this commodity id!");
     }
