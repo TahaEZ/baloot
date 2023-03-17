@@ -49,7 +49,8 @@ public class WebServerTest {
             RemoveFromBuyListPage.result(username, commodityIdToAdd[1]);
             assertEquals(0, commodityId.size());
         } catch (IOException e) {
-            assertEquals(IOException.class, e.getClass());
+            System.out.println("IOException error");
+            assertEquals(false, true);
         }
     }
 
@@ -57,6 +58,7 @@ public class WebServerTest {
         try {
             priceRangeFilter.result(startPrice, endPrice);
         } catch (IOException e) {
+            System.out.println("IOException error");
             assertEquals(false, true);
         }
     }
