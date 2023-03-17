@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,14 +18,14 @@ public class BalootTest {
         baloot.addUser(new User("ali", "12345", "ali@gmail.com", "2000-09-01", "Tehran", 5000));
         baloot.addUser(new User("taha", "4512", "taha@gmail.com", "2001-03-31", "Rey", 3000));
 
+        baloot.addProvider(new Provider(1, "Headphone Provider", "2000-01-01"));
+        baloot.addProvider(new Provider(2, "Car Provider", "2010-10-10"));
+        baloot.addProvider(new Provider(3, "Vegetable Provider", "1900-09-09"));
+
         baloot.addCommodity(new Commodity(1, "Headphone A", 1, 5200, new ArrayList<>(Arrays.asList("Technology", "Headphone")), 8.3F, 20));
         baloot.addCommodity(new Commodity(2, "Headphone B", 1, 3200, new ArrayList<>(Arrays.asList("Technology", "Headphone")), 10F, 0));
         baloot.addCommodity(new Commodity(3, "Bugatti", 2, 10000000, new ArrayList<>(Arrays.asList("Car")), 8.3F, 2));
         baloot.addCommodity(new Commodity(4, "Onion", 3, 200, new ArrayList<>(Arrays.asList("Vegetables")), 8.3F, 1000));
-
-        baloot.addProvider(new Provider(1, "Headphone Provider", "2000-01-01"));
-        baloot.addProvider(new Provider(2, "Car Provider", "2010-10-10"));
-        baloot.addProvider(new Provider(3, "Vegetable Provider", "1900-09-09"));
     }
 
     @Test

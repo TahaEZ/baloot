@@ -1,26 +1,57 @@
 package org.iespring1402;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.iespring1402.response.FailedResponse;
 import org.iespring1402.response.Response;
 import org.iespring1402.response.SuccessfulResponse;
 import org.iespring1402.views.CommodityNoInStock;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 import java.util.ArrayList;
 
 public class Baloot {
+    private static final String API_URL = "http://5.253.25.110:5000";
+    private static Baloot instance;
     private ArrayList<User> users;
     private ArrayList<Commodity> commodities;
-
     private ArrayList<Provider> providers;
+    private ArrayList<Comment> comments;
 
     public Baloot() {
-        this.users = new ArrayList<User>();
-        this.commodities = new ArrayList<Commodity>();
-        this.providers = new ArrayList<Provider>();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String commentsJson = fetchData("/api/comments");
+            comments = new ArrayList<>(Arrays.asList(mapper.readValue(commentsJson, Comment[].class)));
+            String usersJson = fetchData("/api/users");
+            users = new ArrayList<>(Arrays.asList(mapper.readValue(usersJson, User[].class)));
+            String providersJson = fetchData("/api/providers");
+            providers = new ArrayList<>(Arrays.asList(mapper.readValue(providersJson, Provider[].class)));
+            String commoditiesJson = fetchData("/api/commodities");
+            ArrayList<Commodity> commodityArrayList = new ArrayList<>(Arrays.asList(mapper.readValue(commoditiesJson, Commodity[].class)));
+            commodities = new ArrayList<>();
+            for (Commodity commodity : commodityArrayList) {
+                addCommodity(commodity);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    User findUserByUsername(String username) {
+    public static Baloot getInstance() {
+        if (instance == null)
+            instance = new Baloot();
+        return instance;
+    }
+
+    public static void removeInstance() {
+        instance = null;
+    }
+
+    public User findUserByUsername(String username) {
         for (User user : users) {
             if (user.username.equals(username)) {
                 return user;
@@ -31,6 +62,33 @@ public class Baloot {
 
     public ArrayList<Commodity> getCommodities() {
         return commodities;
+    }
+
+    private String fetchData(String path) {
+        try {
+            URL url = new URL(API_URL + path);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(
+                        connection.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                return response.toString();
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public boolean addUser(User newUser) {
@@ -59,8 +117,13 @@ public class Baloot {
         return !username.matches(".*[@!#$%^&*()\\u0020\\u200C].*"); // false if username contains any special character.
     }
 
-    public void addCommodity(Commodity commodity) {
+    public boolean addCommodity(Commodity commodity) {
+        int providerId = commodity.getProviderId();
+        Provider provider = findProviderByProviderId(providerId);
+        if (provider == null) return false;
+        provider.addRating(commodity.getId(), commodity.getRating());
         commodities.add(commodity);
+        return true;
     }
 
     public Commodity findCommodityById(int commodityId) {
@@ -137,28 +200,56 @@ public class Baloot {
     public Response rateCommodity(String username, int commodityId, int score) {
         Commodity commodity = findCommodityById(commodityId);
         if (commodity != null) {
-            int providerId = commodity.getProviderId();
-            Provider provider = findProviderByProviderId(providerId);
-            if (provider != null) {
-                commodity.addRating(username, score);
+            User user = findUserByUsername(username);
+            if (user != null) {
+                int providerId = commodity.getProviderId();
+                Provider provider = findProviderByProviderId(providerId);
+                if (provider != null) {
+                    if (score >= 1 && score <= 10) {
+                        commodity.addRating(username, score);
 
-                float commodityRating = commodity.getRating();
-                provider.addRating(commodityId, commodityRating);
+                        float commodityRating = commodity.getRating();
+                        provider.addRating(commodityId, commodityRating);
 
-                return new SuccessfulResponse();
-            } else
-                return new FailedResponse("No provider found for this commodity!");
+                        return new SuccessfulResponse();
+                    }else {
+                        return new FailedResponse("Score must be an integer from 1 to 10!");
+                    }
+                } else
+                    return new FailedResponse("No provider found for this commodity!");
+            } else {
+                return new FailedResponse("No user found with this username!");
+            }
         } else
             return new FailedResponse("No commodity found with this commodity id!");
     }
 
-    Provider findProviderByProviderId(int providerId) {
+    public Provider findProviderByProviderId(int providerId) {
         for (Provider provider : providers) {
             if (provider.getId() == providerId) {
                 return provider;
             }
         }
         return null;
+    }
+
+    public Comment findCommentById(String commentId) {
+        for (Comment comment : comments) {
+            if (comment.getId().equals(commentId)) {
+                return comment;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Comment> getFilteredCommentsByCommodityId(int commodityId) {
+        ArrayList<Comment> filteredComments = new ArrayList<>();
+        for (Comment comment : comments) {
+            if (comment.getCommodityId() == commodityId) {
+                filteredComments.add(comment);
+            }
+        }
+        return filteredComments;
     }
 
     public void addProvider(Provider newProvider) {

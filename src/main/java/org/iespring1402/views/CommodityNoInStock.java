@@ -11,9 +11,6 @@ public class CommodityNoInStock {
     private ArrayList<String> categories;
     private float rating;
 
-    public CommodityNoInStock() {
-
-    }
 
     public CommodityNoInStock(int id, String name, int providerId, int price, ArrayList<String> categories, float rating) {
         this.id = id;
