@@ -47,6 +47,11 @@ public class Baloot {
         return instance;
     }
 
+    public static void removeInstance()
+    {
+        instance = null;
+    }
+
     public User findUserByUsername(String username) {
         for (User user : users) {
             if (user.username.equals(username)) {
