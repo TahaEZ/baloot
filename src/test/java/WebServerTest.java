@@ -13,8 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class WebServerTest {
 
@@ -47,7 +46,7 @@ public class WebServerTest {
             assertEquals(0, commodityId.size());
         } catch (IOException e) {
             System.out.println("IOException error");
-            assertEquals(false, true);
+            fail();
         }
     }
 
@@ -56,7 +55,7 @@ public class WebServerTest {
             priceRangeFilter.result(startPrice, endPrice);
         } catch (IOException e) {
             System.out.println("IOException error");
-            assertEquals(false, true);
+            fail();
         }
     }
 
@@ -69,15 +68,15 @@ public class WebServerTest {
         callPriceRangeFilter(priceRangeFilter, startPrice, endPrice);
         ArrayList<Commodity> filtered = priceRangeFilter.getFilteredByPriceRange();
         for (Commodity commodity : filtered) {
-            assertEquals(true, commodity.getPrice() >= startPrice);
-            assertEquals(true, commodity.getPrice() <= endPrice);
+            assertTrue(commodity.getPrice() >= startPrice);
+            assertTrue(commodity.getPrice() <= endPrice);
         }
         startPrice = 14000;
         endPrice = 14000;
         callPriceRangeFilter(priceRangeFilter, startPrice, endPrice);
         for (Commodity commodity : filtered) {
-            assertEquals(true, commodity.getPrice() >= startPrice);
-            assertEquals(true, commodity.getPrice() <= endPrice);
+            assertTrue(commodity.getPrice() >= startPrice);
+            assertTrue(commodity.getPrice() <= endPrice);
         }
         startPrice = 0;
         endPrice = 0;
