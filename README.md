@@ -2,6 +2,8 @@
 
 ## Baloot - University of Tehran Internet Engineering Course Project
 
+## Phase 1:
+
 ### Commands:
 
 <br/>
@@ -125,4 +127,52 @@ getBuyList {"username": string}
 
 ```
 getBuyList {"username": "user1"}
+```
+
+## Phase 2: Web Server
+
+### Links:
+
+```
+/commodities
+```
+
+```
+/commodities/{commodity_id}
+```
+
+```
+/providers/{provider_id}
+```
+
+```
+/users/{user_id}
+```
+
+```
+/addCredit/{user_id}/{credit}
+```
+
+```
+/addToBuyList/{username}/{commodityId}
+```
+
+```
+/removeFromBuyList/{username}/{commodityId}
+```
+
+```
+/rateCommodity/{username}/{commodityId}/{rate}
+```
+
+```
+/voteComment/{username}/{commentId}/{vote}
+```
+
+```
+/commodities/search/{start_price}/{end_price}
+```
+
+```
+/commodities/search/{categories}
 ```
