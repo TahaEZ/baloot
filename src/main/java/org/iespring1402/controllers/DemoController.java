@@ -10,7 +10,7 @@ import org.apache.commons.lang.StringUtils;
 
 import java.io.IOException;
 
-@WebServlet("/DemoController")
+@WebServlet(urlPatterns = {"/DemoController", "/Baloot/DemoController"})
 public class DemoController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
