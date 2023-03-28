@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class Baloot {
     private static final String API_URL = "http://5.253.25.110:5000";
     private static Baloot instance;
+    private String currentUser;
     private ArrayList<User> users;
     private ArrayList<Commodity> commodities;
     private ArrayList<Provider> providers;
@@ -36,6 +37,7 @@ public class Baloot {
             for (Commodity commodity : commodityArrayList) {
                 addCommodity(commodity);
             }
+            currentUser = null;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -264,5 +266,13 @@ public class Baloot {
             toBeUpdatedProvider.updateProvider(name, registryDate, ratings);
         } else
             providers.add(newProvider);
+    }
+
+    public String getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(String currentUser) {
+        this.currentUser = currentUser;
     }
 }
