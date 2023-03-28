@@ -10,7 +10,6 @@
 
 <body>
 <form method="post" action="LoginController">
-    <%=Baloot.getInstance().getCurrentUser()%>
     <%
         if (request.getAttribute("wrongUserPass") == "true") {%>
     <div class="has-error">
