@@ -15,8 +15,6 @@ public class LogoutController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Baloot.getInstance().setCurrentUser(null);
-        String loginPageName = "/login.jsp";
-        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(loginPageName);
-        requestDispatcher.forward(req, resp);
+        resp.sendRedirect(req.getContextPath() + "/login");
     }
 }
