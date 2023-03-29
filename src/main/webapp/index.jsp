@@ -5,8 +5,10 @@
     <title>Home</title>
 </head>
 <body>
+<%if (Baloot.getInstance().getCurrentUser() == null) response.sendRedirect(request.getContextPath() + "/login");%>
 <ul>
-    <li id="email">username: <%=Baloot.getInstance().getCurrentUser()%></li>
+    <li id="email">username: <%=Baloot.getInstance().getCurrentUser()%>
+    </li>
     <li>
         <a href="commodities">Commodities</a>
     </li>
