@@ -62,7 +62,7 @@ username: <span><%=Baloot.getInstance().getCurrentUser()%></span>
         </td>
         <td><%=commodity.getInStock()%>
         </td>
-        <td><a href="/commodities/<%=commodity.getId()%>">Link</a></td>
+        <td><a href="<%=request.getContextPath()%>/commodities/<%=commodity.getId()%>">Link</a></td>
     </tr>
     <%}%>
 </table>
