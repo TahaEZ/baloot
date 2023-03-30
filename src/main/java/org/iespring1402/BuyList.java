@@ -30,6 +30,15 @@ public class BuyList {
         } else return new FailedResponse("No commodity found with this commodity id in your buy list!");
     }
 
+    public int totalCost(){
+        int total = 0;
+        for(int id : list)
+        {
+            int cost = Baloot.getInstance().findCommodityById(id).getPrice();
+            total += cost;
+        }
+        return total;
+    }
     public ArrayList<Integer> getList() {
         return list;
     }
