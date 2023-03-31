@@ -26,18 +26,18 @@ public class CommoditiesController extends HttpServlet {
             ArrayList<Commodity> allCommodities = Baloot.getInstance().getCommodities();
             ArrayList<Commodity> visibleCommodities = new ArrayList<>();
 
-            String paramSearch = req.getParameter("search");
-            String paramAction = req.getParameter("action");
-            if (!StringUtils.isBlank(paramAction)) {
-                switch (paramAction) {
+            String searchParam = req.getParameter("search");
+            String actionParam = req.getParameter("action");
+            if (!StringUtils.isBlank(actionParam)) {
+                switch (actionParam) {
                     case "search_by_category":
                         CategoryFilter filter = new CategoryFilter();
-                        filter.setCategoryItem(paramSearch);
+                        filter.setCategoryItem(searchParam);
                         visibleCommodities = filter.applyFilter(allCommodities);
                         break;
                     case "search_by_name":
                         for (Commodity commodity : allCommodities) {
-                            if (commodity.getName().toLowerCase().contains(paramSearch.toLowerCase())) {
+                            if (commodity.getName().toLowerCase().contains(searchParam.toLowerCase())) {
                                 visibleCommodities.add(commodity);
                             }
                         }
