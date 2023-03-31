@@ -59,6 +59,10 @@ public class User {
         return buyList;
     }
 
+    public void resetBuyList()
+    {
+        buyList = new BuyList();
+    }
     public String getUsername() {
         return username;
     }
