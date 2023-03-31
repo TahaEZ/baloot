@@ -1,14 +1,13 @@
 package org.iespring1402;
 
 public class DiscountCode {
-    private String code;
+    private String discountCode;
     private int discount;
-
     private boolean deprecated;
 
-    public DiscountCode(String codeName, int percentage) {
-        code = codeName;
-        discount = percentage;
+    public DiscountCode(String discountCode, int discount) {
+        this.discountCode = discountCode;
+        this.discount = discount;
         deprecated = false;
     }
 
@@ -17,12 +16,13 @@ public class DiscountCode {
     }
 
     public String getCode() {
-        return code;
+        return discountCode;
     }
 
-    public boolean getDeprecated(){
+    public boolean getDeprecated() {
         return deprecated;
     }
+
     public void setDeprecated(boolean deprecated) {
         this.deprecated = deprecated;
     }
