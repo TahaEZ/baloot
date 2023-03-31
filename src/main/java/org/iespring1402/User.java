@@ -4,6 +4,8 @@ import org.iespring1402.response.FailedResponse;
 import org.iespring1402.response.Response;
 import org.iespring1402.response.SuccessfulResponse;
 
+import java.util.ArrayList;
+
 public class User {
     public String username;
     public String password;
@@ -12,6 +14,8 @@ public class User {
     public String address;
     public long credit;
     private BuyList buyList;
+
+    private ArrayList<DiscountCode> usedDiscounts;
 
     private PurchasedList purchasedList;
 
@@ -30,6 +34,7 @@ public class User {
         this.credit = credit;
         this.buyList = new BuyList();
         this.purchasedList = new PurchasedList();
+        this.usedDiscounts = new ArrayList<DiscountCode>();
     }
 
     public void updateUser(String password, String email, String birthDate, String address, long credit) {
@@ -46,6 +51,16 @@ public class User {
         credit += creditToAdd;
         return new SuccessfulResponse();
     }
+
+    public Response addToUsedDiscounts(DiscountCode discount){
+        usedDiscounts.add(discount);
+        return new SuccessfulResponse();
+    }
+
+    public ArrayList<DiscountCode> getUsedDiscounts() {
+        return usedDiscounts;
+    }
+
 
     public Response addToBuyList(int commodityId) {
         return buyList.add(commodityId);

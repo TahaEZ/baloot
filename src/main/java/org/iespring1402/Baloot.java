@@ -21,6 +21,7 @@ public class Baloot {
     private ArrayList<Commodity> commodities;
     private ArrayList<Provider> providers;
     private ArrayList<Comment> comments;
+    private  ArrayList<DiscountCode> discountCodes;
 
     public Baloot() {
         ObjectMapper mapper = new ObjectMapper();
@@ -37,6 +38,8 @@ public class Baloot {
             for (Commodity commodity : commodityArrayList) {
                 addCommodity(commodity);
             }
+            String discountCodesJSON = fetchData("/api/discount");
+            discountCodes = new ArrayList<>(Arrays.asList((mapper.readValue(discountCodesJSON, DiscountCode[].class))));
             currentUser = null;
         } catch (Exception e) {
             e.printStackTrace();
