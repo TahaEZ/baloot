@@ -84,7 +84,14 @@ public class BuyListController extends HttpServlet {
                 }
             }
 
-
+            else if (req.getParameter("discount") != null)
+            {
+                String discountCode  = req.getParameter("discount");
+                if(Baloot.getInstance().discountCodeValidityCheck(discountCode))
+                {
+                    //TODO
+                }
+            }
             req.setAttribute("username", username);
             req.setAttribute("credit", credit);
             req.setAttribute("totalCost", totalCost);

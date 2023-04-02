@@ -19,7 +19,7 @@ public class DiscountCode {
         return discountCode;
     }
 
-    public boolean getDeprecated() {
+    public boolean isDeprecated() {
         return deprecated;
     }
 

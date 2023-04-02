@@ -73,4 +73,11 @@
             </tr>
             <%}%>
     </tbody></table>
+       <li>
+              <form id="discount" action="/buyList" method="POST">
+                    <label>Enter your Discount Code Here: </label>
+                    <input type= "text" name="discount" />
+                    <button type= "submit" >Add to credit</button>
+              </form>
+       </li>
 </body></html>

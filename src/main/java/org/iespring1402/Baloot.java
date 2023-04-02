@@ -96,6 +96,35 @@ public class Baloot {
         }
     }
 
+    public boolean discountCodeValidityCheck(String discountCode)
+    {
+        for(DiscountCode discountCodeTemp : discountCodes)
+        {
+            if(discountCodeTemp.getCode() == discountCode && !discountCodeTemp.isDeprecated())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Response deprecateDiscountCode(String discountCode)
+    {
+        for(DiscountCode discountCodeTemp : discountCodes)
+        {
+            if(discountCodeTemp.getCode() == discountCode)
+            {
+                discountCodeTemp.setDeprecated(true);
+                return new SuccessfulResponse("Discount code deprecated.");
+            }
+        }
+        return  new FailedResponse("Discount code not found to deprecate.");
+    }
+
+    public Response insertDiscountCodeToUsedForUser(DiscountCode discountCode,String username)
+    {
+        //TODO
+    }
     public boolean addUser(User newUser) {
         String username = newUser.username;
 
