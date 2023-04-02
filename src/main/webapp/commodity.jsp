@@ -22,6 +22,7 @@
     Commodity commodity = (Commodity) request.getAttribute("commodity");
 %>
 <body>
+<%if (Baloot.getInstance().getCurrentUser() == null) response.sendRedirect(request.getContextPath() + "/login");%>
 <span>username: Siri</span>
 <br>
 <ul>
