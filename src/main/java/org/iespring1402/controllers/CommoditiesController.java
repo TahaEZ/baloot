@@ -13,7 +13,6 @@ import org.iespring1402.Commodity;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 @WebServlet("/commodities")
@@ -44,7 +43,7 @@ public class CommoditiesController extends HttpServlet {
                         break;
                     case "sort_by_rate":
                         visibleCommodities = new ArrayList<>(allCommodities);
-                        Collections.sort(visibleCommodities, Comparator.comparingInt(Commodity::getPrice));
+                        visibleCommodities.sort(Comparator.comparingInt(Commodity::getPrice));
                         break;
                     default:
                         visibleCommodities = allCommodities;

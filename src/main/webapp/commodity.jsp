@@ -104,6 +104,9 @@
     <% } %>
 </table>
 <br><br>
+<%
+    ArrayList<Commodity> suggestedCommodities = (ArrayList<Commodity>) request.getAttribute("suggestedCommodities");
+%>
 <table>
     <caption><h2>Suggested Commodities</h2></caption>
     <tr>
@@ -116,46 +119,25 @@
         <th>In Stock</th>
         <th>Links</th>
     </tr>
+    <% for (Commodity suggestedCommodity : suggestedCommodities) { %>
     <tr>
-        <td>2341</td>
-        <td>Galaxy S22</td>
-        <td>Phone Provider No.1</td>
-        <td>34000000</td>
-        <td>Technology, Phone</td>
-        <td>8.3</td>
-        <td>17</td>
-        <td><a href="/commodities/2341">Link</a></td>
+        <td><%=suggestedCommodity.getId()%>
+        </td>
+        <td><%=suggestedCommodity.getName()%>
+        </td>
+        <td><%=Baloot.getInstance().findProviderByProviderId(suggestedCommodity.getProviderId()).getName()%>
+        </td>
+        <td><%=suggestedCommodity.getPrice()%>
+        </td>
+        <td><%=String.join(", ", suggestedCommodity.getCategories())%>
+        </td>
+        <td><%=suggestedCommodity.getRating()%>
+        </td>
+        <td><%=suggestedCommodity.getInStock()%>
+        </td>
+        <td><a href="<%=request.getContextPath()%>/commodities/<%=suggestedCommodity.getId()%>">Link</a></td>
     </tr>
-    <tr>
-        <td>4231</td>
-        <td>Galaxy S22 Plus</td>
-        <td>Phone Provider No.1</td>
-        <td>43000000</td>
-        <td>Technology, Phone</td>
-        <td>8.7</td>
-        <td>12</td>
-        <td><a href="/commodities/4231">Link</a></td>
-    </tr>
-    <tr>
-        <td>1234</td>
-        <td>Galaxy S22 Ultra</td>
-        <td>Phone Provider No.2</td>
-        <td>50000000</td>
-        <td>Technology, Phone</td>
-        <td>8.9</td>
-        <td>5</td>
-        <td><a href="/commodities/1234">Link</a></td>
-    </tr>
-    <tr>
-        <td>4321</td>
-        <td>Galaxy A53</td>
-        <td>Phone Provider No.2</td>
-        <td>16000000</td>
-        <td>Technology, Phone</td>
-        <td>8.7</td>
-        <td>11</td>
-        <td><a href="/commodities/4321">Link</a></td>
-    </tr>
+    <% } %>
 </table>
 </body>
 </html>
