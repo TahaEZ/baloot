@@ -25,7 +25,6 @@ public class CommodityController extends HttpServlet {
             return;
         }
         String[] pathInfo = req.getPathInfo().split("/");
-        System.out.println(pathInfo.length);
         if (pathInfo.length == 2) {
             int commodityId = Integer.parseInt(pathInfo[pathInfo.length - 1]);
             ArrayList<Commodity> commodities = Baloot.getInstance().getCommodities();

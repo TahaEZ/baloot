@@ -18,6 +18,7 @@
     ArrayList<Commodity> visibleCommodities = (ArrayList<Commodity>) request.getAttribute("visibleCommodities");
 %>
 <body>
+<%if (Baloot.getInstance().getCurrentUser() == null) response.sendRedirect(request.getContextPath() + "/login");%>
 <a href="<%=request.getContextPath()%>">Home</a>
 <br>
 username: <span><%=Baloot.getInstance().getCurrentUser()%></span>
@@ -57,7 +58,8 @@ username: <span><%=Baloot.getInstance().getCurrentUser()%></span>
         </td>
         <td><%=commodity.getPrice()%>
         </td>
-        <td><%=String.join(", ", commodity.getCategories())%></td>
+        <td><%=String.join(", ", commodity.getCategories())%>
+        </td>
         <td><%=commodity.getRating()%>
         </td>
         <td><%=commodity.getInStock()%>
