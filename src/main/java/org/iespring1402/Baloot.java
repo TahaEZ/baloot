@@ -23,6 +23,7 @@ public class Baloot {
     private ArrayList<Commodity> commodities;
     private ArrayList<Provider> providers;
     private ArrayList<Comment> comments;
+    private  ArrayList<DiscountCode> discountCodes;
 
     public Baloot() {
         ObjectMapper mapper = new ObjectMapper();
@@ -39,6 +40,9 @@ public class Baloot {
             for (Commodity commodity : commodityArrayList) {
                 addCommodity(commodity);
             }
+            discountCodes = new ArrayList<>();
+            String discountCodesJSON = fetchData("/api/discount");
+            discountCodes = new ArrayList<>(Arrays.asList(mapper.readValue(discountCodesJSON, DiscountCode[].class)));
             currentUser = null;
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,6 +99,32 @@ public class Baloot {
         }
     }
 
+    public boolean discountCodeValidityCheck(String discountCode)
+    {
+        for(DiscountCode discountCodeTemp : discountCodes)
+        {
+            if(discountCodeTemp.getCode() == discountCode && !discountCodeTemp.isDeprecated())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Response deprecateDiscountCode(String discountCode)
+    {
+        for(DiscountCode discountCodeTemp : discountCodes)
+        {
+            if(discountCodeTemp.getCode() == discountCode)
+            {
+                discountCodeTemp.setDeprecated(true);
+                return new SuccessfulResponse("Discount code deprecated.");
+            }
+        }
+        return  new FailedResponse("Discount code not found to deprecate.");
+    }
+
+
     public boolean addUser(User newUser) {
         String username = newUser.username;
 
@@ -121,6 +151,10 @@ public class Baloot {
         return !username.matches(".*[@!#$%^&*()\\u0020\\u200C].*"); // false if username contains any special character.
     }
 
+    public ArrayList<DiscountCode> getDiscountCodes() {
+        return discountCodes;
+    }
+
     public boolean addCommodity(Commodity commodity) {
         int providerId = commodity.getProviderId();
         Provider provider = findProviderByProviderId(providerId);
@@ -128,6 +162,9 @@ public class Baloot {
         provider.addRating(commodity.getId(), commodity.getRating());
         commodities.add(commodity);
         return true;
+    }
+    public void addDiscountCode(DiscountCode discountCode) {
+        discountCodes.add(discountCode);
     }
 
     public Commodity findCommodityById(int commodityId) {
@@ -311,4 +348,15 @@ public class Baloot {
     public void setCurrentUser(String currentUser) {
         this.currentUser = currentUser;
     }
+
+    public void quantityToChangeCommodityInStock(int commodityId , int quantity )
+    {
+        for(Commodity commodity : commodities)
+        {
+            if(commodity.getId()==commodityId){
+                commodity.setInStock(commodity.getInStock()+quantity);
+            }
+        }
+    }
+
 }

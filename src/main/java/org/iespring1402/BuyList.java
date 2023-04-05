@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class BuyList {
     private ArrayList<Integer> list;
 
+    private DiscountCode activeDiscountCode;
     public BuyList() {
         list = new ArrayList<Integer>();
     }
@@ -29,6 +30,32 @@ public class BuyList {
             return new SuccessfulResponse();
         } else return new FailedResponse("No commodity found with this commodity id in your buy list!");
     }
+
+    public void setActiveDiscountCode(DiscountCode activeDiscountCode) {
+        this.activeDiscountCode = activeDiscountCode;
+    }
+
+    public DiscountCode getActiveDiscountCode() {
+        return activeDiscountCode;
+    }
+    public  void deactivateDiscountCode(){
+        activeDiscountCode = null;
+    }
+    public int totalCost(){
+        int total = 0;
+        for(int id : list)
+        {
+            int cost = Baloot.getInstance().findCommodityById(id).getPrice();
+            total += cost;
+        }
+        if(activeDiscountCode != null )
+        {
+            total = total + total* activeDiscountCode.getDiscount()/100;
+        }
+        return total;
+    }
+
+
 
     public ArrayList<Integer> getList() {
         return list;
