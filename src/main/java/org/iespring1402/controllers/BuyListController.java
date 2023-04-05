@@ -38,7 +38,7 @@ public class BuyListController extends HttpServlet {
 
             req.setAttribute("username", username);
             req.setAttribute("email", email);
-            req.setAttribute("birthdate", birthDate);
+            req.setAttribute("birthDate", birthDate);
             req.setAttribute("address", address);
             req.setAttribute("credit", credit);
             req.setAttribute("totalCost", totalCost);

@@ -1,7 +1,16 @@
+<%@ page import ="java.util.ArrayList"%>
+<%@ page import ="java.util.List"%>
+<%@ page import="org.iespring1402.Baloot" %>
+<%@ page import="org.iespring1402.Commodity" %>
 <html lang="en"><head>
     <meta charset="UTF-8">
     <title>User</title>
     <style>
+    discount {
+    position: absolute;
+      width: 50%;
+      bottom: 10px;
+    }
         li {
         	padding: 5px
         }
@@ -48,7 +57,7 @@
             <th></th>
             <th></th>
         </tr>
-         <% for (Commodity commodity : visibleCommodities) { %>
+         <% for (Commodity commodity : buyList) { %>
             <tr>
                 <td><%=commodity.getId()%>
                 </td>
@@ -73,11 +82,13 @@
             </tr>
             <%}%>
     </tbody></table>
-       <li>
+    <br>
+       <discount>
               <form id="discount" action="/buyList" method="POST">
                     <label>Enter your Discount Code Here: </label>
                     <input type= "text" name="discount" />
-                    <button type= "submit" >Add to credit</button>
+                    <button type= "submit" >Submit</button>
               </form>
        </li>
+       </discount>
 </body></html>
