@@ -123,8 +123,16 @@ public class Baloot {
 
     public Response insertDiscountCodeToUsedForUser(DiscountCode discountCode,String username)
     {
-        //TODO
+        try {
+            User  user = findUserByUsername(username);
+            return   user.addToUsedDiscounts(discountCode);
+        }
+        catch (Exception e)
+        {
+            return new FailedResponse("username not found!");
+        }
     }
+
     public boolean addUser(User newUser) {
         String username = newUser.username;
 
@@ -149,6 +157,10 @@ public class Baloot {
 
     private boolean isUsernameValid(String username) {
         return !username.matches(".*[@!#$%^&*()\\u0020\\u200C].*"); // false if username contains any special character.
+    }
+
+    public ArrayList<DiscountCode> getDiscountCodes() {
+        return discountCodes;
     }
 
     public boolean addCommodity(Commodity commodity) {

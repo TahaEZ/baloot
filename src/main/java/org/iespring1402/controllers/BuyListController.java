@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.iespring1402.Baloot;
 import org.iespring1402.CategoryFilter;
 import org.iespring1402.Commodity;
+import org.iespring1402.DiscountCode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -78,6 +79,8 @@ public class BuyListController extends HttpServlet {
                         Baloot.getInstance().findUserByUsername(username).addToPurchasedList(commodity);
                     }
                     Baloot.getInstance().findUserByUsername(username).resetBuyList();
+                    Baloot.getInstance().findUserByUsername(username).addToUsedDiscounts(Baloot.getInstance().findUserByUsername(username).getBuyList().getActiveDiscountCode());
+                    Baloot.getInstance().findUserByUsername(username).getBuyList().deactivateDiscountCode();
                     String commoditiesPageName = "/buyList.jsp";
                     RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(commoditiesPageName);
                     requestDispatcher.forward(req, resp);
@@ -89,7 +92,23 @@ public class BuyListController extends HttpServlet {
                 String discountCode  = req.getParameter("discount");
                 if(Baloot.getInstance().discountCodeValidityCheck(discountCode))
                 {
-                    //TODO
+                    if(Baloot.getInstance().findUserByUsername(username).isDiscountCodeUsed(discountCode) == false)
+                    {
+                        Baloot.getInstance().findUserByUsername(username).setActiveDiscountCode(discountCode);
+                        totalCost = Baloot.getInstance().findUserByUsername(username).getBuyList().totalCost();
+                    }
+                    else {
+                        String errorPageName = "/error.jsp";
+                        req.setAttribute("message", "Discount Code used before!");
+                        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(errorPageName);
+                        requestDispatcher.forward(req, resp);
+                    }
+                }
+                else {
+                    String errorPageName = "/error.jsp";
+                    req.setAttribute("message", "Invalid Discount Code!");
+                    RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(errorPageName);
+                    requestDispatcher.forward(req, resp);
                 }
             }
             req.setAttribute("username", username);

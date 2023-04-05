@@ -12,9 +12,9 @@ public class User {
     public String email;
     public String birthDate;
     public String address;
+
     public long credit;
     private BuyList buyList;
-
     private ArrayList<DiscountCode> usedDiscounts;
 
     private PurchasedList purchasedList;
@@ -66,6 +66,28 @@ public class User {
         return buyList.add(commodityId);
     }
 
+    public boolean isDiscountCodeUsed(String discount)
+    {
+        for(DiscountCode discountCode: usedDiscounts)
+        {
+            if(discountCode.getCode() == discount)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setActiveDiscountCode(String discountCode)
+    {
+            for(DiscountCode foundDiscountCode : Baloot.getInstance().getDiscountCodes())
+            {
+                if(foundDiscountCode.getCode() == discountCode)
+                {
+                    buyList.setActiveDiscountCode(foundDiscountCode);
+                }
+            }
+    }
     public Response addToPurchasedList(Commodity commodity){return purchasedList.add(commodity);}
 
     public Response removeFromBuyList(int commodityId) {return buyList.remove(commodityId);}
