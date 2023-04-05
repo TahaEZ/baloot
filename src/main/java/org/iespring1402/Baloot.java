@@ -40,12 +40,9 @@ public class Baloot {
             for (Commodity commodity : commodityArrayList) {
                 addCommodity(commodity);
             }
-            String discountCodesJSON = fetchData("/api/discount");
-            ArrayList<DiscountCode> discountsArrayList = new ArrayList<>(Arrays.asList(mapper.readValue(discountCodesJSON, DiscountCode[].class)));
             discountCodes = new ArrayList<>();
-            for (DiscountCode discountCode : discountsArrayList) {
-                addDiscountCode(discountCode);
-            }
+            String discountCodesJSON = fetchData("/api/discount");
+            discountCodes = new ArrayList<>(Arrays.asList(mapper.readValue(discountCodesJSON, DiscountCode[].class)));
             currentUser = null;
         } catch (Exception e) {
             e.printStackTrace();
@@ -127,17 +124,6 @@ public class Baloot {
         return  new FailedResponse("Discount code not found to deprecate.");
     }
 
-    public Response insertDiscountCodeToUsedForUser(DiscountCode discountCode,String username)
-    {
-        try {
-            User  user = findUserByUsername(username);
-            return   user.addToUsedDiscounts(discountCode);
-        }
-        catch (Exception e)
-        {
-            return new FailedResponse("username not found!");
-        }
-    }
 
     public boolean addUser(User newUser) {
         String username = newUser.username;
@@ -362,4 +348,15 @@ public class Baloot {
     public void setCurrentUser(String currentUser) {
         this.currentUser = currentUser;
     }
+
+    public void quantityToChangeCommodityInStock(int commodityId , int quantity )
+    {
+        for(Commodity commodity : commodities)
+        {
+            if(commodity.getId()==commodityId){
+                commodity.setInStock(commodity.getInStock()+quantity);
+            }
+        }
+    }
+
 }

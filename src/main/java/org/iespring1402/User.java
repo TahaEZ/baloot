@@ -23,6 +23,7 @@ public class User {
         super();
         this.buyList = new BuyList();
         this.purchasedList = new PurchasedList();
+        this.usedDiscounts = new ArrayList<>();
     }
 
     public User(String username, String password, String email, String birthDate, String address, long credit) {
@@ -34,7 +35,7 @@ public class User {
         this.credit = credit;
         this.buyList = new BuyList();
         this.purchasedList = new PurchasedList();
-        this.usedDiscounts = new ArrayList<DiscountCode>();
+        this.usedDiscounts = new ArrayList<>();
     }
 
     public void updateUser(String password, String email, String birthDate, String address, long credit) {

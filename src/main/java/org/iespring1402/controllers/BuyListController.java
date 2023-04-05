@@ -70,19 +70,25 @@ public class BuyListController extends HttpServlet {
                     req.setAttribute("message", "Insufficient Credit");
                     RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(errorPageName);
                     requestDispatcher.forward(req, resp);
-                    return;
+                } else if (Baloot.getInstance().findUserByUsername(username).getBuyList().getList().isEmpty()) {
+                    String errorPageName = "/error.jsp";
+                    req.setAttribute("message", "Buy list is empty!");
+                    RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(errorPageName);
+                    requestDispatcher.forward(req, resp);
                 } else {
                     Long remainedCredit = credit - totalCost;
                     Baloot.getInstance().findUserByUsername(username).setCredit(remainedCredit);
                     for (int commodityId : Baloot.getInstance().findUserByUsername(username).getBuyList().getList()) {
                         Commodity commodity = Baloot.getInstance().findCommodityById(commodityId);
+                        Baloot.getInstance().quantityToChangeCommodityInStock(commodityId,-1);
                         Baloot.getInstance().findUserByUsername(username).addToPurchasedList(commodity);
                     }
-                    Baloot.getInstance().findUserByUsername(username).resetBuyList();
                     Baloot.getInstance().findUserByUsername(username).addToUsedDiscounts(Baloot.getInstance().findUserByUsername(username).getBuyList().getActiveDiscountCode());
                     Baloot.getInstance().findUserByUsername(username).getBuyList().deactivateDiscountCode();
-                    String commoditiesPageName = "/buyList.jsp";
-                    RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(commoditiesPageName);
+                    Baloot.getInstance().findUserByUsername(username).resetBuyList();
+                    String errorPageName = "/ok.jsp";
+                    req.setAttribute("message", "Payment was successful!");
+                    RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(errorPageName);
                     requestDispatcher.forward(req, resp);
                 }
             }

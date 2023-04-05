@@ -32,7 +32,7 @@
         <li id="credit">Credit: <%=request.getAttribute("credit")%></li></li>
         <li>Current Buy List Price: <%=request.getAttribute("totalCost")%></li></li>
         <li>
-            <a href="/credit">Add Credit</a>
+            <a href="credit">Add Credit</a>
         </li>
         <li>
             <form action="buyList" method="POST">
