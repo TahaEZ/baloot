@@ -19,15 +19,19 @@ public class LoginController extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
-        String loginPageName = "/login.jsp";
+        String errorPageName = "/error.jsp";
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+            String message = "";
             if (StringUtils.isBlank(username)) {
-                req.setAttribute("badUsername", "true");
+                message += "Username cannot be empty!";
             }
             if (StringUtils.isBlank(password)) {
-                req.setAttribute("badPassword", "true");
+                if (!message.isEmpty())
+                    message += "<br>";
+                message += "Password cannot be empty!";
             }
-            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(loginPageName);
+            req.setAttribute("message", message);
+            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(errorPageName);
             requestDispatcher.forward(req, resp);
         } else {
             User user = Baloot.getInstance().findUserByUsername(username);
@@ -40,8 +44,8 @@ public class LoginController extends HttpServlet {
                     return;
                 }
             }
-            req.setAttribute("wrongUserPass", "true");
-            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(loginPageName);
+            req.setAttribute("message", "Wrong password or username!");
+            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(errorPageName);
             requestDispatcher.forward(req, resp);
         }
     }

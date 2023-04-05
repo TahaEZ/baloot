@@ -28,7 +28,11 @@ public class Comment {
     }
 
     public void voteComment(String username, int vote) {
-        votes.put(username, vote);
+        if (votes.get(username) != null && votes.get(username) == vote) {
+            votes.put(username, 0);
+        } else {
+            votes.put(username, vote);
+        }
     }
 
     public String getId() {

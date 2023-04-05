@@ -9,6 +9,7 @@
 </head>
 
 <body>
+<%if (Baloot.getInstance().getCurrentUser() == null) response.sendRedirect(request.getContextPath() + "/login");%>
 username: <span><%=Baloot.getInstance().getCurrentUser()%></span>
 <br>
 <form method="post" action="CreditController">
