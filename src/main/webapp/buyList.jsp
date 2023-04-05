@@ -35,7 +35,7 @@
             <a href="/credit">Add Credit</a>
         </li>
         <li>
-            <form action="/buyList" method="POST">
+            <form action="buyList" method="POST">
                 <label>Submit & Pay</label>
                 <input id="form_payment" type="hidden" name="payment" value=<%=request.getAttribute("username")%>>
                 <button type="submit">Payment</button>
@@ -74,7 +74,7 @@
                 </td>
                 <td><a href="/commodities/<%=commodity.getId()%>">Link</a></td>
                  <td>
-                                <form action="/buyList" method="POST">
+                                <form action="buyList" method="POST">
                                     <input id="form_commodity_id" type="hidden" name="remove" value=<%=commodity.getId()%>>
                                     <button type="submit">Remove</button>
                                 </form>
@@ -84,7 +84,7 @@
     </tbody></table>
     <br>
        <discount>
-              <form id="discount" action="/buyList" method="POST">
+              <form id="discount" action="buyList" method="POST">
                     <label>Enter your Discount Code Here: </label>
                     <input type= "text" name="discount" />
                     <button type= "submit" >Submit</button>

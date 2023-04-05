@@ -41,7 +41,11 @@ public class Baloot {
                 addCommodity(commodity);
             }
             String discountCodesJSON = fetchData("/api/discount");
-            discountCodes = new ArrayList<>(Arrays.asList((mapper.readValue(discountCodesJSON, DiscountCode[].class))));
+            ArrayList<DiscountCode> discountsArrayList = new ArrayList<>(Arrays.asList(mapper.readValue(discountCodesJSON, DiscountCode[].class)));
+            discountCodes = new ArrayList<>();
+            for (DiscountCode discountCode : discountsArrayList) {
+                addDiscountCode(discountCode);
+            }
             currentUser = null;
         } catch (Exception e) {
             e.printStackTrace();
@@ -172,6 +176,9 @@ public class Baloot {
         provider.addRating(commodity.getId(), commodity.getRating());
         commodities.add(commodity);
         return true;
+    }
+    public void addDiscountCode(DiscountCode discountCode) {
+        discountCodes.add(discountCode);
     }
 
     public Commodity findCommodityById(int commodityId) {
