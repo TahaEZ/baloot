@@ -23,7 +23,7 @@
 %>
 <body>
 <%if (Baloot.getInstance().getCurrentUser() == null) response.sendRedirect(request.getContextPath() + "/login");%>
-<span>username: Siri</span>
+username: <span><%=Baloot.getInstance().getCurrentUser()%></span>
 <br>
 <ul>
     <li id="id">Id: <%=commodity.getId()%>

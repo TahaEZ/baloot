@@ -21,6 +21,7 @@
 <body>
 <%if (Baloot.getInstance().getCurrentUser() == null) response.sendRedirect(request.getContextPath() + "/login");%>
 
+username: <span><%=Baloot.getInstance().getCurrentUser()%></span>
 <%
     Provider provider = (Provider) request.getAttribute("provider");
     ArrayList<Commodity> providedCommodities = (ArrayList<Commodity>) request.getAttribute("providedCommodities");
