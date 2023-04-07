@@ -31,8 +31,6 @@ public class BuyListController extends HttpServlet {
             long credit = Baloot.getInstance().findUserByUsername(username).getCredit();
 
 
-            DiscountCode discountCode = Baloot.getInstance().findDiscountCodeByCode("HAPPY_NOWRUZ");
-            Baloot.getInstance().findUserByUsername(username).getBuyList().setActiveDiscountCode(discountCode);
             DiscountCode activeDiscount = Baloot.getInstance().findUserByUsername(username).getBuyList().getActiveDiscountCode();
             long totalCost = Baloot.getInstance().findUserByUsername(username).getBuyList().totalCost();
 

@@ -62,7 +62,7 @@ public class BuyList {
         }
         if(isDiscountActive == true )
         {
-            total = total + total* activeDiscountCode.getDiscount()/100;
+            total = total - total* activeDiscountCode.getDiscount()/100;
         }
         return total;
     }
