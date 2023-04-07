@@ -79,16 +79,6 @@ public class User {
         return false;
     }
 
-    public void setActiveDiscountCode(String discountCode)
-    {
-            for(DiscountCode foundDiscountCode : Baloot.getInstance().getDiscountCodes())
-            {
-                if(foundDiscountCode.getCode() == discountCode)
-                {
-                    buyList.setActiveDiscountCode(foundDiscountCode);
-                }
-            }
-    }
     public Response addToPurchasedList(Commodity commodity){return purchasedList.add(commodity);}
 
     public Response removeFromBuyList(int commodityId) {return buyList.remove(commodityId);}

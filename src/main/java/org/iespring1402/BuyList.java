@@ -31,8 +31,8 @@ public class BuyList {
         } else return new FailedResponse("No commodity found with this commodity id in your buy list!");
     }
 
-    public void setActiveDiscountCode(DiscountCode activeDiscountCode) {
-        this.activeDiscountCode = activeDiscountCode;
+    public void setActiveDiscountCode(DiscountCode active) {
+        activeDiscountCode = active;
     }
 
     public DiscountCode getActiveDiscountCode() {
