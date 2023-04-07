@@ -1,0 +1,11 @@
+input {
+    border: 1px solid black;
+}
+
+.has-error :is(label, span) {
+    color: red;
+}
+
+.has-error input {
+    border: 1px solid red;
+}

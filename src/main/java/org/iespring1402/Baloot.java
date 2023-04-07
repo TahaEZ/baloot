@@ -10,16 +10,20 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.ArrayList;
 
 public class Baloot {
     private static final String API_URL = "http://5.253.25.110:5000";
     private static Baloot instance;
+    private String currentUser;
     private ArrayList<User> users;
     private ArrayList<Commodity> commodities;
     private ArrayList<Provider> providers;
     private ArrayList<Comment> comments;
+    private  ArrayList<DiscountCode> discountCodes;
 
     public Baloot() {
         ObjectMapper mapper = new ObjectMapper();
@@ -36,6 +40,10 @@ public class Baloot {
             for (Commodity commodity : commodityArrayList) {
                 addCommodity(commodity);
             }
+            discountCodes = new ArrayList<>();
+            String discountCodesJSON = fetchData("/api/discount");
+            discountCodes = new ArrayList<>(Arrays.asList(mapper.readValue(discountCodesJSON, DiscountCode[].class)));
+            currentUser = null;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,6 +68,17 @@ public class Baloot {
         return null;
     }
 
+    public DiscountCode findDiscountCodeByCode(String code)
+    {
+        for (DiscountCode discountCode: discountCodes)
+        {
+            if(discountCode.getCode().equals(code) )
+            {
+                return  discountCode;
+            }
+        }
+        return null;
+    }
     public ArrayList<Commodity> getCommodities() {
         return commodities;
     }
@@ -91,6 +110,32 @@ public class Baloot {
         }
     }
 
+    public boolean discountCodeValidityCheck(String discountCode)
+    {
+        for(DiscountCode discountCodeTemp : discountCodes)
+        {
+            if(discountCodeTemp.getCode().equals(discountCode)  && discountCodeTemp.isDeprecated()== false)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Response deprecateDiscountCode(String discountCode)
+    {
+        for(DiscountCode discountCodeTemp : discountCodes)
+        {
+            if(discountCodeTemp.getCode() == discountCode)
+            {
+                discountCodeTemp.setDeprecated(true);
+                return new SuccessfulResponse("Discount code deprecated.");
+            }
+        }
+        return  new FailedResponse("Discount code not found to deprecate.");
+    }
+
+
     public boolean addUser(User newUser) {
         String username = newUser.username;
 
@@ -117,6 +162,10 @@ public class Baloot {
         return !username.matches(".*[@!#$%^&*()\\u0020\\u200C].*"); // false if username contains any special character.
     }
 
+    public ArrayList<DiscountCode> getDiscountCodes() {
+        return discountCodes;
+    }
+
     public boolean addCommodity(Commodity commodity) {
         int providerId = commodity.getProviderId();
         Provider provider = findProviderByProviderId(providerId);
@@ -124,6 +173,9 @@ public class Baloot {
         provider.addRating(commodity.getId(), commodity.getRating());
         commodities.add(commodity);
         return true;
+    }
+    public void addDiscountCode(DiscountCode discountCode) {
+        discountCodes.add(discountCode);
     }
 
     public Commodity findCommodityById(int commodityId) {
@@ -212,7 +264,7 @@ public class Baloot {
                         provider.addRating(commodityId, commodityRating);
 
                         return new SuccessfulResponse();
-                    }else {
+                    } else {
                         return new FailedResponse("Score must be an integer from 1 to 10!");
                     }
                 } else
@@ -265,4 +317,57 @@ public class Baloot {
         } else
             providers.add(newProvider);
     }
+
+    public Response addComment(String username, int commodityId, String text) {
+        User user = findUserByUsername(username);
+        if (user == null)
+            return new FailedResponse("No user found with this username!");
+        Commodity commodity = findCommodityById(commodityId);
+        if (commodity == null) {
+            return new FailedResponse("No commodity found with this commodity id!");
+        }
+        if (text.isEmpty()) {
+            return new FailedResponse("Your comment can't be empty!");
+        }
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+        Comment comment = new Comment(user.getEmail(), commodityId, text, dateFormat.format(date));
+        comments.add(comment);
+        return new SuccessfulResponse();
+    }
+
+    public Response voteComment(String username, String commentId, int vote) {
+        User user = findUserByUsername(username);
+        if (user == null)
+            return new FailedResponse("No user found with this username!");
+        Comment comment = Baloot.getInstance().findCommentById(commentId);
+        if (comment == null) {
+            return new FailedResponse("No comment found with this comment id!");
+        }
+        if (vote == 1 || vote == -1 || vote == 0) {
+            comment.voteComment(username, vote);
+            return new SuccessfulResponse();
+        } else {
+            return new FailedResponse("Vote must be 1, -1 or 0 (like, dislike or neutral)");
+        }
+    }
+
+    public String getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(String currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    public void quantityToChangeCommodityInStock(int commodityId , int quantity )
+    {
+        for(Commodity commodity : commodities)
+        {
+            if(commodity.getId()==commodityId){
+                commodity.setInStock(commodity.getInStock()+quantity);
+            }
+        }
+    }
+
 }

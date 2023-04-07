@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>403 Forbidden</title>
+    <title>404 Error</title>
 </head>
 <body>
-    <h1>403<br>This function is Forbidden!</h1>
+<h1>404<br>Page Not Found!</h1>
 </body>
 </html>

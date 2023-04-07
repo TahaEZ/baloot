@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>404 Error</title>
+    <title>200 Success</title>
 </head>
 <body>
-    <h1>404<br>Page Not Found!</h1>
+<h1>200<br>Function done successfully!</h1>
 </body>
 </html>

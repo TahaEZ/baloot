@@ -79,6 +79,10 @@ public class Commodity {
         return inStock != 0;
     }
 
+    public void setInStock(int inStock) {
+        this.inStock = inStock;
+    }
+
     @JsonIgnore
     public HashMap<String, Integer> getRatings() {
         return ratings;
