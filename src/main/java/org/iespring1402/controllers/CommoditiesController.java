@@ -43,6 +43,10 @@ public class CommoditiesController extends HttpServlet {
                         break;
                     case "sort_by_rate":
                         visibleCommodities = new ArrayList<>(allCommodities);
+                        visibleCommodities.sort(Comparator.comparingDouble(Commodity::getRating));
+                        break;
+                    case "sort_by_price":
+                        visibleCommodities = new ArrayList<>(allCommodities);
                         visibleCommodities.sort(Comparator.comparingInt(Commodity::getPrice));
                         break;
                     default:

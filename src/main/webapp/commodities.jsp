@@ -35,6 +35,7 @@ username: <span><%=Baloot.getInstance().getCurrentUser()%></span>
 <form action="commodities" method="GET">
     <label>Sort By:</label>
     <button type="submit" name="action" value="sort_by_rate">Rate</button>
+    <button type="submit" name="action" value="sort_by_price">Price</button>
 </form>
 <br><br>
 <table>
