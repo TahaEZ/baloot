@@ -68,6 +68,17 @@ public class Baloot {
         return null;
     }
 
+    public DiscountCode findDiscountCodeByCode(String code)
+    {
+        for (DiscountCode discountCode: discountCodes)
+        {
+            if(discountCode.getCode().equals(code) )
+            {
+                return  discountCode;
+            }
+        }
+        return null;
+    }
     public ArrayList<Commodity> getCommodities() {
         return commodities;
     }
@@ -103,7 +114,7 @@ public class Baloot {
     {
         for(DiscountCode discountCodeTemp : discountCodes)
         {
-            if(discountCodeTemp.getCode() == discountCode && !discountCodeTemp.isDeprecated())
+            if(discountCodeTemp.getCode().equals(discountCode)  && discountCodeTemp.isDeprecated()== false)
             {
                 return true;
             }

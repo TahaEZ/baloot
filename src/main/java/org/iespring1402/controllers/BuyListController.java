@@ -29,6 +29,9 @@ public class BuyListController extends HttpServlet {
             String birthDate = Baloot.getInstance().findUserByUsername(username).getBirthDate();
             String address = Baloot.getInstance().findUserByUsername(username).getAddress();
             long credit = Baloot.getInstance().findUserByUsername(username).getCredit();
+
+
+            DiscountCode activeDiscount = Baloot.getInstance().findUserByUsername(username).getBuyList().getActiveDiscountCode();
             long totalCost = Baloot.getInstance().findUserByUsername(username).getBuyList().totalCost();
 
             ArrayList<Commodity> buyList = new ArrayList<>();
@@ -43,6 +46,13 @@ public class BuyListController extends HttpServlet {
             req.setAttribute("credit", credit);
             req.setAttribute("totalCost", totalCost);
             req.setAttribute("buyList", buyList);
+            if(Baloot.getInstance().findUserByUsername(username).getBuyList().isDiscountActive()){
+                req.setAttribute("isDiscountActive","true");
+                req.setAttribute("activeDiscount", activeDiscount.getCode());
+            }else {
+                req.setAttribute("isDiscountActive","false");
+
+            }
 
             String commoditiesPageName = "/buyList.jsp";
             RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(commoditiesPageName);
@@ -100,8 +110,11 @@ public class BuyListController extends HttpServlet {
                 {
                     if(!Baloot.getInstance().findUserByUsername(username).isDiscountCodeUsed(discountCode))
                     {
-                        Baloot.getInstance().findUserByUsername(username).setActiveDiscountCode(discountCode);
-                        totalCost = Baloot.getInstance().findUserByUsername(username).getBuyList().totalCost();
+                        Baloot.getInstance().findUserByUsername(username).getBuyList().setActiveDiscountCode(Baloot.getInstance().findDiscountCodeByCode(discountCode));
+                        String errorPageName = "/ok.jsp";
+                        req.setAttribute("message", "Discount Code submitted !" );
+                        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(errorPageName);
+                        requestDispatcher.forward(req, resp);
                     }
                     else {
                         String errorPageName = "/error.jsp";
@@ -113,6 +126,21 @@ public class BuyListController extends HttpServlet {
                 else {
                     String errorPageName = "/error.jsp";
                     req.setAttribute("message", "Invalid Discount Code!");
+                    RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(errorPageName);
+                    requestDispatcher.forward(req, resp);
+                }
+            } else if (req.getParameter("remove") != null) {
+                try {
+                    Baloot.getInstance().findUserByUsername(username).removeFromBuyList(Integer.parseInt(req.getParameter("remove")));
+                    String errorPageName = "/ok.jsp";
+                    req.setAttribute("message", "Commodity Removed!");
+                    RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(errorPageName);
+                    requestDispatcher.forward(req, resp);
+                }
+                catch (Exception e)
+                {
+                    String errorPageName = "/error.jsp";
+                    req.setAttribute("message", "Invalid request !");
                     RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(errorPageName);
                     requestDispatcher.forward(req, resp);
                 }

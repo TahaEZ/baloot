@@ -41,6 +41,19 @@
                 <button type="submit">Payment</button>
             </form>
         </li>
+
+       <%
+               if (request.getAttribute("isDiscountActive") == "true") {%>
+               <li>
+                   <div>
+                        Active Discount :  <%=request.getAttribute("activeDiscount")%>
+                    </div>
+                </li>
+           <br>
+           <%
+               }
+           %>
+
     </ul>
     <table>
         <caption>
