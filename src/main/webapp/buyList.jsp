@@ -86,8 +86,8 @@
        <discount>
               <form id="discount" action="buyList" method="POST">
                     <label>Enter your Discount Code Here: </label>
-                    <input type= "text" name="discount" />
-                    <button type= "submit" >Submit</button>
+                    <input type="text" name="discount" />
+                    <button type="submit" >Submit</button>
               </form>
        </li>
        </discount>

@@ -98,7 +98,7 @@ public class BuyListController extends HttpServlet {
                 String discountCode  = req.getParameter("discount");
                 if(Baloot.getInstance().discountCodeValidityCheck(discountCode))
                 {
-                    if(Baloot.getInstance().findUserByUsername(username).isDiscountCodeUsed(discountCode) == false)
+                    if(!Baloot.getInstance().findUserByUsername(username).isDiscountCodeUsed(discountCode))
                     {
                         Baloot.getInstance().findUserByUsername(username).setActiveDiscountCode(discountCode);
                         totalCost = Baloot.getInstance().findUserByUsername(username).getBuyList().totalCost();
