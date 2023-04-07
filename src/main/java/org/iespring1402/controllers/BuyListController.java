@@ -29,12 +29,12 @@ public class BuyListController extends HttpServlet {
             String birthDate = Baloot.getInstance().findUserByUsername(username).getBirthDate();
             String address = Baloot.getInstance().findUserByUsername(username).getAddress();
             long credit = Baloot.getInstance().findUserByUsername(username).getCredit();
-            long totalCost = Baloot.getInstance().findUserByUsername(username).getBuyList().totalCost();
 
 
             DiscountCode discountCode = Baloot.getInstance().findDiscountCodeByCode("HAPPY_NOWRUZ");
             Baloot.getInstance().findUserByUsername(username).getBuyList().setActiveDiscountCode(discountCode);
             DiscountCode activeDiscount = Baloot.getInstance().findUserByUsername(username).getBuyList().getActiveDiscountCode();
+            long totalCost = Baloot.getInstance().findUserByUsername(username).getBuyList().totalCost();
 
             ArrayList<Commodity> buyList = new ArrayList<>();
             for (int commodityId : Baloot.getInstance().findUserByUsername(username).getBuyList().getList()) {
@@ -49,10 +49,11 @@ public class BuyListController extends HttpServlet {
             req.setAttribute("totalCost", totalCost);
             req.setAttribute("buyList", buyList);
             if(Baloot.getInstance().findUserByUsername(username).getBuyList().isDiscountActive()){
-                req.setAttribute("isDiscountActive",true);
+                req.setAttribute("isDiscountActive","true");
                 req.setAttribute("activeDiscount", activeDiscount.getCode());
             }else {
-                req.setAttribute("isDiscountActive",false);
+                req.setAttribute("isDiscountActive","false");
+
             }
 
             String commoditiesPageName = "/buyList.jsp";

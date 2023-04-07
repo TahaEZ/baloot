@@ -46,7 +46,7 @@
                if (request.getAttribute("isDiscountActive") == "true") {%>
                <li>
                    <div>
-                        Active Discount :  <%=request.getAttribute("activeDiscountCode")%>
+                        Active Discount :  <%=request.getAttribute("activeDiscount")%>
                     </div>
                 </li>
            <br>
