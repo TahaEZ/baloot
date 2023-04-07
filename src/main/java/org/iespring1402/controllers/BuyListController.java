@@ -30,6 +30,10 @@ public class BuyListController extends HttpServlet {
             String address = Baloot.getInstance().findUserByUsername(username).getAddress();
             long credit = Baloot.getInstance().findUserByUsername(username).getCredit();
             long totalCost = Baloot.getInstance().findUserByUsername(username).getBuyList().totalCost();
+
+
+            DiscountCode discountCode = Baloot.getInstance().findDiscountCodeByCode("HAPPY_NOWRUZ");
+            Baloot.getInstance().findUserByUsername(username).getBuyList().setActiveDiscountCode(discountCode);
             DiscountCode activeDiscount = Baloot.getInstance().findUserByUsername(username).getBuyList().getActiveDiscountCode();
 
             ArrayList<Commodity> buyList = new ArrayList<>();
@@ -44,7 +48,7 @@ public class BuyListController extends HttpServlet {
             req.setAttribute("credit", credit);
             req.setAttribute("totalCost", totalCost);
             req.setAttribute("buyList", buyList);
-            if(Baloot.getInstance().findUserByUsername(username).getBuyList().getActiveDiscountCode() != null){
+            if(Baloot.getInstance().findUserByUsername(username).getBuyList().isDiscountActive()){
                 req.setAttribute("isDiscountActive",true);
                 req.setAttribute("activeDiscount", activeDiscount.getCode());
             }else {

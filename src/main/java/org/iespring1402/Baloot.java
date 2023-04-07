@@ -72,7 +72,7 @@ public class Baloot {
     {
         for (DiscountCode discountCode: discountCodes)
         {
-            if(discountCode.getCode() == code)
+            if(discountCode.getCode().equals(code) )
             {
                 return  discountCode;
             }
