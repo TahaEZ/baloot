@@ -53,8 +53,8 @@ public class BuyList {
         activeDiscountCode = new DiscountCode();
         isDiscountActive = false;
     }
-    public int totalCost(){
-        int total = 0;
+    public long totalCost(){
+        long total = 0;
         for(int id : list)
         {
             int cost = Baloot.getInstance().findCommodityById(id).getPrice();
