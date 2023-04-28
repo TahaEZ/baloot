@@ -1,8 +1,4 @@
 package org.iespring1402.Baloot.controller;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import org.iespring1402.Baloot.model.Baloot;
 import org.iespring1402.Baloot.model.Commodity;
 import org.iespring1402.Baloot.model.CommodityByIdView;
@@ -24,13 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @CrossOrigin
 public class commodityController {
     private Baloot balootInstance = new Baloot();
-
-    @GetMapping("/")
-    public @ResponseBody Object list() {
-        Map commoditiesList = new HashMap();
-        commoditiesList.put("commoditiesList", balootInstance.getCommodities());
-        return commoditiesList;
-    }
 
     @GetMapping(value = "")
     @ResponseBody
