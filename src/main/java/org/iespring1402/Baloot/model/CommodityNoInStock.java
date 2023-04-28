@@ -1,0 +1,70 @@
+package org.iespring1402.Baloot.model;
+
+import java.util.ArrayList;
+
+public class CommodityNoInStock {
+    private int id;
+    private String name;
+    private int providerId;
+    private int price;
+    private ArrayList<String> categories;
+    private float rating;
+
+
+    public CommodityNoInStock(int id, String name, int providerId, int price, ArrayList<String> categories, float rating) {
+        this.id = id;
+        this.name = name;
+        this.providerId = providerId;
+        this.price = price;
+        this.categories = categories;
+        this.rating = rating;
+    }
+
+    public ArrayList<String> getCategories() {
+        return categories;
+    }
+
+    public int getProviderId() {
+        return providerId;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setCategories(ArrayList<String> categories) {
+        this.categories = categories;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public void setProviderId(int providerId) {
+        this.providerId = providerId;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+}
