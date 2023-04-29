@@ -1,4 +1,5 @@
 package org.iespring1402.Baloot.controller;
+
 import org.iespring1402.Baloot.model.Baloot;
 import org.iespring1402.Baloot.model.Commodity;
 import org.iespring1402.Baloot.model.CommodityByIdView;
@@ -36,7 +37,7 @@ public class commodityController {
     }
 
     @PostMapping(value = "/rate")
-    public Object rateCommodity(@RequestBody String username, int id, int rate) {
+    public Object rateCommodity(@RequestParam String username, int id, int rate) {
 
         if (rate >= 1 && rate <= 10) {
             try {

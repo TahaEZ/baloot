@@ -3,7 +3,6 @@ package org.iespring1402.Baloot.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import org.iespring1402.Baloot.model.Baloot;
 import org.iespring1402.Baloot.model.CategoryFilter;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -48,5 +45,4 @@ public class commoditiesController {
         return filteredCommoditiesList;
     }
 
-    
 }

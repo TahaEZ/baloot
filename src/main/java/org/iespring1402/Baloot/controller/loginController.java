@@ -1,4 +1,5 @@
 package org.iespring1402.Baloot.controller;
+
 import org.iespring1402.Baloot.model.Baloot;
 import org.iespring1402.Baloot.model.User;
 import org.springframework.http.HttpStatus;
@@ -15,17 +16,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @CrossOrigin
 public class loginController {
     private Baloot balootInstance = new Baloot();
+
     @GetMapping(value = "")
     @ResponseBody
-    public Object credentialsCheck(@RequestParam String username , String password) {
+    public Object credentialsCheck(@RequestParam String username, String password) {
         User user = balootInstance.findUserByUsername(username);
         if (user == null || user.password != password) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-        else
-        {
+        } else {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(null);
-
         }
     }
 
