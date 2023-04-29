@@ -21,10 +21,10 @@ public class loginController {
     @ResponseBody
     public Object credentialsCheck(@RequestParam String username, String password) {
         User user = balootInstance.findUserByUsername(username);
-        if (user == null || user.password != password) {
+        if (user == null || !user.getPassword().equals(password)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } else {
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(null);
+            return ResponseEntity.status(HttpStatus.OK).body(user);
         }
     }
 
