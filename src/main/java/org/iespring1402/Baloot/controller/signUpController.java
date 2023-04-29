@@ -27,7 +27,7 @@ public class signUpController {
             }
             User newUser = new User(username, password, email, birthDate, address, credit);
             balootInstance.addUser(newUser);
-            return ResponseEntity.status(HttpStatus.OK).body(null);
+            return newUser;
         }
         else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Duplicate user or password field is empty!");
