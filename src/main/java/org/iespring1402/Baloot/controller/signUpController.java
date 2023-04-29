@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,18 +19,17 @@ public class signUpController {
 
     @PostMapping(value = "")
     @ResponseBody
-    public Object signupForm(@RequestParam String username, String password, String email, String birthDate, String address, long credit) {
-        if(balootInstance.findUserByUsername(username) == null || password != null)
+    public Object signupForm(@RequestBody User user) {
+        if(balootInstance.findUserByUsername(user.getUsername()) == null)
         {
-            if (credit != 0) {
-                credit = 0;               
+            if (user.getCredit() != 0) {
+                user.setCredit(0);               
             }
-            User newUser = new User(username, password, email, birthDate, address, credit);
-            balootInstance.addUser(newUser);
-            return newUser;
+            balootInstance.addUser(user);
+            return user;
         }
         else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Duplicate user or password field is empty!");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Duplicate username!");
         }
     }
 
