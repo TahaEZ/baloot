@@ -38,7 +38,7 @@ public class commoditiesController {
         return commoditiesList;
     }
 
-    @GetMapping(value = "" , params = "category")
+    @GetMapping(value = "", params = "category")
     public Object getCommoditiesByCategory(@PathParam("category") String category) {
         CategoryFilter filter = new CategoryFilter(category);
         Map filteredCommoditiesList = new HashMap();
@@ -73,7 +73,7 @@ public class commoditiesController {
     public Object addCommodity(@RequestBody Commodity commodity) {
 
         if (balootInstance.findCommodityById(commodity.getId()).getId() == commodity.getId()) {
-          return  ResponseEntity.status(HttpStatus.CONFLICT).body("Duplicate was occurred!");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Duplicate was occurred!");
         }
 
         else {
@@ -85,10 +85,13 @@ public class commoditiesController {
 
     @PostMapping(value = "/{id}/ratings")
     @ResponseBody
-    public Object rateCommodity(@PathVariable("id") int id,String username, int rate) {
+    public Object rateCommodity(@PathVariable("id") int id, @RequestParam String username, int rate) {
 
         if (rate >= 1 && rate <= 10) {
             try {
+                if (balootInstance.findUserByUsername(username) == null) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User Not Found!");
+                }
                 balootInstance.rateCommodity(username, id, rate);
 
             } catch (Exception e) {
