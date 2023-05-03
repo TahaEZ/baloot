@@ -2,6 +2,7 @@ package org.iespring1402.Baloot.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.iespring1402.Baloot.model.Baloot;
@@ -32,10 +33,47 @@ public class commoditiesController {
     private Baloot balootInstance = new Baloot();
 
     @GetMapping("")
-    public @ResponseBody Object list() {
-        Map commoditiesList = new HashMap();
-        commoditiesList.put("commoditiesList", balootInstance.getCommodities());
-        return commoditiesList;
+    public @ResponseBody List<Object> list(
+            @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "12") Integer pageSize) {
+        
+        
+        List<Object> returnVal = new ArrayList<>();
+        int commoditySize = balootInstance.getCommodities().size();
+        int totalPagesNumber = commoditySize/pageSize;
+        if(commoditySize % pageSize != 0)
+        {
+            totalPagesNumber += 1;
+        }
+        HashMap <String,Integer> totalPages = new HashMap<String, Integer>();
+        totalPages.put("totalPages", totalPagesNumber);
+        returnVal.add(totalPages);
+        if (pageNo * pageSize > commoditySize) {
+            returnVal.add(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Page not available!"));
+            return returnVal ;
+        } else {
+            int start = (pageNo - 1) * pageSize;
+            ArrayList<Commodity> commodities = new ArrayList<>();
+            if ((commoditySize - (pageNo * pageSize)) >= pageSize) {
+
+                for (int dynamicStart = start; dynamicStart < start + pageSize; dynamicStart++) {
+                    commodities.add(balootInstance.getCommodities().get(dynamicStart));
+                }
+                returnVal.add(commodities);
+                
+                return returnVal;
+            }
+            else
+            {
+                for(int dynamicStart = (pageNo * pageSize) - 1 ; dynamicStart < commoditySize ; dynamicStart++ )
+                {
+                    commodities.add(balootInstance.getCommodities().get(dynamicStart));
+                }
+                returnVal.add(commodities);
+                return returnVal;
+            }
+        }
+
     }
 
     @GetMapping(value = "", params = "category")
@@ -68,10 +106,10 @@ public class commoditiesController {
         return result;
     }
 
-    @GetMapping(value = "" , params = "providerId")
+    @GetMapping(value = "", params = "providerId")
     @ResponseBody
     public Object getCommodityByProviderId(@PathParam("providerId") int providerId) {
-        ArrayList <Commodity> commodities = balootInstance.findCommoditiesByProviderId(providerId);
+        ArrayList<Commodity> commodities = balootInstance.findCommoditiesByProviderId(providerId);
         if (commodities.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("This provider didn't provide any commodity.");
         }
