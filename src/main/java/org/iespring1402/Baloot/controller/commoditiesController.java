@@ -68,6 +68,17 @@ public class commoditiesController {
         return result;
     }
 
+    @GetMapping(value = "" , params = "providerId")
+    @ResponseBody
+    public Object getCommodityByProviderId(@PathParam("providerId") int providerId) {
+        ArrayList <Commodity> commodities = balootInstance.findCommoditiesByProviderId(providerId);
+        if (commodities.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("This provider didn't provide any commodity.");
+        }
+
+        return commodities;
+    }
+
     @PostMapping(value = "")
     @ResponseBody
     public Object addCommodity(@RequestBody Commodity commodity) {

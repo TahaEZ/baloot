@@ -318,6 +318,18 @@ public class Baloot {
             providers.add(newProvider);
     }
 
+    public ArrayList<Commodity> findCommoditiesByProviderId(int providerId)
+    {
+        ArrayList<Commodity> commoditiesByProviderId = new ArrayList<>();
+        for(Commodity commodity: commodities)
+        {
+            if(commodity.getProviderId() == providerId){
+                commoditiesByProviderId.add(commodity);
+            }
+        }
+        return commoditiesByProviderId;
+    }
+
     public Response addComment(String username, int commodityId, String text) {
         User user = findUserByUsername(username);
         if (user == null)
