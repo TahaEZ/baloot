@@ -33,22 +33,19 @@ public class commoditiesController {
     private Baloot balootInstance = Baloot.getInstance();
 
     @GetMapping("")
-    public @ResponseBody List<Object> list(
+    public @ResponseBody Object list(
             @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
             @RequestParam(value = "pageSize", defaultValue = "12") Integer pageSize) {
-
-        List<Object> returnVal = new ArrayList<>();
+        HashMap<String, Object> returnResponse = new HashMap<>();
         int commoditySize = balootInstance.getCommodities().size();
         int totalPagesNumber = commoditySize / pageSize;
         if (commoditySize % pageSize != 0) {
             totalPagesNumber += 1;
         }
         HashMap<String, Integer> totalPages = new HashMap<String, Integer>();
-        totalPages.put("totalPages", totalPagesNumber);
-        returnVal.add(totalPages);
+        returnResponse.put("totalPages", totalPagesNumber);
         if (pageNo * pageSize > commoditySize) {
-            returnVal.add(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Page not available!"));
-            return returnVal;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Page not available!");
         } else {
             int start = (pageNo - 1) * pageSize;
             ArrayList<Commodity> commodities = new ArrayList<>();
@@ -57,15 +54,16 @@ public class commoditiesController {
                 for (int dynamicStart = start; dynamicStart < start + pageSize; dynamicStart++) {
                     commodities.add(balootInstance.getCommodities().get(dynamicStart));
                 }
-                returnVal.add(commodities);
+                returnResponse.put("commoditiesList", commodities);
 
-                return returnVal;
+                return returnResponse;
             } else {
                 for (int dynamicStart = (pageNo * pageSize) - 1; dynamicStart < commoditySize; dynamicStart++) {
                     commodities.add(balootInstance.getCommodities().get(dynamicStart));
                 }
-                returnVal.add(commodities);
-                return returnVal;
+                returnResponse.put("commoditiesList", commodities);
+
+                return returnResponse;
             }
         }
 
@@ -117,26 +115,25 @@ public class commoditiesController {
                         filteredWithStock.add(commodity);
                     }
                 }
-            } else if (searchType == "provider") {
-                ArrayList<Provider> foundProviders = balootInstance.searchProviderByName(searchVal);
-                for (Provider provider : foundProviders) {
-                    for (Commodity commodity : balootInstance.getCommodities()) {
-                        if (commodity.getProviderId() == provider.getId()) {
-                            filteredWithStock.add(commodity);
-                        }
-                    }
-                }
             }
-            if(filteredWithStock.isEmpty())
-            {
+            //  else if (searchType == "provider") {
+            //     ArrayList<Provider> foundProviders = balootInstance.searchProviderByName(searchVal);
+            //     for (Provider provider : foundProviders) {
+            //         for (Commodity commodity : balootInstance.getCommodities()) {
+            //             if (commodity.getProviderId() == provider.getId()) {
+            //                 filteredWithStock.add(commodity);
+            //             }
+            //         }
+            //     }
+            // }
+            if (filteredWithStock.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Didn't find any Commodities.");
             }
             if (availableCommodities) {
                 filteredCommoditiesList.put("searchedCommodities",
                         deleteInStock(listAvailableCommodities(filteredWithStock)));
                 return filteredCommoditiesList;
-            }
-            else{
+            } else {
                 filteredCommoditiesList.put("searchedCommodities",
                         deleteInStock(filteredWithStock));
                 return filteredCommoditiesList;
