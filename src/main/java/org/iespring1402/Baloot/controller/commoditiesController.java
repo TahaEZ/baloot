@@ -42,7 +42,6 @@ public class commoditiesController {
         if (commoditySize % pageSize != 0) {
             totalPagesNumber += 1;
         }
-        HashMap<String, Integer> totalPages = new HashMap<String, Integer>();
         returnResponse.put("totalPages", totalPagesNumber);
         if (pageNo * pageSize > commoditySize) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Page not available!");
@@ -100,22 +99,20 @@ public class commoditiesController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid search.");
         } else {
 
-            ArrayList<CommodityNoInStock> filteredWithoutInStock = new ArrayList<>();
             Map filteredCommoditiesList = new HashMap();
             ArrayList<Commodity> filteredWithStock = new ArrayList<>();
-
-            if (searchType == "category") {
-
+            if (searchType.equals("category")) {
                 CategoryFilter filter = new CategoryFilter(searchVal);
+                System.out.println(searchVal);
                 filteredWithStock = filter.applyFilter(balootInstance.getCommodities());
-            } else if (searchType == "name") {
+            } else if (searchType.equals("name")) {
 
                 for (Commodity commodity : balootInstance.getCommodities()) {
                     if (commodity.getName().toLowerCase().contains(searchVal.toLowerCase())) {
                         filteredWithStock.add(commodity);
                     }
                 }
-            } else if (searchType == "provider") {
+            } else if (searchType.equals("provider")) {
                 ArrayList<Provider> foundProviders = balootInstance.searchProviderByName(searchVal);
                 for (Provider provider : foundProviders) {
                     for (Commodity commodity : balootInstance.getCommodities()) {
