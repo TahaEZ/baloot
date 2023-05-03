@@ -36,21 +36,19 @@ public class commoditiesController {
     public @ResponseBody List<Object> list(
             @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
             @RequestParam(value = "pageSize", defaultValue = "12") Integer pageSize) {
-        
-        
+
         List<Object> returnVal = new ArrayList<>();
         int commoditySize = balootInstance.getCommodities().size();
-        int totalPagesNumber = commoditySize/pageSize;
-        if(commoditySize % pageSize != 0)
-        {
+        int totalPagesNumber = commoditySize / pageSize;
+        if (commoditySize % pageSize != 0) {
             totalPagesNumber += 1;
         }
-        HashMap <String,Integer> totalPages = new HashMap<String, Integer>();
+        HashMap<String, Integer> totalPages = new HashMap<String, Integer>();
         totalPages.put("totalPages", totalPagesNumber);
         returnVal.add(totalPages);
         if (pageNo * pageSize > commoditySize) {
             returnVal.add(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Page not available!"));
-            return returnVal ;
+            return returnVal;
         } else {
             int start = (pageNo - 1) * pageSize;
             ArrayList<Commodity> commodities = new ArrayList<>();
@@ -60,13 +58,10 @@ public class commoditiesController {
                     commodities.add(balootInstance.getCommodities().get(dynamicStart));
                 }
                 returnVal.add(commodities);
-                
+
                 return returnVal;
-            }
-            else
-            {
-                for(int dynamicStart = (pageNo * pageSize) - 1 ; dynamicStart < commoditySize ; dynamicStart++ )
-                {
+            } else {
+                for (int dynamicStart = (pageNo * pageSize) - 1; dynamicStart < commoditySize; dynamicStart++) {
                     commodities.add(balootInstance.getCommodities().get(dynamicStart));
                 }
                 returnVal.add(commodities);
@@ -76,8 +71,9 @@ public class commoditiesController {
 
     }
 
-    @GetMapping(value = "", params = "category")
-    public Object getCommoditiesByCategory(@PathParam("category") String category) {
+    @GetMapping(value = "", params = "searchType")
+    public Object getCommoditiesByCategory(@PathParam("") String category,
+        @RequestParam("available") Boolean availableCommodities) {
         CategoryFilter filter = new CategoryFilter(category);
         Map filteredCommoditiesList = new HashMap();
         ArrayList<Commodity> filteredWithStock = filter.applyFilter(balootInstance.getCommodities());
@@ -91,6 +87,10 @@ public class commoditiesController {
         filteredCommoditiesList.put("commoditiesListByCategory", filteredWithoutInStock);
         return filteredCommoditiesList;
     }
+
+    
+
+
 
     @GetMapping(value = "/{id}")
     @ResponseBody
