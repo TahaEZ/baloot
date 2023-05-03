@@ -115,17 +115,16 @@ public class commoditiesController {
                         filteredWithStock.add(commodity);
                     }
                 }
+            } else if (searchType == "provider") {
+                ArrayList<Provider> foundProviders = balootInstance.searchProviderByName(searchVal);
+                for (Provider provider : foundProviders) {
+                    for (Commodity commodity : balootInstance.getCommodities()) {
+                        if (commodity.getProviderId() == provider.getId()) {
+                            filteredWithStock.add(commodity);
+                        }
+                    }
+                }
             }
-            //  else if (searchType == "provider") {
-            //     ArrayList<Provider> foundProviders = balootInstance.searchProviderByName(searchVal);
-            //     for (Provider provider : foundProviders) {
-            //         for (Commodity commodity : balootInstance.getCommodities()) {
-            //             if (commodity.getProviderId() == provider.getId()) {
-            //                 filteredWithStock.add(commodity);
-            //             }
-            //         }
-            //     }
-            // }
             if (filteredWithStock.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Didn't find any Commodities.");
             }
