@@ -71,8 +71,7 @@ public class commoditiesController {
 
     }
 
-    private ArrayList<CommodityNoInStock> deleteInStock(ArrayList<Commodity> commodities)
-    {
+    private ArrayList<CommodityNoInStock> deleteInStock(ArrayList<Commodity> commodities) {
         ArrayList<CommodityNoInStock> filteredWithoutInStock = new ArrayList<CommodityNoInStock>();
         for (Commodity commodity : commodities) {
             CommodityNoInStock oneCommodityWithNoInStock = new CommodityNoInStock(commodity.getId(),
@@ -81,63 +80,70 @@ public class commoditiesController {
             filteredWithoutInStock.add(oneCommodityWithNoInStock);
         }
         return filteredWithoutInStock;
-        
+
     }
 
-    @GetMapping(value = "", params = {"searchType","searchVal"})
-    public Object getCommoditiesByCategory(
-        @PathParam("searchType") String searchType,
-        @PathParam("searchVal") String searchVal,
-        @RequestParam(value = "available" , defaultValue = "false") Boolean availableCommodities) {
-        if(searchType == "category")
-        {
-
-            CategoryFilter filter = new CategoryFilter(searchVal);
-            Map filteredCommoditiesList = new HashMap();
-            ArrayList<Commodity> filteredWithStock = filter.applyFilter(balootInstance.getCommodities());
-            ArrayList<CommodityNoInStock> filteredWithoutInStock = deleteInStock(filteredWithStock);
-            filteredCommoditiesList.put("commoditiesListByCategory", filteredWithoutInStock);
-            return filteredCommoditiesList;
-        }
-        else if(searchType == "name")
-        {
-            
-            Map filteredCommoditiesList = new HashMap();
-            
-            ArrayList<Commodity> filteredWithStock = new ArrayList<>();
-            for (Commodity commodity : balootInstance.getCommodities()) {
-                if (commodity.getName().toLowerCase().contains(searchVal.toLowerCase())) {
-                    filteredWithStock.add(commodity);
-                }
+    private ArrayList<Commodity> listAvailableCommodities(ArrayList<Commodity> commodities) {
+        ArrayList<Commodity> availableCommodities = new ArrayList<>();
+        for (Commodity commodity : balootInstance.getCommodities()) {
+            if (commodity.isInStock()) {
+                availableCommodities.add(commodity);
             }
-            ArrayList<CommodityNoInStock> filteredWithoutInStock = deleteInStock(filteredWithStock);
-            filteredCommoditiesList.put("commoditiesByName", filteredWithoutInStock);
-            return filteredCommoditiesList;
         }
-        else if(searchType == "provider")
-        {
+        return availableCommodities;
+    }
+
+    @GetMapping(value = "", params = { "searchType", "searchVal" })
+    public Object getCommoditiesByCategory(
+            @PathParam("searchType") String searchType,
+            @PathParam("searchVal") String searchVal,
+            @RequestParam(value = "available", defaultValue = "false") Boolean availableCommodities) {
+        if (searchVal.equals("category") || searchVal.equals("name") || searchVal.equals("provider")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid search.");
+        } else {
+
+            ArrayList<CommodityNoInStock> filteredWithoutInStock = new ArrayList<>();
             Map filteredCommoditiesList = new HashMap();
             ArrayList<Commodity> filteredWithStock = new ArrayList<>();
-            ArrayList<Provider> foundProviders = balootInstance.searchProviderByName(searchVal);
-            for(Provider provider : foundProviders)
-            {
+
+            if (searchType == "category") {
+
+                CategoryFilter filter = new CategoryFilter(searchVal);
+                filteredWithStock = filter.applyFilter(balootInstance.getCommodities());
+            } else if (searchType == "name") {
+
                 for (Commodity commodity : balootInstance.getCommodities()) {
-                    if (commodity.getProviderId() == provider.getId() ) {
+                    if (commodity.getName().toLowerCase().contains(searchVal.toLowerCase())) {
                         filteredWithStock.add(commodity);
                     }
                 }
+            } else if (searchType == "provider") {
+                ArrayList<Provider> foundProviders = balootInstance.searchProviderByName(searchVal);
+                for (Provider provider : foundProviders) {
+                    for (Commodity commodity : balootInstance.getCommodities()) {
+                        if (commodity.getProviderId() == provider.getId()) {
+                            filteredWithStock.add(commodity);
+                        }
+                    }
+                }
             }
-            ArrayList<CommodityNoInStock> filteredWithoutInStock = deleteInStock(filteredWithStock);
-            filteredCommoditiesList.put("commoditiesByProvider", filteredWithoutInStock);
-            return filteredCommoditiesList;
+            if(filteredWithStock.isEmpty())
+            {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Didn't find any Commodities.");
+            }
+            if (availableCommodities) {
+                filteredCommoditiesList.put("searchedCommodities",
+                        deleteInStock(listAvailableCommodities(filteredWithStock)));
+                return filteredCommoditiesList;
+            }
+            else{
+                filteredCommoditiesList.put("searchedCommodities",
+                        deleteInStock(filteredWithStock));
+                return filteredCommoditiesList;
+            }
+
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid search.");
     }
-    
-
-    
-
-
 
     @GetMapping(value = "/{id}")
     @ResponseBody
