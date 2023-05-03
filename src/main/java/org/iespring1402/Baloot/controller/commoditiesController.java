@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/commodities")
 @CrossOrigin
 public class commoditiesController {
-    private Baloot balootInstance = new Baloot();
+    private Baloot balootInstance = Baloot.getInstance();
 
     @GetMapping("")
     public @ResponseBody List<Object> list(
@@ -71,22 +71,69 @@ public class commoditiesController {
 
     }
 
-    @GetMapping(value = "", params = "searchType")
-    public Object getCommoditiesByCategory(@PathParam("") String category,
-        @RequestParam("available") Boolean availableCommodities) {
-        CategoryFilter filter = new CategoryFilter(category);
-        Map filteredCommoditiesList = new HashMap();
-        ArrayList<Commodity> filteredWithStock = filter.applyFilter(balootInstance.getCommodities());
+    private ArrayList<CommodityNoInStock> deleteInStock(ArrayList<Commodity> commodities)
+    {
         ArrayList<CommodityNoInStock> filteredWithoutInStock = new ArrayList<CommodityNoInStock>();
-        for (Commodity commodity : filteredWithStock) {
+        for (Commodity commodity : commodities) {
             CommodityNoInStock oneCommodityWithNoInStock = new CommodityNoInStock(commodity.getId(),
                     commodity.getName(),
                     commodity.getProviderId(), commodity.getPrice(), commodity.getCategories(), commodity.getRating());
             filteredWithoutInStock.add(oneCommodityWithNoInStock);
         }
-        filteredCommoditiesList.put("commoditiesListByCategory", filteredWithoutInStock);
-        return filteredCommoditiesList;
+        return filteredWithoutInStock;
+        
     }
+
+    @GetMapping(value = "", params = {"searchType","searchVal"})
+    public Object getCommoditiesByCategory(
+        @PathParam("searchType") String searchType,
+        @PathParam("searchVal") String searchVal,
+        @RequestParam(value = "available" , defaultValue = "false") Boolean availableCommodities) {
+        if(searchType == "category")
+        {
+
+            CategoryFilter filter = new CategoryFilter(searchVal);
+            Map filteredCommoditiesList = new HashMap();
+            ArrayList<Commodity> filteredWithStock = filter.applyFilter(balootInstance.getCommodities());
+            ArrayList<CommodityNoInStock> filteredWithoutInStock = deleteInStock(filteredWithStock);
+            filteredCommoditiesList.put("commoditiesListByCategory", filteredWithoutInStock);
+            return filteredCommoditiesList;
+        }
+        else if(searchType == "name")
+        {
+            
+            Map filteredCommoditiesList = new HashMap();
+            
+            ArrayList<Commodity> filteredWithStock = new ArrayList<>();
+            for (Commodity commodity : balootInstance.getCommodities()) {
+                if (commodity.getName().toLowerCase().contains(searchVal.toLowerCase())) {
+                    filteredWithStock.add(commodity);
+                }
+            }
+            ArrayList<CommodityNoInStock> filteredWithoutInStock = deleteInStock(filteredWithStock);
+            filteredCommoditiesList.put("commoditiesByName", filteredWithoutInStock);
+            return filteredCommoditiesList;
+        }
+        else if(searchType == "provider")
+        {
+            Map filteredCommoditiesList = new HashMap();
+            ArrayList<Commodity> filteredWithStock = new ArrayList<>();
+            ArrayList<Provider> foundProviders = balootInstance.searchProviderByName(searchVal);
+            for(Provider provider : foundProviders)
+            {
+                for (Commodity commodity : balootInstance.getCommodities()) {
+                    if (commodity.getProviderId() == provider.getId() ) {
+                        filteredWithStock.add(commodity);
+                    }
+                }
+            }
+            ArrayList<CommodityNoInStock> filteredWithoutInStock = deleteInStock(filteredWithStock);
+            filteredCommoditiesList.put("commoditiesByProvider", filteredWithoutInStock);
+            return filteredCommoditiesList;
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid search.");
+    }
+    
 
     
 

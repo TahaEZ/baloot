@@ -178,6 +178,17 @@ public class Baloot {
         discountCodes.add(discountCode);
     }
 
+    public ArrayList<Provider>searchProviderByName(String name)
+    {
+        ArrayList<Provider> foundProviders = new ArrayList<>();
+        for (Provider provider : providers) {
+            if (provider.getName().toLowerCase().contains(name.toLowerCase())) {
+                foundProviders.add(provider);
+            }
+        }
+        return foundProviders;
+
+    }
     public Commodity findCommodityById(int commodityId) {
         for (Commodity commodity : commodities) {
             if (commodity.getId() == commodityId) {

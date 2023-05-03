@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/providers")
 @CrossOrigin
 public class providersController {
-    private Baloot balootInstance = new Baloot();
+    private Baloot balootInstance = Baloot.getInstance();
 
     @GetMapping(value = "/{providerId}")
     @ResponseBody
