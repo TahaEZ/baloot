@@ -87,6 +87,7 @@ public class CommoditiesController {
             @RequestParam(value = "available", defaultValue = "false") Boolean availableCommodities) {
         ArrayList<Commodity> allCommodities = new ArrayList<>();
         Map filteredCommoditiesList = new HashMap();
+        ArrayList<Commodity> filteredWithStock = new ArrayList<>();
         if (availableCommodities == true) {
             allCommodities = listAvailableCommodities(balootInstance.getCommodities());
         } else {
@@ -96,7 +97,6 @@ public class CommoditiesController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid search.");
         } else {
 
-            ArrayList<Commodity> filteredWithStock = new ArrayList<>();
             if (searchType.equals("category")) {
                 CategoryFilter filter = new CategoryFilter(searchVal);
                 System.out.println(searchVal);
@@ -122,7 +122,7 @@ public class CommoditiesController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Didn't find any Commodities.");
             }
         }
-        PaginationController paginator = new PaginationController(allCommodities);
+        PaginationController paginator = new PaginationController(filteredWithStock);
         filteredCommoditiesList = paginator.paginateItems(pageSize, pageNo);
         if (filteredCommoditiesList.size() == 1) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Page Number.");
@@ -142,7 +142,7 @@ public class CommoditiesController {
         CommodityDTO result;
         Provider provider = balootInstance.findProviderByProviderId(commodity.getProviderId());
         result = new CommodityDTO(commodity.getId(), commodity.getName(),provider.getId(), provider.getName(),
-                commodity.getPrice(), commodity.getCategories(), commodity.getRating(),commodity.getInStock());
+                commodity.getPrice(), commodity.getCategories(), commodity.getRating());
         return result;
     }
 

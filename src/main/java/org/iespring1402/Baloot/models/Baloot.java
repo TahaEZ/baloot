@@ -2,6 +2,7 @@ package org.iespring1402.Baloot.models;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.iespring1402.Baloot.models.views.CommodityDTO;
 import org.iespring1402.Baloot.models.views.CommodityNoInStock;
 import org.iespring1402.Baloot.response.FailedResponse;
 import org.iespring1402.Baloot.response.Response;
@@ -235,26 +236,19 @@ public class Baloot {
         }
     }
 
-    public Response removeFromBuyList(String username, int commodityId) {
-        User user = findUserByUsername(username);
-        if (user == null)
-            return new FailedResponse("No user found with this username!");
-        else
-            return user.removeFromBuyList(commodityId);
-    }
 
-    public ArrayList<CommodityNoInStock> getBuyList(String username) {
+    public ArrayList<CommodityDTO> getBuyList(String username) {
         User user = findUserByUsername(username);
         if (user != null) {
-            ArrayList<Integer> BuyList = user.getBuyList().getList();
-            ArrayList<CommodityNoInStock> result = new ArrayList<CommodityNoInStock>();
-            for (int commodityId : BuyList) {
-                Commodity commodity = findCommodityById(commodityId);
+            HashMap<Integer,Integer> buylist = user.getBuyList().getItems();
+            ArrayList<CommodityDTO> result = new ArrayList<>();
+            for (HashMap.Entry<Integer,Integer>item : buylist.entrySet()) {
+                Commodity commodity = findCommodityById(item.getKey());
 
-                CommodityNoInStock commodityWithNoInStockField = new CommodityNoInStock(commodity.getId(), commodity.getName(),
-                        commodity.getProviderId(), commodity.getPrice(), commodity.getCategories(), commodity.getRating());
+                CommodityDTO buylistItem = new CommodityDTO(commodity.getId(), commodity.getName(),
+                        commodity.getProviderId(), commodity.getPrice(), commodity.getCategories(), commodity.getRating(),commodity.getInStock(),item.getValue());
 
-                result.add(commodityWithNoInStockField);
+                result.add(buylistItem);
             }
             return result;
         } else

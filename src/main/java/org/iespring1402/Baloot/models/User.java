@@ -64,7 +64,7 @@ public class User {
 
 
     public Response addToBuyList(int commodityId) {
-        return buyList.add(commodityId);
+        return buyList.increase(commodityId);
     }
 
     public boolean isDiscountCodeUsed(String discount)

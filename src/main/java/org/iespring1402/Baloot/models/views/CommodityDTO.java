@@ -11,11 +11,12 @@ public class CommodityDTO {
     private Integer id;
     private String name;
     private Integer providerId;
-    String providerName;
+    private String providerName;
     private Integer price;
     private ArrayList<String> categories;
     private Float rating;
     private Integer inStock;
+    private Integer quantity;
 
     public CommodityDTO(
             Integer id,
@@ -34,6 +35,7 @@ public class CommodityDTO {
         this.categories = categories;
         this.rating = rating;
         this.inStock = inStock;
+        this.quantity = null;
     }
 
     public CommodityDTO(
@@ -52,6 +54,7 @@ public class CommodityDTO {
         this.categories = categories;
         this.rating = rating;
         this.inStock = null;
+        this.quantity = null;
     }
 
     public CommodityDTO(
@@ -70,6 +73,27 @@ public class CommodityDTO {
         this.categories = categories;
         this.rating = rating;
         this.inStock = inStock;
+        this.quantity = null;
+    }
+
+    public CommodityDTO(
+            Integer id,
+            String name,
+            Integer providerId,
+            Integer price,
+            ArrayList<String> categories,
+            Float rating,
+            Integer inStock,
+            Integer quantity) {
+        this.id = id;
+        this.name = name;
+        this.providerId = providerId;
+        this.providerName = null;
+        this.price = price;
+        this.categories = categories;
+        this.rating = rating;
+        this.inStock = inStock;
+        this.quantity = quantity;
     }
 
     public void setCategories(ArrayList<String> categories) {
@@ -104,6 +128,10 @@ public class CommodityDTO {
         this.rating = rating;
     }
 
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
     public ArrayList<String> getCategories() {
         return categories;
     }
@@ -136,5 +164,8 @@ public class CommodityDTO {
 
     public Float getRating() {
         return rating;
+    }
+    public Integer getQuantity() {
+        return quantity;
     }
 }

@@ -5,32 +5,50 @@ import org.iespring1402.Baloot.response.Response;
 import org.iespring1402.Baloot.response.SuccessfulResponse;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class BuyList {
-    private ArrayList<Integer> list;
-
+    private HashMap<Integer, Integer> items;
     private boolean isDiscountActive;
     private DiscountCode activeDiscountCode;
+
     public BuyList() {
-        list = new ArrayList<Integer>();
+        items = new HashMap<Integer,Integer>();
         isDiscountActive = false;
     }
 
-    public Response add(int commodityId) {
-        if (list.contains(commodityId)) {
-            
-        }
+    public Response increase(int commodityId) {
 
-        list.add(commodityId);
+        for(HashMap.Entry<Integer , Integer>item : items.entrySet())
+        {
+            if (item.getKey() == commodityId) {
+                item.setValue(item.getValue()+1);
+                return new SuccessfulResponse();
+            }
+        }
+        items.put(commodityId,1);
         return new SuccessfulResponse();
     }
 
+    public Response decrease(int commodityId) {
+
+        for (HashMap.Entry<Integer, Integer> item : items.entrySet()) {
+            if (item.getKey() == commodityId) {
+                if(item.getValue() -1 == 0)
+                {
+                    items.remove(item.getKey());
+                    return new SuccessfulResponse();
+                }
+                item.setValue(item.getValue() -1);
+                return new SuccessfulResponse();
+            }
+        }
+        return new FailedResponse();
+    }
+
     public Response remove(int commodityId) {
-        int index = list.indexOf(commodityId);
-        if (index != -1) {
-            list.remove(index);
-            return new SuccessfulResponse();
-        } else return new FailedResponse("No commodity found with this commodity id in your buy list!");
+        items.remove(commodityId);
+        return new SuccessfulResponse();
     }
 
     public void setDiscountActive(boolean discountActive) {
@@ -38,7 +56,7 @@ public class BuyList {
     }
 
     public void setActiveDiscountCode(DiscountCode activeDiscountCode) {
-        this.activeDiscountCode = new DiscountCode(activeDiscountCode.getCode(),activeDiscountCode.getDiscount());
+        this.activeDiscountCode = new DiscountCode(activeDiscountCode.getCode(), activeDiscountCode.getDiscount());
         setDiscountActive(true);
     }
 
@@ -49,25 +67,25 @@ public class BuyList {
     public DiscountCode getActiveDiscountCode() {
         return activeDiscountCode;
     }
-    public  void deactivateDiscountCode(){
+
+    public void deactivateDiscountCode() {
         activeDiscountCode = new DiscountCode();
         isDiscountActive = false;
     }
-    public long totalCost(){
+
+    public long totalCost() {
         long total = 0;
-        for(int id : list)
-        {
-            int cost = Baloot.getInstance().findCommodityById(id).getPrice();
-            total += cost;
+        for (HashMap.Entry<Integer,Integer> item :items.entrySet()) {
+            int cost = Baloot.getInstance().findCommodityById(item.getKey()).getPrice();
+            total += cost * item.getValue();
         }
-        if(isDiscountActive == true )
-        {
-            total = total - total* activeDiscountCode.getDiscount()/100;
+        if (isDiscountActive == true) {
+            total = total - total * activeDiscountCode.getDiscount() / 100;
         }
         return total;
     }
 
-    public ArrayList<Integer> getList() {
-        return list;
+    public HashMap<Integer, Integer> getItems() {
+        return items;
     }
 }
