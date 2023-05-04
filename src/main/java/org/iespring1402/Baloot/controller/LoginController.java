@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RestController
 @RequestMapping("/login")
 @CrossOrigin
-public class loginController {
+public class LoginController {
     private Baloot balootInstance = Baloot.getInstance();
 
     @GetMapping(value = "")

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/signup")
 @CrossOrigin
-public class signUpController {
+public class SignUpController {
     private Baloot balootInstance = Baloot.getInstance();
 
     @PostMapping(value = "")

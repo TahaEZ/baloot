@@ -29,52 +29,28 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RestController
 @RequestMapping("/commodities")
 @CrossOrigin
-public class commoditiesController {
+public class CommoditiesController {
     private Baloot balootInstance = Baloot.getInstance();
 
     @GetMapping("")
     public @ResponseBody Object list(
             @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
             @RequestParam(value = "pageSize", defaultValue = "12") Integer pageSize,
-            @RequestParam(value = "available" , defaultValue = "false") Boolean availableCommodities) {
+            @RequestParam(value = "available", defaultValue = "false") Boolean availableCommodities) {
         HashMap<String, Object> returnResponse = new HashMap<>();
         ArrayList<Commodity> allCommodities = new ArrayList<>();
-        int commoditySize;
         if (availableCommodities == true) {
             allCommodities = listAvailableCommodities(balootInstance.getCommodities());
-            commoditySize = allCommodities.size();
         } else {
             allCommodities = balootInstance.getCommodities();
-            commoditySize = balootInstance.getCommodities().size();
         }
 
-        int totalPagesNumber = commoditySize / pageSize;
-        if (commoditySize % pageSize != 0) {
-            totalPagesNumber += 1;
-        }
-        returnResponse.put("totalPages", totalPagesNumber);
-        if (pageNo > totalPagesNumber) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Page not available!");
+        PaginationController paginator = new PaginationController(allCommodities);
+        returnResponse = paginator.paginateItems(pageSize, pageNo);
+        if (returnResponse.size() == 1) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Page Number.");
         } else {
-            int start = (pageNo - 1) * pageSize;
-            ArrayList<Commodity> commodities = new ArrayList<>();
-            if ((commoditySize - (start)) >= pageSize) {
-
-                for (int dynamicStart = start; dynamicStart < start + pageSize; dynamicStart++) {
-                    commodities.add(allCommodities.get(dynamicStart));
-                }
-
-                returnResponse.put("commoditiesList", commodities);
-                return returnResponse;
-                
-            } else {
-                for (int dynamicStart = start; dynamicStart < commoditySize; dynamicStart++) {
-                    commodities.add(allCommodities.get(dynamicStart));
-                }
-            
-                returnResponse.put("commoditiesList", commodities);
-                return returnResponse;
-            }
+            return returnResponse;
         }
 
     }
@@ -105,20 +81,28 @@ public class commoditiesController {
     public Object getCommoditiesByCategory(
             @PathParam("searchType") String searchType,
             @PathParam("searchVal") String searchVal,
+            @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "12") Integer pageSize,
             @RequestParam(value = "available", defaultValue = "false") Boolean availableCommodities) {
+        ArrayList<Commodity> allCommodities = new ArrayList<>();
+        Map filteredCommoditiesList = new HashMap();
+        if (availableCommodities == true) {
+            allCommodities = listAvailableCommodities(balootInstance.getCommodities());
+        } else {
+            allCommodities = balootInstance.getCommodities();
+        }
         if (searchVal.equals("category") || searchVal.equals("name") || searchVal.equals("provider")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid search.");
         } else {
 
-            Map filteredCommoditiesList = new HashMap();
             ArrayList<Commodity> filteredWithStock = new ArrayList<>();
             if (searchType.equals("category")) {
                 CategoryFilter filter = new CategoryFilter(searchVal);
                 System.out.println(searchVal);
-                filteredWithStock = filter.applyFilter(balootInstance.getCommodities());
+                filteredWithStock = filter.applyFilter(allCommodities);
             } else if (searchType.equals("name")) {
 
-                for (Commodity commodity : balootInstance.getCommodities()) {
+                for (Commodity commodity : allCommodities) {
                     if (commodity.getName().toLowerCase().contains(searchVal.toLowerCase())) {
                         filteredWithStock.add(commodity);
                     }
@@ -126,7 +110,7 @@ public class commoditiesController {
             } else if (searchType.equals("provider")) {
                 ArrayList<Provider> foundProviders = balootInstance.searchProviderByName(searchVal);
                 for (Provider provider : foundProviders) {
-                    for (Commodity commodity : balootInstance.getCommodities()) {
+                    for (Commodity commodity : allCommodities) {
                         if (commodity.getProviderId() == provider.getId()) {
                             filteredWithStock.add(commodity);
                         }
@@ -136,17 +120,15 @@ public class commoditiesController {
             if (filteredWithStock.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Didn't find any Commodities.");
             }
-            if (availableCommodities) {
-                filteredCommoditiesList.put("searchedCommodities",
-                        deleteInStock(listAvailableCommodities(filteredWithStock)));
-                return filteredCommoditiesList;
-            } else {
-                filteredCommoditiesList.put("searchedCommodities",
-                        deleteInStock(filteredWithStock));
-                return filteredCommoditiesList;
-            }
-
         }
+        PaginationController paginator = new PaginationController(allCommodities);
+        filteredCommoditiesList = paginator.paginateItems(pageSize, pageNo);
+        if (filteredCommoditiesList.size() == 1) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Page Number.");
+        } else {
+            return filteredCommoditiesList;
+        }
+
     }
 
     @GetMapping(value = "/{id}")

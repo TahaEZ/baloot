@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/users")
 @CrossOrigin
-public class usersController {
+public class UsersController {
     private Baloot balootInstance = Baloot.getInstance();
 
     @GetMapping(value = "/{username}")
