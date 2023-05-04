@@ -142,7 +142,7 @@ public class CommoditiesController {
         CommodityDTO result;
         Provider provider = balootInstance.findProviderByProviderId(commodity.getProviderId());
         result = new CommodityDTO(commodity.getId(), commodity.getName(),provider.getId(), provider.getName(),
-                commodity.getPrice(), commodity.getCategories(), commodity.getRating());
+                commodity.getPrice(), commodity.getCategories(), commodity.getRating(),commodity.getInStock());
         return result;
     }
 
