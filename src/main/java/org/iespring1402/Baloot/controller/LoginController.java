@@ -24,6 +24,7 @@ public class LoginController {
         if (user == null || !user.getPassword().equals(password)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid username or password!");
         } else {
+            balootInstance.setCurrentUser(username);
             return ResponseEntity.status(HttpStatus.OK).body(user);
         }
     }
