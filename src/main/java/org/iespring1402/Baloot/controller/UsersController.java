@@ -47,7 +47,7 @@ public class UsersController {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         } else {
-            buylist.put("buylist",balootInstance.getBuyList(username));
+            buylist.put("buylist", balootInstance.getBuyList(username));
             return buylist;
         }
     }
@@ -56,28 +56,23 @@ public class UsersController {
     @ResponseBody
     public Object addBuyListItemByUsername(@PathVariable("username") String username, @RequestParam int commodityId) {
         User user = balootInstance.findUserByUsername(username);
-        HashMap <String , Object> response = new HashMap<>();
+        HashMap<String, Object> response = new HashMap<>();
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         } else {
             Commodity commodity = balootInstance.findCommodityById(commodityId);
-            if(commodity == null)
-            {
+            if (commodity == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Commodity not found!");
-            }
-            else if (commodity.getInStock() == 0)
-            {
+            } else if (commodity.getInStock() == 0) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Insufficient commodity quantity!");
-            }
-            else{
+            } else {
                 Response responseStatus = user.addToBuyList(commodityId);
                 if (responseStatus.success) {
                     ArrayList<CommodityDTO> buyList = balootInstance.getBuyList(username);
-                    response.put("buylist" , buyList);
+                    response.put("buylist", buyList);
                     return response;
-                }
-                else{
-                   return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Internal Error!");
+                } else {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Internal Error!");
                 }
             }
         }
@@ -85,8 +80,8 @@ public class UsersController {
 
     @DeleteMapping(value = "/{username}/buyList")
     @ResponseBody
-    public Object deleteBuyListItemByUsername(@PathVariable("username") String username, @RequestParam int commodityId,
-            int quantity) {
+    public Object deleteBuyListItemByUsername(@PathVariable("username") String username, @RequestParam int commodityId) {
+        HashMap<String, Object> response = new HashMap<>();
         User user = balootInstance.findUserByUsername(username);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
@@ -94,13 +89,14 @@ public class UsersController {
             Commodity commodity = balootInstance.findCommodityById(commodityId);
             if (commodity == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Commodity not found!");
-            } 
-            else {
-                Response response = user.removeFromBuyList(commodityId);
-                if (response.success) {
-                    return user.getBuyList();
+            } else {
+                Response responseStatus = user.removeFromBuyList(commodityId);
+                if (responseStatus.success) {
+                    ArrayList<CommodityDTO> buyList = balootInstance.getBuyList(username);
+                    response.put("buylist", buyList);
+                    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
                 } else {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Internal Errors!");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Item Not found in buylist!");
                 }
             }
         }

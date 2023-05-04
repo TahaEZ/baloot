@@ -3,8 +3,7 @@ package org.iespring1402.Baloot.models.views;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommodityDTO {
