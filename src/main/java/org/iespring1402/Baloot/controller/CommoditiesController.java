@@ -5,12 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.iespring1402.Baloot.model.Baloot;
-import org.iespring1402.Baloot.model.CategoryFilter;
-import org.iespring1402.Baloot.model.Commodity;
-import org.iespring1402.Baloot.model.CommodityByIdView;
-import org.iespring1402.Baloot.model.CommodityNoInStock;
-import org.iespring1402.Baloot.model.Provider;
+import org.iespring1402.Baloot.models.Baloot;
+import org.iespring1402.Baloot.models.CategoryFilter;
+import org.iespring1402.Baloot.models.Commodity;
+import org.iespring1402.Baloot.models.Provider;
+import org.iespring1402.Baloot.models.views.CommodityByIdView;
+import org.iespring1402.Baloot.models.views.CommodityDTO;
+import org.iespring1402.Baloot.models.views.CommodityNoInStock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -138,9 +139,9 @@ public class CommoditiesController {
         if (commodity == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Commodity Not Found.");
         }
-        CommodityByIdView result;
+        CommodityDTO result;
         Provider provider = balootInstance.findProviderByProviderId(commodity.getProviderId());
-        result = new CommodityByIdView(commodity.getId(), commodity.getName(), provider.getName(),
+        result = new CommodityDTO(commodity.getId(), commodity.getName(),provider.getId(), provider.getName(),
                 commodity.getPrice(), commodity.getCategories(), commodity.getRating());
         return result;
     }
@@ -152,23 +153,19 @@ public class CommoditiesController {
         if (commodities.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("This provider didn't provide any commodity.");
         }
-
         return commodities;
     }
 
     @PostMapping(value = "")
     @ResponseBody
     public Object addCommodity(@RequestBody Commodity commodity) {
-
         if (balootInstance.findCommodityById(commodity.getId()).getId() == commodity.getId()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Duplicate was occurred!");
         }
-
         else {
             balootInstance.addCommodity(commodity);
             return commodity;
         }
-
     }
 
     @PostMapping(value = "/{id}/ratings")

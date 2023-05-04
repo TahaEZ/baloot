@@ -1,4 +1,4 @@
-package org.iespring1402.Baloot.model;
+package org.iespring1402.Baloot.models;
 
 public class DiscountCode {
     private String discountCode;

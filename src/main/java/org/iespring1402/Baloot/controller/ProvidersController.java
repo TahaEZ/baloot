@@ -1,8 +1,8 @@
 package org.iespring1402.Baloot.controller;
 
-import org.iespring1402.Baloot.model.Baloot;
-import org.iespring1402.Baloot.model.Provider;
-import org.iespring1402.Baloot.model.User;
+import org.iespring1402.Baloot.models.Baloot;
+import org.iespring1402.Baloot.models.Provider;
+import org.iespring1402.Baloot.models.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

@@ -1,10 +1,11 @@
-package org.iespring1402.Baloot.model;
+package org.iespring1402.Baloot.models;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.iespring1402.Baloot.models.views.CommodityNoInStock;
 import org.iespring1402.Baloot.response.FailedResponse;
 import org.iespring1402.Baloot.response.Response;
 import org.iespring1402.Baloot.response.SuccessfulResponse;
-import org.iespring1402.Baloot.model.CommodityNoInStock;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

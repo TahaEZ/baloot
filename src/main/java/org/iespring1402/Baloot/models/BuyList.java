@@ -1,4 +1,4 @@
-package org.iespring1402.Baloot.model;
+package org.iespring1402.Baloot.models;
 
 import org.iespring1402.Baloot.response.FailedResponse;
 import org.iespring1402.Baloot.response.Response;

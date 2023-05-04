@@ -1,4 +1,4 @@
-package org.iespring1402.Baloot.model;
+package org.iespring1402.Baloot.models.views;
 
 import java.util.ArrayList;
 
