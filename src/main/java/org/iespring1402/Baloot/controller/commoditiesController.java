@@ -35,33 +35,44 @@ public class commoditiesController {
     @GetMapping("")
     public @ResponseBody Object list(
             @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "12") Integer pageSize) {
+            @RequestParam(value = "pageSize", defaultValue = "12") Integer pageSize,
+            @RequestParam(value = "available" , defaultValue = "false") Boolean availableCommodities) {
         HashMap<String, Object> returnResponse = new HashMap<>();
-        int commoditySize = balootInstance.getCommodities().size();
+        ArrayList<Commodity> allCommodities = new ArrayList<>();
+        int commoditySize;
+        if (availableCommodities == true) {
+            allCommodities = listAvailableCommodities(balootInstance.getCommodities());
+            commoditySize = allCommodities.size();
+        } else {
+            allCommodities = balootInstance.getCommodities();
+            commoditySize = balootInstance.getCommodities().size();
+        }
+
         int totalPagesNumber = commoditySize / pageSize;
         if (commoditySize % pageSize != 0) {
             totalPagesNumber += 1;
         }
         returnResponse.put("totalPages", totalPagesNumber);
-        if (pageNo * pageSize > commoditySize) {
+        if (pageNo > totalPagesNumber) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Page not available!");
         } else {
             int start = (pageNo - 1) * pageSize;
             ArrayList<Commodity> commodities = new ArrayList<>();
-            if ((commoditySize - (pageNo * pageSize)) >= pageSize) {
+            if ((commoditySize - (start)) >= pageSize) {
 
                 for (int dynamicStart = start; dynamicStart < start + pageSize; dynamicStart++) {
-                    commodities.add(balootInstance.getCommodities().get(dynamicStart));
+                    commodities.add(allCommodities.get(dynamicStart));
                 }
-                returnResponse.put("commoditiesList", commodities);
 
+                returnResponse.put("commoditiesList", commodities);
                 return returnResponse;
+                
             } else {
-                for (int dynamicStart = (pageNo * pageSize) - 1; dynamicStart < commoditySize; dynamicStart++) {
-                    commodities.add(balootInstance.getCommodities().get(dynamicStart));
+                for (int dynamicStart = start; dynamicStart < commoditySize; dynamicStart++) {
+                    commodities.add(allCommodities.get(dynamicStart));
                 }
+            
                 returnResponse.put("commoditiesList", commodities);
-
                 return returnResponse;
             }
         }
@@ -82,7 +93,7 @@ public class commoditiesController {
 
     private ArrayList<Commodity> listAvailableCommodities(ArrayList<Commodity> commodities) {
         ArrayList<Commodity> availableCommodities = new ArrayList<>();
-        for (Commodity commodity : balootInstance.getCommodities()) {
+        for (Commodity commodity : commodities) {
             if (commodity.isInStock()) {
                 availableCommodities.add(commodity);
             }
