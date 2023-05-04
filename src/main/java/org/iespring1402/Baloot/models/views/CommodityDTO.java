@@ -4,27 +4,28 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommodityDTO {
-    private int id;
+    private Integer id;
     private String name;
-    private int providerId;
+    private Integer providerId;
     String providerName;
-    private int price;
+    private Integer price;
     private ArrayList<String> categories;
-    private float rating;
-    private int inStock;
+    private Float rating;
+    private Integer inStock;
 
     public CommodityDTO(
-            int id,
+            Integer id,
             String name,
-            int providerId,
+            Integer providerId,
             String providerName,
-            int price,
+            Integer price,
             ArrayList<String> categories,
-            float rating,
-            int inStock) {
+            Float rating,
+            Integer inStock) {
         this.id = id;
         this.name = name;
         this.providerId = providerId;
@@ -36,13 +37,13 @@ public class CommodityDTO {
     }
 
     public CommodityDTO(
-            int id,
+            Integer id,
             String name,
-            int providerId,
+            Integer providerId,
             String providerName,
-            int price,
+            Integer price,
             ArrayList<String> categories,
-            float rating) {
+            Float rating) {
         this.id = id;
         this.name = name;
         this.providerId = providerId;
@@ -50,18 +51,20 @@ public class CommodityDTO {
         this.price = price;
         this.categories = categories;
         this.rating = rating;
+        this.inStock = null;
     }
 
     public CommodityDTO(
-            int id,
+            Integer id,
             String name,
             String providerName,
-            int price,
+            Integer price,
             ArrayList<String> categories,
-            float rating,
-            int inStock) {
+            Float rating,
+            Integer inStock) {
         this.id = id;
         this.name = name;
+        this.providerId = null;
         this.providerName = providerName;
         this.price = price;
         this.categories = categories;
@@ -73,11 +76,11 @@ public class CommodityDTO {
         this.categories = categories;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public void setInStock(int inStock) {
+    public void setInStock(Integer inStock) {
         this.inStock = inStock;
     }
 
@@ -85,11 +88,11 @@ public class CommodityDTO {
         this.name = name;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
-    public void setProviderId(int providerId) {
+    public void setProviderId(Integer providerId) {
         this.providerId = providerId;
     }
 
@@ -97,7 +100,7 @@ public class CommodityDTO {
         this.providerName = providerName;
     }
 
-    public void setRating(float rating) {
+    public void setRating(Float rating) {
         this.rating = rating;
     }
 
@@ -105,11 +108,13 @@ public class CommodityDTO {
         return categories;
     }
 
-    public int getId() {
+
+    public Integer getId() {
         return id;
     }
 
-    public int getInStock() {
+    
+    public Integer getInStock() {
         return inStock;
     }
 
@@ -117,11 +122,11 @@ public class CommodityDTO {
         return name;
     }
 
-    public int getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public int getProviderId() {
+    public Integer getProviderId() {
         return providerId;
     }
 
@@ -129,7 +134,7 @@ public class CommodityDTO {
         return providerName;
     }
 
-    public float getRating() {
+    public Float getRating() {
         return rating;
     }
 }
