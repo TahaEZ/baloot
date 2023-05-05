@@ -78,7 +78,7 @@ public class CommoditiesController {
         return availableCommodities;
     }
 
-    @GetMapping(value = "", params = { "searchType", "searchVal" })
+    @GetMapping(value = "", params = {"searchType", "searchVal"})
     public Object getCommoditiesByCategory(
             @PathParam("searchType") String searchType,
             @PathParam("searchVal") String searchVal,
@@ -141,8 +141,10 @@ public class CommoditiesController {
         }
         CommodityDTO result;
         Provider provider = balootInstance.findProviderByProviderId(commodity.getProviderId());
-        result = new CommodityDTO(commodity.getId(), commodity.getName(),provider.getId(), provider.getName(),
-                commodity.getPrice(), commodity.getCategories(), commodity.getRating(),commodity.getInStock());
+        ArrayList<Commodity> suggestedCommodities = balootInstance.getSuggestedCommodities(commodity.getId());
+        System.out.println(suggestedCommodities.size());
+        result = new CommodityDTO(commodity.getId(), commodity.getName(), provider.getId(), provider.getName(),
+                commodity.getPrice(), commodity.getCategories(), commodity.getRating(), commodity.getInStock(), suggestedCommodities);
         return result;
     }
 
@@ -161,8 +163,7 @@ public class CommoditiesController {
     public Object addCommodity(@RequestBody Commodity commodity) {
         if (balootInstance.findCommodityById(commodity.getId()).getId() == commodity.getId()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Duplicate was occurred!");
-        }
-        else {
+        } else {
             balootInstance.addCommodity(commodity);
             return commodity;
         }
@@ -184,9 +185,7 @@ public class CommoditiesController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
             return ResponseEntity.status(HttpStatus.OK).body(null);
-        }
-
-        else {
+        } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 

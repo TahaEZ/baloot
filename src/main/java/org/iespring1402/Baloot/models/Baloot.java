@@ -25,7 +25,7 @@ public class Baloot {
     private ArrayList<Commodity> commodities;
     private ArrayList<Provider> providers;
     private ArrayList<Comment> comments;
-    private  ArrayList<DiscountCode> discountCodes;
+    private ArrayList<DiscountCode> discountCodes;
 
     public Baloot() {
         ObjectMapper mapper = new ObjectMapper();
@@ -69,17 +69,15 @@ public class Baloot {
         return null;
     }
 
-    public DiscountCode findDiscountCodeByCode(String code)
-    {
-        for (DiscountCode discountCode: discountCodes)
-        {
-            if(discountCode.getCode().equals(code) )
-            {
-                return  discountCode;
+    public DiscountCode findDiscountCodeByCode(String code) {
+        for (DiscountCode discountCode : discountCodes) {
+            if (discountCode.getCode().equals(code)) {
+                return discountCode;
             }
         }
         return null;
     }
+
     public ArrayList<Commodity> getCommodities() {
         return commodities;
     }
@@ -111,29 +109,23 @@ public class Baloot {
         }
     }
 
-    public boolean discountCodeValidityCheck(String discountCode)
-    {
-        for(DiscountCode discountCodeTemp : discountCodes)
-        {
-            if(discountCodeTemp.getCode().equals(discountCode)  && discountCodeTemp.isDeprecated()== false)
-            {
+    public boolean discountCodeValidityCheck(String discountCode) {
+        for (DiscountCode discountCodeTemp : discountCodes) {
+            if (discountCodeTemp.getCode().equals(discountCode) && discountCodeTemp.isDeprecated() == false) {
                 return true;
             }
         }
         return false;
     }
 
-    public Response deprecateDiscountCode(String discountCode)
-    {
-        for(DiscountCode discountCodeTemp : discountCodes)
-        {
-            if(discountCodeTemp.getCode() == discountCode)
-            {
+    public Response deprecateDiscountCode(String discountCode) {
+        for (DiscountCode discountCodeTemp : discountCodes) {
+            if (discountCodeTemp.getCode() == discountCode) {
                 discountCodeTemp.setDeprecated(true);
                 return new SuccessfulResponse("Discount code deprecated.");
             }
         }
-        return  new FailedResponse("Discount code not found to deprecate.");
+        return new FailedResponse("Discount code not found to deprecate.");
     }
 
 
@@ -175,12 +167,12 @@ public class Baloot {
         commodities.add(commodity);
         return true;
     }
+
     public void addDiscountCode(DiscountCode discountCode) {
         discountCodes.add(discountCode);
     }
 
-    public ArrayList<Provider>searchProviderByName(String name)
-    {
+    public ArrayList<Provider> searchProviderByName(String name) {
         ArrayList<Provider> foundProviders = new ArrayList<>();
         for (Provider provider : providers) {
             if (provider.getName().toLowerCase().contains(name.toLowerCase())) {
@@ -190,6 +182,7 @@ public class Baloot {
         return foundProviders;
 
     }
+
     public Commodity findCommodityById(int commodityId) {
         for (Commodity commodity : commodities) {
             if (commodity.getId() == commodityId) {
@@ -239,13 +232,13 @@ public class Baloot {
     public ArrayList<CommodityDTO> getBuyList(String username) {
         User user = findUserByUsername(username);
         if (user != null) {
-            HashMap<Integer,Integer> buylist = user.getBuyList().getItems();
+            HashMap<Integer, Integer> buylist = user.getBuyList().getItems();
             ArrayList<CommodityDTO> result = new ArrayList<>();
-            for (HashMap.Entry<Integer,Integer>item : buylist.entrySet()) {
+            for (HashMap.Entry<Integer, Integer> item : buylist.entrySet()) {
                 Commodity commodity = findCommodityById(item.getKey());
 
                 CommodityDTO buylistItem = new CommodityDTO(commodity.getId(), commodity.getName(),
-                        commodity.getProviderId(), commodity.getPrice(), commodity.getCategories(), commodity.getRating(),commodity.getInStock(),item.getValue());
+                        commodity.getProviderId(), commodity.getPrice(), commodity.getCategories(), commodity.getRating(), commodity.getInStock(), item.getValue());
 
                 result.add(buylistItem);
             }
@@ -323,12 +316,10 @@ public class Baloot {
             providers.add(newProvider);
     }
 
-    public ArrayList<Commodity> findCommoditiesByProviderId(int providerId)
-    {
+    public ArrayList<Commodity> findCommoditiesByProviderId(int providerId) {
         ArrayList<Commodity> commoditiesByProviderId = new ArrayList<>();
-        for(Commodity commodity: commodities)
-        {
-            if(commodity.getProviderId() == providerId){
+        for (Commodity commodity : commodities) {
+            if (commodity.getProviderId() == providerId) {
                 commoditiesByProviderId.add(commodity);
             }
         }
@@ -377,14 +368,38 @@ public class Baloot {
         this.currentUser = currentUser;
     }
 
-    public void quantityToChangeCommodityInStock(int commodityId , int quantity )
-    {
-        for(Commodity commodity : commodities)
-        {
-            if(commodity.getId()==commodityId){
-                commodity.setInStock(commodity.getInStock()+quantity);
+    public void quantityToChangeCommodityInStock(int commodityId, int quantity) {
+        for (Commodity commodity : commodities) {
+            if (commodity.getId() == commodityId) {
+                commodity.setInStock(commodity.getInStock() + quantity);
             }
         }
     }
 
+    public ArrayList<Commodity> getSuggestedCommodities(int commodityId) {
+        ArrayList<Commodity> suggestedCommodities = new ArrayList<>(this.commodities);
+        Commodity commodity = findCommodityById(commodityId);
+        if (commodity == null) {
+            return null;
+        } else {
+            Comparator<Commodity> comparator = (commodity1, commodity2) -> {
+                ArrayList<String> currentCategories = commodity.getCategories();
+                int is_in_similar_category1 = commodity1.getCategories().containsAll(currentCategories) ? 1 : 0;
+                int is_in_similar_category2 = commodity2.getCategories().containsAll(currentCategories) ? 1 : 0;
+                float score1 = is_in_similar_category1 * 11 + commodity1.getRating();
+                float score2 = is_in_similar_category2 * 11 + commodity2.getRating();
+                return Float.compare(score2, score1);
+            };
+            suggestedCommodities.sort(comparator);
+            for (int i = 0; i < suggestedCommodities.size(); i++) {
+                if (suggestedCommodities.get(i).getId() == commodity.getId()) {
+                    suggestedCommodities.remove(i);
+                    break;
+                }
+            }
+            suggestedCommodities = new ArrayList<>(suggestedCommodities.subList(0, 5));
+            return suggestedCommodities;
+        }
+
+    }
 }
