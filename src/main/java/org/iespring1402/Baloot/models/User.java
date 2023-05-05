@@ -72,7 +72,9 @@ public class User {
     {
         for(DiscountCode discountCode: usedDiscounts)
         {
-            if(discountCode.getCode() == discount)
+            System.out.println(discountCode.getCode());
+            System.out.println(discount);
+            if(discountCode.getCode().equals(discount))
             {
                 return true;
             }

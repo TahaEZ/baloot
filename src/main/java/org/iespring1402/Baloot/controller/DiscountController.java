@@ -27,7 +27,7 @@ public class DiscountController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         } 
         if (balootInstance.discountCodeValidityCheck(code)){
-            if(user.isDiscountCodeUsed(username))
+            if(user.isDiscountCodeUsed(code))
             {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Discount used before!");
             }

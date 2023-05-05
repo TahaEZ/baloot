@@ -35,7 +35,7 @@ public class PaymentController {
         if (code != null) {
 
             if (balootInstance.discountCodeValidityCheck(code)) {
-                if (user.isDiscountCodeUsed(username)) {
+                if (user.isDiscountCodeUsed(code)) {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Discount used before!");
                 } else {
 
