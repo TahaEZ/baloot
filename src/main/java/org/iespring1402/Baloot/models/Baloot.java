@@ -3,7 +3,6 @@ package org.iespring1402.Baloot.models;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.iespring1402.Baloot.models.views.CommodityDTO;
-import org.iespring1402.Baloot.models.views.CommodityNoInStock;
 import org.iespring1402.Baloot.response.FailedResponse;
 import org.iespring1402.Baloot.response.Response;
 import org.iespring1402.Baloot.response.SuccessfulResponse;

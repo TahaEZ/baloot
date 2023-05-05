@@ -1,6 +1,5 @@
 package org.iespring1402.Baloot.controller;
 
-import org.apache.catalina.User;
 import org.iespring1402.Baloot.models.Baloot;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

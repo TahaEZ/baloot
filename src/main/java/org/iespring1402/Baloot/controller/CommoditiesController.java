@@ -2,16 +2,12 @@ package org.iespring1402.Baloot.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.iespring1402.Baloot.models.Baloot;
 import org.iespring1402.Baloot.models.CategoryFilter;
 import org.iespring1402.Baloot.models.Commodity;
 import org.iespring1402.Baloot.models.Provider;
-import org.iespring1402.Baloot.models.views.CommodityByIdView;
 import org.iespring1402.Baloot.models.views.CommodityDTO;
-import org.iespring1402.Baloot.models.views.CommodityNoInStock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -74,7 +70,7 @@ public class CommoditiesController {
             @RequestParam(value = "pageSize", defaultValue = "12") Integer pageSize,
             @RequestParam(value = "available", defaultValue = "false") Boolean availableCommodities) {
         ArrayList<Commodity> allCommodities = new ArrayList<>();
-        Map filteredCommoditiesList = new HashMap();
+        HashMap <String,Object> filteredCommoditiesList = new HashMap<>();
         ArrayList<Commodity> filteredWithStock = new ArrayList<>();
         if (availableCommodities == true) {
             allCommodities = listAvailableCommodities(balootInstance.getCommodities());

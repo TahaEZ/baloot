@@ -4,7 +4,6 @@ import org.iespring1402.Baloot.response.FailedResponse;
 import org.iespring1402.Baloot.response.Response;
 import org.iespring1402.Baloot.response.SuccessfulResponse;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BuyList {
