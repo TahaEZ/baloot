@@ -48,6 +48,7 @@ public class UsersController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         } else {
             buylist.put("buylist", balootInstance.getBuyList(username));
+            buylist.put("totalCost",balootInstance.findUserByUsername(username).getBuyList().totalCost());
             return buylist;
         }
     }
@@ -70,6 +71,7 @@ public class UsersController {
                 if (responseStatus.success) {
                     ArrayList<CommodityDTO> buyList = balootInstance.getBuyList(username);
                     response.put("buylist", buyList);
+                    response.put("totalCost", balootInstance.findUserByUsername(username).getBuyList().totalCost());
                     return response;
                 } else {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Internal Error!");
