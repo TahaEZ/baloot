@@ -3,6 +3,7 @@ package org.iespring1402.Baloot.models.views;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.iespring1402.Baloot.models.Commodity;
 
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -16,6 +17,8 @@ public class CommodityDTO {
     private Float rating;
     private Integer inStock;
     private Integer quantity;
+    private ArrayList<Commodity> suggestedCommodities;
+    private Integer totalRatings;
 
     public CommodityDTO(
             Integer id,
@@ -25,7 +28,9 @@ public class CommodityDTO {
             Integer price,
             ArrayList<String> categories,
             Float rating,
-            Integer inStock) {
+            Integer inStock,
+            ArrayList<Commodity> suggestedCommodities,
+            Integer totalRatings) {
         this.id = id;
         this.name = name;
         this.providerId = providerId;
@@ -35,6 +40,8 @@ public class CommodityDTO {
         this.rating = rating;
         this.inStock = inStock;
         this.quantity = null;
+        this.suggestedCommodities = suggestedCommodities;
+        this.totalRatings = totalRatings;
     }
 
     public CommodityDTO(
@@ -54,6 +61,8 @@ public class CommodityDTO {
         this.rating = rating;
         this.inStock = null;
         this.quantity = null;
+        this.suggestedCommodities = null;
+        this.totalRatings = null;
     }
 
     public CommodityDTO(
@@ -73,6 +82,8 @@ public class CommodityDTO {
         this.rating = rating;
         this.inStock = inStock;
         this.quantity = null;
+        this.suggestedCommodities = null;
+        this.totalRatings = null;
     }
 
     public CommodityDTO(
@@ -93,6 +104,8 @@ public class CommodityDTO {
         this.rating = rating;
         this.inStock = inStock;
         this.quantity = quantity;
+        this.suggestedCommodities = null;
+        this.totalRatings = null;
     }
 
     public void setCategories(ArrayList<String> categories) {
@@ -140,7 +153,7 @@ public class CommodityDTO {
         return id;
     }
 
-    
+
     public Integer getInStock() {
         return inStock;
     }
@@ -164,7 +177,16 @@ public class CommodityDTO {
     public Float getRating() {
         return rating;
     }
+
     public Integer getQuantity() {
         return quantity;
+    }
+
+    public ArrayList<Commodity> getSuggestedCommodities() {
+        return suggestedCommodities;
+    }
+
+    public Integer getTotalRatings() {
+        return totalRatings;
     }
 }

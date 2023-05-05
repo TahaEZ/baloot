@@ -8,7 +8,6 @@ import org.iespring1402.Baloot.models.Commodity;
 import org.iespring1402.Baloot.models.User;
 import org.iespring1402.Baloot.models.views.CommodityDTO;
 import org.iespring1402.Baloot.response.Response;
-import org.springframework.boot.autoconfigure.amqp.RabbitProperties.Retry;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -96,10 +94,26 @@ public class UsersController {
                 if (responseStatus.success) {
                     ArrayList<CommodityDTO> buyList = balootInstance.getBuyList(username);
                     response.put("buylist", buyList);
-                    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+                    return ResponseEntity.status(HttpStatus.OK).body(response);
                 } else {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Item Not found in buylist!");
                 }
+            }
+        }
+    }
+
+    @PostMapping(value = "/{username}")
+    @ResponseBody
+    public Object addBuyListItemByUsername(@PathVariable("username") String username, @RequestParam long creditToAdd) {
+        User user = balootInstance.findUserByUsername(username);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
+        } else {
+            Response addCreditRes = user.addCredit(creditToAdd);
+            if (addCreditRes.success) {
+                return ResponseEntity.status(HttpStatus.OK).body(addCreditRes.data);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(addCreditRes.data);
             }
         }
     }
