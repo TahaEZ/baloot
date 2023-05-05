@@ -237,7 +237,7 @@ public class Baloot {
                 Commodity commodity = findCommodityById(item.getKey());
 
                 CommodityDTO buylistItem = new CommodityDTO(commodity.getId(), commodity.getName(),
-                        commodity.getProviderId(), commodity.getPrice(), commodity.getCategories(), commodity.getRating(), commodity.getInStock(), item.getValue());
+                        commodity.getProviderId(), commodity.getPrice(), commodity.getCategories(), commodity.getRating(), commodity.getInStock(), item.getValue() , commodity.getImage());
 
                 result.add(buylistItem);
             }

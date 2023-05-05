@@ -114,6 +114,30 @@ public class CommodityDTO {
         this.image = null;
     }
 
+    public CommodityDTO(
+            Integer id,
+            String name,
+            Integer providerId,
+            Integer price,
+            ArrayList<String> categories,
+            Float rating,
+            Integer inStock,
+            Integer quantity,
+            String image) {
+        this.id = id;
+        this.name = name;
+        this.providerId = providerId;
+        this.providerName = null;
+        this.price = price;
+        this.categories = categories;
+        this.rating = rating;
+        this.inStock = inStock;
+        this.quantity = quantity;
+        this.suggestedCommodities = null;
+        this.totalRatings = null;
+        this.image = image;
+    }
+
     public void setCategories(ArrayList<String> categories) {
         this.categories = categories;
     }
