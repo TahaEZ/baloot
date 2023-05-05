@@ -72,8 +72,8 @@ public class BuyList {
         isDiscountActive = false;
     }
 
-    public long totalCost() {
-        long total = 0;
+    public double totalCost() {
+        double total = 0;
         for (HashMap.Entry<Integer,Integer> item :items.entrySet()) {
             int cost = Baloot.getInstance().findCommodityById(item.getKey()).getPrice();
             total += cost * item.getValue();

@@ -2,20 +2,20 @@ package org.iespring1402.Baloot.models;
 
 public class DiscountCode {
     private String discountCode;
-    private int discount;
+    private double discount;
     private boolean deprecated;
     public DiscountCode()
     {
         super();
     }
 
-    public DiscountCode(String discountCode, int discount) {
+    public DiscountCode(String discountCode, Double discount) {
         this.discountCode = discountCode;
         this.discount = discount;
         deprecated = false;
     }
 
-    public int getDiscount() {
+    public double getDiscount() {
         return discount;
     }
 
