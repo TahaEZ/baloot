@@ -30,8 +30,6 @@ public class Baloot {
     public Baloot() {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            String commentsJson = fetchData("/api/comments");
-            comments = new ArrayList<>(Arrays.asList(mapper.readValue(commentsJson, Comment[].class)));
             String usersJson = fetchData("/api/users");
             users = new ArrayList<>(Arrays.asList(mapper.readValue(usersJson, User[].class)));
             String providersJson = fetchData("/api/providers");
@@ -42,6 +40,7 @@ public class Baloot {
             for (Commodity commodity : commodityArrayList) {
                 addCommodity(commodity);
             }
+            comments = new ArrayList<>();
             discountCodes = new ArrayList<>();
             String discountCodesJSON = fetchData("/api/discount");
             discountCodes = new ArrayList<>(Arrays.asList(mapper.readValue(discountCodesJSON, DiscountCode[].class)));
@@ -347,9 +346,9 @@ public class Baloot {
         if (text.isEmpty()) {
             return new FailedResponse("Your comment can't be empty!");
         }
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
-        Comment comment = new Comment(user.getEmail(), commodityId, text, dateFormat.format(date));
+        Comment comment = new Comment(username, commodityId, text, dateFormat.format(date));
         comments.add(comment);
         return new SuccessfulResponse();
     }

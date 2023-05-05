@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class Comment {
     private String id;
-    private String userEmail;
+    private String username;
     private int commodityId;
     private String text;
     private String date;
@@ -18,8 +18,8 @@ public class Comment {
         id = UUID.randomUUID().toString();
     }
 
-    public Comment(String userEmail, int commodityId, String text, String date) {
-        this.userEmail = userEmail;
+    public Comment(String username, int commodityId, String text, String date) {
+        this.username = username;
         this.commodityId = commodityId;
         this.text = text;
         this.date = date;
@@ -39,8 +39,8 @@ public class Comment {
         return id;
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public String getUsername() {
+        return username;
     }
 
     public int getCommodityId() {
