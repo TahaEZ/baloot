@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("api/v1/users")
 @CrossOrigin
 public class UsersController {
     private Baloot balootInstance = Baloot.getInstance();

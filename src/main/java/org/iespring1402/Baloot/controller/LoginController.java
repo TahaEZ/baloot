@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("api/v1/login")
 @CrossOrigin
 public class LoginController {
     private Baloot balootInstance = Baloot.getInstance();

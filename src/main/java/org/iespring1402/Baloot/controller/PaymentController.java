@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/payment")
+@RequestMapping("api/v1/payment")
 @CrossOrigin
 public class PaymentController {
     private Baloot balootInstance = Baloot.getInstance();
@@ -51,6 +51,7 @@ public class PaymentController {
                     user.addToUsedDiscounts(discountCode);
                     for(CommodityDTO commodity : balootInstance.getBuyList(username)){
                         user.addToPurchasedList(commodity);
+                        balootInstance.quantityToChangeCommodityInStock(commodity.getId(), -1);
                         user.removeItemFromBuyListCompletely(commodity.getId());
                     }
                     user.setCredit(user.getCredit() - totalCost);
@@ -72,6 +73,7 @@ public class PaymentController {
                 user.addToUsedDiscounts(discountCode);
                 for (CommodityDTO commodity : balootInstance.getBuyList(username)) {
                     user.addToPurchasedList(commodity);
+                    balootInstance.quantityToChangeCommodityInStock(commodity.getId(), -1);
                     user.removeItemFromBuyListCompletely(commodity.getId());
                 }
                 user.setCredit(user.getCredit()-totalCost);

@@ -7,6 +7,7 @@ public class Provider {
     private String name;
     private String registryDate;
     private HashMap<Integer, Float> ratings;
+    private String img;
 
     public Provider() {
         super();
@@ -18,6 +19,14 @@ public class Provider {
         this.name = name;
         this.registryDate = registryDate;
         this.ratings = new HashMap<>();
+    }
+
+    public Provider(int id, String name, String registryDate , String img) {
+        this.id = id;
+        this.name = name;
+        this.registryDate = registryDate;
+        this.ratings = new HashMap<>();
+        this.img = img;
     }
 
     public void addRating(int commodityId, float rating) {
@@ -44,5 +53,12 @@ public class Provider {
 
     public HashMap<Integer, Float> getRatings() {
         return ratings;
+    }
+
+    public String getImg() {
+        return img;
+    }
+    public void setImg(String img) {
+        this.img = img;
     }
 }

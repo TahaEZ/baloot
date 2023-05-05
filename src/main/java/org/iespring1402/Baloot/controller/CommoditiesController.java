@@ -24,7 +24,7 @@ import jakarta.websocket.server.PathParam;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
-@RequestMapping("/commodities")
+@RequestMapping("api/v1/commodities")
 @CrossOrigin
 public class CommoditiesController {
     private Baloot balootInstance = Baloot.getInstance();

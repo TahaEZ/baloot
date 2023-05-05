@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/signup")
+@RequestMapping("api/v1/signup")
 @CrossOrigin
 public class SignUpController {
     private Baloot balootInstance = Baloot.getInstance();

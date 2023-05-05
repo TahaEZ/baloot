@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 @RestController
-@RequestMapping("/comments")
+@RequestMapping("api/v1/comments")
 @CrossOrigin
 public class CommentController {
     private Baloot balootInstance = Baloot.getInstance();
