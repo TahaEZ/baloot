@@ -48,7 +48,7 @@ public class PaymentController {
                     user.addToUsedDiscounts(discountCode);
                     for(CommodityDTO commodity : balootInstance.getBuyList(username)){
                         user.addToPurchasedList(commodity);
-                        user.removeFromBuyList(commodity.getId());
+                        user.removeItemFromBuyListCompletely(commodity.getId());
                     }
                     user.setCredit(user.getCredit() - totalCost);
                     
@@ -69,7 +69,7 @@ public class PaymentController {
                 user.addToUsedDiscounts(discountCode);
                 for (CommodityDTO commodity : balootInstance.getBuyList(username)) {
                     user.addToPurchasedList(commodity);
-                    user.removeFromBuyList(commodity.getId());
+                    user.removeItemFromBuyListCompletely(commodity.getId());
                 }
                 user.setCredit(user.getCredit()-totalCost);
                 return ResponseEntity.status(HttpStatus.OK).body(null);

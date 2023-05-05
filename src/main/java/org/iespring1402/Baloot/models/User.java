@@ -6,6 +6,7 @@ import org.iespring1402.Baloot.response.Response;
 import org.iespring1402.Baloot.response.SuccessfulResponse;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class User {
     public String username;
@@ -83,8 +84,19 @@ public class User {
 
     public Response addToPurchasedList(CommodityDTO commodity){return purchasedList.add(commodity);}
     
-
-    public Response removeFromBuyList(int commodityId) {return buyList.decrease(commodityId);}
+    public Response removeFromBuyList(int commodityId) {return buyList.decrease(commodityId);} 
+    
+    public Response removeItemFromBuyListCompletely(int commodityId){
+        HashMap <Integer , Integer> items = buyList.getItems();
+        for(HashMap.Entry <Integer,Integer> item : items.entrySet())
+        {
+            if(item.getKey() == commodityId )
+            {
+                buyList.remove(commodityId);
+            }
+        }
+        return new SuccessfulResponse();
+}
 
     public BuyList getBuyList() {
         return buyList;
