@@ -7,6 +7,8 @@ import org.iespring1402.Baloot.response.SuccessfulResponse;
 
 import java.util.ArrayList;
 
+import static java.util.Objects.isNull;
+
 public class User {
     public String username;
     public String password;
@@ -47,14 +49,14 @@ public class User {
         this.credit = credit;
     }
 
-    public Response addCredit(long creditToAdd){
-        if(creditToAdd <= 0)
+    public Response addCredit(long creditToAdd) {
+        if (creditToAdd <= 0)
             return new FailedResponse("Invalid credit value!");
         credit += creditToAdd;
         return new SuccessfulResponse();
     }
 
-    public Response addToUsedDiscounts(DiscountCode discount){
+    public Response addToUsedDiscounts(DiscountCode discount) {
         usedDiscounts.add(discount);
         return new SuccessfulResponse();
     }
@@ -68,36 +70,38 @@ public class User {
         return buyList.increase(commodityId);
     }
 
-    public boolean isDiscountCodeUsed(String discount)
-    {
-        for(DiscountCode discountCode: usedDiscounts)
-        {
-          
-            if(discountCode.getCode().equals(discount))
-            {
-                return true;
+    public boolean isDiscountCodeUsed(String discount) {
+        for (DiscountCode discountCode : usedDiscounts) {
+            if (!isNull(discountCode)) {
+                if (discountCode.getCode().equals(discount)) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
-    public Response addToPurchasedList(CommodityDTO commodity){return purchasedList.add(commodity);}
-    
-    public Response removeFromBuyList(int commodityId) {return buyList.decrease(commodityId);} 
-    
-    public Response removeItemFromBuyListCompletely(int commodityId){
+    public Response addToPurchasedList(CommodityDTO commodity) {
+        return purchasedList.add(commodity);
+    }
+
+    public Response removeFromBuyList(int commodityId) {
+        return buyList.decrease(commodityId);
+    }
+
+    public Response removeItemFromBuyListCompletely(int commodityId) {
         buyList.getItems().remove(commodityId);
         return new SuccessfulResponse();
-}
+    }
 
     public BuyList getBuyList() {
         return buyList;
     }
 
-    public void resetBuyList()
-    {
+    public void resetBuyList() {
         buyList = new BuyList();
     }
+
     public String getUsername() {
         return username;
     }
