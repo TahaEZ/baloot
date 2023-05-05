@@ -20,8 +20,23 @@ public class CommentController {
     @ResponseBody
     public Object getComments(@RequestParam(value = "commodityId") int commodityId) {
         ArrayList<Comment> comments = balootInstance.getFilteredCommentsByCommodityId(commodityId);
+        ArrayList<HashMap<String, Object>> result = new ArrayList<>();
+
+        for (Comment comment: comments) {
+            HashMap<String, Object> item = new HashMap<>();
+            item.put("id", comment.getId());
+            item.put("username", comment.getUsername());
+            item.put("commodityId", comment.getCommodityId());
+            item.put("text", comment.getText());
+            item.put("date", comment.getDate());
+            item.put("likes", comment.likesCount());
+            item.put("dislikes", comment.dislikesCount());
+
+            result.add(item);
+        }
+
         HashMap<String, Object> response = new HashMap<>();
-        response.put("comments", comments);
+        response.put("comments", result);
         return response;
     }
 
@@ -33,6 +48,17 @@ public class CommentController {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(addCommentRes.data);
+        }
+    }
+
+    @PostMapping(value = "/{commentId}")
+    @ResponseBody
+    public Object voteComment(@PathVariable("commentId") String commentId, @RequestParam(value = "vote") int vote, @RequestParam(value = "username") String username) {
+        Response voteCommentRes = balootInstance.voteComment(username, commentId, vote);
+        if (voteCommentRes.success) {
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(voteCommentRes.data);
         }
     }
 }
