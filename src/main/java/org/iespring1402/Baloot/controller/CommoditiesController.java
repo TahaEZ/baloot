@@ -144,7 +144,8 @@ public class CommoditiesController {
         ArrayList<Commodity> suggestedCommodities = balootInstance.getSuggestedCommodities(commodity.getId());
         System.out.println(suggestedCommodities.size());
         result = new CommodityDTO(commodity.getId(), commodity.getName(), provider.getId(), provider.getName(),
-                commodity.getPrice(), commodity.getCategories(), commodity.getRating(), commodity.getInStock(), suggestedCommodities);
+                commodity.getPrice(), commodity.getCategories(), commodity.getRating(), commodity.getInStock(),
+                suggestedCommodities, commodity.getRatings().keySet().size());
         return result;
     }
 
