@@ -13,7 +13,7 @@ public class Commodity {
     private ArrayList<String> categories;
     private float rating;
     private int inStock;
-    private String img;
+    private String image;
 
     private HashMap<String, Integer> ratings;
 
@@ -34,7 +34,7 @@ public class Commodity {
     }
     
     public Commodity(int id, String name, int providerId, int price, ArrayList<String> categories, float rating,
-            int inStock , String img) {
+            int inStock , String image) {
         this.id = id;
         this.name = name;
         this.providerId = providerId;
@@ -43,7 +43,7 @@ public class Commodity {
         this.rating = rating;
         this.inStock = inStock;
         this.ratings = new HashMap<>();
-        this.img = img;
+        this.image = image;
     }
 
     public void addRating(String username, int score) {
@@ -102,10 +102,10 @@ public class Commodity {
         return ratings;
     }
 
-    public String getImg() {
-        return img;
+    public String getImage() {
+        return image;
     }
-    public void setImg(String img) {
-        this.img = img;
+    public void setImage(String img) {
+        this.image = img;
     }
 }

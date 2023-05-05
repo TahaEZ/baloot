@@ -31,9 +31,9 @@ public class Baloot {
         try {
             String usersJson = fetchData("/api/users");
             users = new ArrayList<>(Arrays.asList(mapper.readValue(usersJson, User[].class)));
-            String providersJson = fetchData("/api/providers");
+            String providersJson = fetchData("/api/v2/providers");
             providers = new ArrayList<>(Arrays.asList(mapper.readValue(providersJson, Provider[].class)));
-            String commoditiesJson = fetchData("/api/commodities");
+            String commoditiesJson = fetchData("/api/v2/commodities");
             ArrayList<Commodity> commodityArrayList = new ArrayList<>(Arrays.asList(mapper.readValue(commoditiesJson, Commodity[].class)));
             commodities = new ArrayList<>();
             for (Commodity commodity : commodityArrayList) {
