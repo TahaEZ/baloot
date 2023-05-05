@@ -40,7 +40,10 @@ public class PaymentController {
                 } else {
 
                     DiscountCode discountCode = balootInstance.findDiscountCodeByCode(code);
-                    long totalCost = user.getBuyList().totalCost() * (1 - discountCode.getDiscount()/100);
+                    double totalCost = ((user.getBuyList().totalCost()) * (100 - discountCode.getDiscount()))/100;
+                    
+                    System.out.println(discountCode.getDiscount()/100);
+                    System.out.println(totalCost);
                     if(user.getCredit() < totalCost)
                     {
                         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Insufficient credit!");
@@ -62,7 +65,7 @@ public class PaymentController {
         else{
 
                 DiscountCode discountCode = balootInstance.findDiscountCodeByCode(code);
-                long totalCost = user.getBuyList().totalCost();
+                double totalCost = user.getBuyList().totalCost();
                 if (user.getCredit() < totalCost) {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Insufficient credit!");
                 }

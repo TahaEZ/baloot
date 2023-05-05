@@ -6,7 +6,6 @@ import org.iespring1402.Baloot.response.Response;
 import org.iespring1402.Baloot.response.SuccessfulResponse;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class User {
     public String username;
@@ -15,7 +14,7 @@ public class User {
     public String birthDate;
     public String address;
 
-    public long credit;
+    public double credit;
     private BuyList buyList;
     private ArrayList<DiscountCode> usedDiscounts;
 
@@ -40,7 +39,7 @@ public class User {
         this.usedDiscounts = new ArrayList<>();
     }
 
-    public void updateUser(String password, String email, String birthDate, String address, long credit) {
+    public void updateUser(String password, String email, String birthDate, String address, double credit) {
         this.password = password;
         this.email = email;
         this.birthDate = birthDate;
@@ -119,7 +118,7 @@ public class User {
         return address;
     }
 
-    public long getCredit() {
+    public double getCredit() {
         return credit;
     }
 
@@ -127,7 +126,7 @@ public class User {
         return purchasedList;
     }
 
-    public void setCredit(long credit) {
+    public void setCredit(double credit) {
         this.credit = credit;
     }
 }

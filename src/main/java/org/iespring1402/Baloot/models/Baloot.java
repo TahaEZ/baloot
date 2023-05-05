@@ -141,7 +141,7 @@ public class Baloot {
             String email = newUser.email;
             String birthDate = newUser.birthDate;
             String address = newUser.address;
-            long credit = newUser.credit;
+            double credit = newUser.credit;
 
             toBeUpdatedUser.updateUser(password, email, birthDate, address, credit);
         } else
