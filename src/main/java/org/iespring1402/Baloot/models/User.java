@@ -1,5 +1,6 @@
 package org.iespring1402.Baloot.models;
 
+import org.iespring1402.Baloot.models.views.CommodityDTO;
 import org.iespring1402.Baloot.response.FailedResponse;
 import org.iespring1402.Baloot.response.Response;
 import org.iespring1402.Baloot.response.SuccessfulResponse;
@@ -79,7 +80,8 @@ public class User {
         return false;
     }
 
-    public Response addToPurchasedList(Commodity commodity){return purchasedList.add(commodity);}
+    public Response addToPurchasedList(CommodityDTO commodity){return purchasedList.add(commodity);}
+    
 
     public Response removeFromBuyList(int commodityId) {return buyList.decrease(commodityId);}
 

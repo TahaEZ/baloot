@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/users")
@@ -102,6 +104,19 @@ public class UsersController {
         }
     }
 
+    @GetMapping(value = "/{username}/purchasedList")
+    @ResponseBody
+    public Object getPurchasedListByUsername(@PathVariable("username") String username) {
+        User user = balootInstance.findUserByUsername(username);
+        HashMap<String, Object> purchasedList = new HashMap<>();
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
+        } else {
+            purchasedList.put("purchasedList", balootInstance.findUserByUsername(username).getPurchasedList().getPurchasedItems());
+            return purchasedList;
+        }
+    }
+
     @PostMapping(value = "/{username}")
     @ResponseBody
     public Object addBuyListItemByUsername(@PathVariable("username") String username, @RequestParam long creditToAdd) {
@@ -117,5 +132,4 @@ public class UsersController {
             }
         }
     }
-
 }

@@ -56,18 +56,6 @@ public class CommoditiesController {
 
     }
 
-    private ArrayList<CommodityNoInStock> deleteInStock(ArrayList<Commodity> commodities) {
-        ArrayList<CommodityNoInStock> filteredWithoutInStock = new ArrayList<CommodityNoInStock>();
-        for (Commodity commodity : commodities) {
-            CommodityNoInStock oneCommodityWithNoInStock = new CommodityNoInStock(commodity.getId(),
-                    commodity.getName(),
-                    commodity.getProviderId(), commodity.getPrice(), commodity.getCategories(), commodity.getRating());
-            filteredWithoutInStock.add(oneCommodityWithNoInStock);
-        }
-        return filteredWithoutInStock;
-
-    }
-
     private ArrayList<Commodity> listAvailableCommodities(ArrayList<Commodity> commodities) {
         ArrayList<Commodity> availableCommodities = new ArrayList<>();
         for (Commodity commodity : commodities) {

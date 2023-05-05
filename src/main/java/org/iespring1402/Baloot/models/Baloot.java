@@ -247,6 +247,7 @@ public class Baloot {
             return null;
     }
 
+
     public Response rateCommodity(String username, int commodityId, int score) {
         Commodity commodity = findCommodityById(commodityId);
         if (commodity != null) {
@@ -397,7 +398,7 @@ public class Baloot {
                     break;
                 }
             }
-            suggestedCommodities = new ArrayList<>(suggestedCommodities.subList(0, 4));
+            suggestedCommodities = new ArrayList<>(suggestedCommodities.subList(0, 5));
             return suggestedCommodities;
         }
 
