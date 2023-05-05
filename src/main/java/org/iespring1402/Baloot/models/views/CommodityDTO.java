@@ -19,6 +19,7 @@ public class CommodityDTO {
     private Integer quantity;
     private ArrayList<Commodity> suggestedCommodities;
     private Integer totalRatings;
+    private String image;
 
     public CommodityDTO(
             Integer id,
@@ -30,7 +31,8 @@ public class CommodityDTO {
             Float rating,
             Integer inStock,
             ArrayList<Commodity> suggestedCommodities,
-            Integer totalRatings) {
+            Integer totalRatings,
+            String image) {
         this.id = id;
         this.name = name;
         this.providerId = providerId;
@@ -42,6 +44,7 @@ public class CommodityDTO {
         this.quantity = null;
         this.suggestedCommodities = suggestedCommodities;
         this.totalRatings = totalRatings;
+        this.image = image;
     }
 
     public CommodityDTO(
@@ -63,6 +66,7 @@ public class CommodityDTO {
         this.quantity = null;
         this.suggestedCommodities = null;
         this.totalRatings = null;
+        this.image = null;
     }
 
     public CommodityDTO(
@@ -84,6 +88,7 @@ public class CommodityDTO {
         this.quantity = null;
         this.suggestedCommodities = null;
         this.totalRatings = null;
+        this.image = null;
     }
 
     public CommodityDTO(
@@ -106,6 +111,7 @@ public class CommodityDTO {
         this.quantity = quantity;
         this.suggestedCommodities = null;
         this.totalRatings = null;
+        this.image = null;
     }
 
     public void setCategories(ArrayList<String> categories) {
@@ -188,5 +194,9 @@ public class CommodityDTO {
 
     public Integer getTotalRatings() {
         return totalRatings;
+    }
+
+    public String getImage() {
+        return image;
     }
 }

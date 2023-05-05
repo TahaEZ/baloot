@@ -397,7 +397,7 @@ public class Baloot {
                     break;
                 }
             }
-            suggestedCommodities = new ArrayList<>(suggestedCommodities.subList(0, 5));
+            suggestedCommodities = new ArrayList<>(suggestedCommodities.subList(0, 4));
             return suggestedCommodities;
         }
 

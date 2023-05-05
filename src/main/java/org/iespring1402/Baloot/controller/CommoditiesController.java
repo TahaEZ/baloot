@@ -70,7 +70,7 @@ public class CommoditiesController {
             @RequestParam(value = "pageSize", defaultValue = "12") Integer pageSize,
             @RequestParam(value = "available", defaultValue = "false") Boolean availableCommodities) {
         ArrayList<Commodity> allCommodities = new ArrayList<>();
-        HashMap <String,Object> filteredCommoditiesList = new HashMap<>();
+        HashMap<String, Object> filteredCommoditiesList = new HashMap<>();
         ArrayList<Commodity> filteredWithStock = new ArrayList<>();
         if (availableCommodities == true) {
             allCommodities = listAvailableCommodities(balootInstance.getCommodities());
@@ -129,7 +129,7 @@ public class CommoditiesController {
         System.out.println(suggestedCommodities.size());
         result = new CommodityDTO(commodity.getId(), commodity.getName(), provider.getId(), provider.getName(),
                 commodity.getPrice(), commodity.getCategories(), commodity.getRating(), commodity.getInStock(),
-                suggestedCommodities, commodity.getRatings().keySet().size());
+                suggestedCommodities, commodity.getRatings().keySet().size(), commodity.getImage());
         return result;
     }
 
