@@ -1,7 +1,19 @@
 package org.iespring1402.Baloot.entities;
 
+import java.util.ArrayList;
+
+import org.iespring1402.Baloot.models.BuyList;
+import org.iespring1402.Baloot.models.DiscountCode;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -9,100 +21,75 @@ import jakarta.persistence.Table;
 public class User {
 
     @Id
-    private int id;
-    private String username;
-    private String password;
-    private String firstname;
-    private String lastname;
-    private String email;
-    private String phone;
-    private boolean enable;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public String username;
+    public String password;
+    public String email;
+    public String birthDate;
+    public String address;
+    public double credit;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "buy_list_id")
+    private BuyList buyList;
 
-    public User() {
-
-    }
-
-    public User(int id, String username, String password, String firstname, String lastname, String email, String phone,
-            boolean enable) {
-        super();
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.phone = phone;
-        this.enable = enable;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_discounts", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "discount_code_id"))
+    private ArrayList<DiscountCode> usedDiscounts;
 
     public String getUsername() {
         return username;
     }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getPassword() {
         return password;
     }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
     public String getEmail() {
         return email;
     }
-
+    public String getBirthDate() {
+        return birthDate;
+    }
+    public String getAddress() {
+        return address;
+    }
+    public double getCredit() {
+        return credit;
+    }
+    public BuyList getBuyList() {
+        return buyList;
+    }
+    public ArrayList<DiscountCode> getUsedDiscounts() {
+        return usedDiscounts;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public String getPhone() {
-        return phone;
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setAddress(String address) {
+        this.address = address;
     }
-
-    public boolean isEnable() {
-        return enable;
+    public void setCredit(double credit) {
+        this.credit = credit;
     }
-
-    public void setEnable(boolean enable) {
-        this.enable = enable;
+    public void setBuyList(BuyList buyList) {
+        this.buyList = buyList;
+    }
+    public void setUsedDiscounts(ArrayList<DiscountCode> usedDiscounts) {
+        this.usedDiscounts = usedDiscounts;
     }
 
     @Override
     public String toString() {
-        return "User [id=" + id + ", username=" + username + ", password=" + password + ", firstname=" + firstname
-                + ", lastname=" + lastname + ", email=" + email + ", phone=" + phone + ", enable=" + enable + "]";
+        return "User [username=" + username + ", password=" + password
+                + "email=" + email + "]";
     }
 
 }
