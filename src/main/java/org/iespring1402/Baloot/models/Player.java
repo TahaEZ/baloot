@@ -1,14 +1,13 @@
 package org.iespring1402.Baloot.models;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
 public class Player {
 
     @Id
-    @GeneratedValue
+    
     private Long id;
     private String name;
 
