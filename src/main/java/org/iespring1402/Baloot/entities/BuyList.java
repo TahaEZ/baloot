@@ -16,7 +16,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
 
 import java.util.HashMap;
@@ -36,7 +35,7 @@ public class BuyList {
     private boolean isDiscountActive;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinTable(name = "buylist_active_discount", joinColumns = @JoinColumn(name = "buylist_id"), inverseJoinColumns = @JoinColumn(name = "discount_code"))
+    @JoinColumn(name = "buylist_active_discount")
     private DiscountCode activeDiscountCode;
 
     public BuyList() {
