@@ -26,8 +26,8 @@ public class Comment {
     private String date;
 
     @ElementCollection
-    @CollectionTable(name = "commennt_vote_mapping", 
-      joinColumns = {@JoinColumn(name = "comment_id", referencedColumnName = "id")})
+    @CollectionTable(name = "comment_vote_mapping", joinColumns = {
+            @JoinColumn(name = "comment_id", referencedColumnName = "id") })
     @MapKeyColumn(name = "username")
     @Column(name = "vote")
     private HashMap<String, Integer> votes;
@@ -78,7 +78,8 @@ public class Comment {
     public int likesCount() {
         int count = 0;
         for (Integer vote : votes.values()) {
-            if (vote == 1) count++;
+            if (vote == 1)
+                count++;
         }
         return count;
     }
@@ -86,7 +87,8 @@ public class Comment {
     public int dislikesCount() {
         int count = 0;
         for (Integer vote : votes.values()) {
-            if (vote == -1) count++;
+            if (vote == -1)
+                count++;
         }
         return count;
     }
