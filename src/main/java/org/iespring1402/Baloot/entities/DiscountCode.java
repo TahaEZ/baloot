@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 @Table(name = "discounts")
 public class DiscountCode {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String discountCode;
     private double discount;
     private boolean deprecated;
