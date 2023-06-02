@@ -1,6 +1,6 @@
 package org.iespring1402.Baloot.models.views;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.iespring1402.Baloot.entities.Commodity;
@@ -12,11 +12,11 @@ public class CommodityDTO {
     private Integer providerId;
     private String providerName;
     private Integer price;
-    private ArrayList<String> categories;
+    private List<String> categories;
     private Float rating;
     private Integer inStock;
     private Integer quantity;
-    private ArrayList<Commodity> suggestedCommodities;
+    private List<Commodity> suggestedCommodities;
     private Integer totalRatings;
     private String image;
 
@@ -26,10 +26,10 @@ public class CommodityDTO {
             Integer providerId,
             String providerName,
             Integer price,
-            ArrayList<String> categories,
+            List<String> categories,
             Float rating,
             Integer inStock,
-            ArrayList<Commodity> suggestedCommodities,
+            List<Commodity> suggestedCommodities,
             Integer totalRatings,
             String image) {
         this.id = id;
@@ -52,7 +52,7 @@ public class CommodityDTO {
             Integer providerId,
             String providerName,
             Integer price,
-            ArrayList<String> categories,
+            List<String> categories,
             Float rating) {
         this.id = id;
         this.name = name;
@@ -73,7 +73,7 @@ public class CommodityDTO {
             String name,
             String providerName,
             Integer price,
-            ArrayList<String> categories,
+            List<String> categories,
             Float rating,
             Integer inStock) {
         this.id = id;
@@ -95,7 +95,7 @@ public class CommodityDTO {
             String name,
             Integer providerId,
             Integer price,
-            ArrayList<String> categories,
+            List<String> categories,
             Float rating,
             Integer inStock,
             Integer quantity) {
@@ -118,7 +118,7 @@ public class CommodityDTO {
             String name,
             Integer providerId,
             Integer price,
-            ArrayList<String> categories,
+            List<String> categories,
             Float rating,
             Integer inStock,
             Integer quantity,
@@ -137,7 +137,7 @@ public class CommodityDTO {
         this.image = image;
     }
 
-    public void setCategories(ArrayList<String> categories) {
+    public void setCategories(List<String> categories) {
         this.categories = categories;
     }
 
@@ -173,7 +173,7 @@ public class CommodityDTO {
         this.quantity = quantity;
     }
 
-    public ArrayList<String> getCategories() {
+    public List<String> getCategories() {
         return categories;
     }
 
@@ -209,7 +209,7 @@ public class CommodityDTO {
         return quantity;
     }
 
-    public ArrayList<Commodity> getSuggestedCommodities() {
+    public List<Commodity> getSuggestedCommodities() {
         return suggestedCommodities;
     }
 

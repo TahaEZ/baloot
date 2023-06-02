@@ -36,6 +36,9 @@ public class CommoditiesController {
     @Autowired
     DiscountRepository discountRepository;
 
+    @Autowired
+    CommodityRepository commodityRepository;
+
     @GetMapping("")
     public @ResponseBody Object list(
             @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
@@ -47,6 +50,10 @@ public class CommoditiesController {
             allCommodities = listAvailableCommodities(balootInstance.getCommodities());
         } else {
             allCommodities = balootInstance.getCommodities();
+        }
+
+        for (Commodity comm : allCommodities) { //TODO: Remove these examples
+            commodityRepository.save(comm);
         }
 
         DiscountCode discountCode = new DiscountCode("be_mola_ke_off_khorde", 0.5);

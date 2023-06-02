@@ -11,10 +11,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapKeyColumn;
+import jakarta.persistence.MapKeyJoinColumn;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "commodities")
@@ -29,17 +31,16 @@ public class Commodity {
     @ElementCollection
     @CollectionTable(name = "categories", joinColumns = @JoinColumn(name = "commodity_id"))
     @Column(name = "categories")
-    private ArrayList<String> categories;
+    private List<String> categories;
     private float rating;
     private int inStock;
     private String image;
 
     @ElementCollection
-    @CollectionTable(name = "commodity_ratings", joinColumns = {
-            @JoinColumn(name = "commodity_rating", referencedColumnName = "id") })
-    @MapKeyColumn(name = "username")
+    @CollectionTable(name = "commodity_ratings")
+    @MapKeyJoinColumn(name = "user_id")
     @Column(name = "rating")
-    private HashMap<String, Integer> ratings;
+    private Map<String, Integer> ratings;
 
     public Commodity() {
         super();
@@ -102,7 +103,7 @@ public class Commodity {
         return price;
     }
 
-    public ArrayList<String> getCategories() {
+    public List<String> getCategories() {
         return categories;
     }
 
@@ -123,7 +124,7 @@ public class Commodity {
     }
 
     @JsonIgnore
-    public HashMap<String, Integer> getRatings() {
+    public Map<String, Integer> getRatings() {
         return ratings;
     }
 

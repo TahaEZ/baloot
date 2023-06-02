@@ -11,7 +11,6 @@ import org.iespring1402.Baloot.response.FailedResponse;
 import org.iespring1402.Baloot.response.Response;
 import org.iespring1402.Baloot.response.SuccessfulResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -59,7 +58,7 @@ public class Baloot {
             String discountCodesJSON = fetchData("/api/discount");
             discountCodes = new ArrayList<>(Arrays.asList(mapper.readValue(discountCodesJSON, DiscountCode[].class)));
             // for (DiscountCode discountCode : discountCodes) {
-            //     discountRepo.save(discountCode);
+            // discountRepo.save(discountCode);
             // }
             currentUser = null;
         } catch (Exception e) {
@@ -400,7 +399,7 @@ public class Baloot {
             return null;
         } else {
             Comparator<Commodity> comparator = (commodity1, commodity2) -> {
-                ArrayList<String> currentCategories = commodity.getCategories();
+                List<String> currentCategories = commodity.getCategories();
                 int is_in_similar_category1 = commodity1.getCategories().containsAll(currentCategories) ? 1 : 0;
                 int is_in_similar_category2 = commodity2.getCategories().containsAll(currentCategories) ? 1 : 0;
                 float score1 = is_in_similar_category1 * 11 + commodity1.getRating();
