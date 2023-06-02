@@ -3,8 +3,7 @@ package org.iespring1402.Baloot.models.views;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.iespring1402.Baloot.models.Commodity;
-
+import org.iespring1402.Baloot.entities.Commodity;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommodityDTO {
@@ -178,11 +177,9 @@ public class CommodityDTO {
         return categories;
     }
 
-
     public Integer getId() {
         return id;
     }
-
 
     public Integer getInStock() {
         return inStock;

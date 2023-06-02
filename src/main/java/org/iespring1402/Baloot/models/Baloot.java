@@ -2,10 +2,16 @@ package org.iespring1402.Baloot.models;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.iespring1402.Baloot.entities.DiscountCode;
+import org.iespring1402.Baloot.entities.Commodity;
 import org.iespring1402.Baloot.models.views.CommodityDTO;
+import org.iespring1402.Baloot.repositories.CommodityRepository;
+import org.iespring1402.Baloot.repositories.DiscountRepository;
 import org.iespring1402.Baloot.response.FailedResponse;
 import org.iespring1402.Baloot.response.Response;
 import org.iespring1402.Baloot.response.SuccessfulResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -26,6 +32,12 @@ public class Baloot {
     private ArrayList<Comment> comments;
     private ArrayList<DiscountCode> discountCodes;
 
+    @Autowired
+    DiscountRepository discountRepo;
+
+    @Autowired
+    CommodityRepository commodityRepo;
+
     public Baloot() {
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -34,15 +46,21 @@ public class Baloot {
             String providersJson = fetchData("/api/v2/providers");
             providers = new ArrayList<>(Arrays.asList(mapper.readValue(providersJson, Provider[].class)));
             String commoditiesJson = fetchData("/api/v2/commodities");
-            ArrayList<Commodity> commodityArrayList = new ArrayList<>(Arrays.asList(mapper.readValue(commoditiesJson, Commodity[].class)));
+            ArrayList<Commodity> commodityArrayList = new ArrayList<>(
+                    Arrays.asList(mapper.readValue(commoditiesJson, Commodity[].class)));
             commodities = new ArrayList<>();
+            System.out.println(commodityArrayList.size());
             for (Commodity commodity : commodityArrayList) {
                 addCommodity(commodity);
+                // commodityRepo.save(commodity);
             }
             comments = new ArrayList<>();
             discountCodes = new ArrayList<>();
             String discountCodesJSON = fetchData("/api/discount");
             discountCodes = new ArrayList<>(Arrays.asList(mapper.readValue(discountCodesJSON, DiscountCode[].class)));
+            // for (DiscountCode discountCode : discountCodes) {
+            //     discountRepo.save(discountCode);
+            // }
             currentUser = null;
         } catch (Exception e) {
             e.printStackTrace();
@@ -127,7 +145,6 @@ public class Baloot {
         return new FailedResponse("Discount code not found to deprecate.");
     }
 
-
     public boolean addUser(User newUser) {
         String username = newUser.username;
 
@@ -161,7 +178,8 @@ public class Baloot {
     public boolean addCommodity(Commodity commodity) {
         int providerId = commodity.getProviderId();
         Provider provider = findProviderByProviderId(providerId);
-        if (provider == null) return false;
+        if (provider == null)
+            return false;
         provider.addRating(commodity.getId(), commodity.getRating());
         commodities.add(commodity);
         return true;
@@ -227,7 +245,6 @@ public class Baloot {
         }
     }
 
-
     public ArrayList<CommodityDTO> getBuyList(String username) {
         User user = findUserByUsername(username);
         if (user != null) {
@@ -237,7 +254,8 @@ public class Baloot {
                 Commodity commodity = findCommodityById(item.getKey());
 
                 CommodityDTO buylistItem = new CommodityDTO(commodity.getId(), commodity.getName(),
-                        commodity.getProviderId(), commodity.getPrice(), commodity.getCategories(), commodity.getRating(), commodity.getInStock(), item.getValue() , commodity.getImage());
+                        commodity.getProviderId(), commodity.getPrice(), commodity.getCategories(),
+                        commodity.getRating(), commodity.getInStock(), item.getValue(), commodity.getImage());
 
                 result.add(buylistItem);
             }
@@ -245,7 +263,6 @@ public class Baloot {
         } else
             return null;
     }
-
 
     public Response rateCommodity(String username, int commodityId, int score) {
         Commodity commodity = findCommodityById(commodityId);

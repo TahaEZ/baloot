@@ -1,5 +1,7 @@
 package org.iespring1402.Baloot.models;
 
+import org.iespring1402.Baloot.entities.Commodity;
+
 import java.util.ArrayList;
 
 public class CategoryFilter {

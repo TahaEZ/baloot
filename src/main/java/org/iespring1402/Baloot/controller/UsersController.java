@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.iespring1402.Baloot.models.Baloot;
-import org.iespring1402.Baloot.models.Commodity;
+import org.iespring1402.Baloot.entities.Commodity;
 import org.iespring1402.Baloot.models.User;
 import org.iespring1402.Baloot.models.views.CommodityDTO;
 import org.iespring1402.Baloot.response.Response;

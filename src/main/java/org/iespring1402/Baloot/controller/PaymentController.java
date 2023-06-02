@@ -1,7 +1,7 @@
 package org.iespring1402.Baloot.controller;
 
 import org.iespring1402.Baloot.models.Baloot;
-import org.iespring1402.Baloot.models.DiscountCode;
+import org.iespring1402.Baloot.entities.DiscountCode;
 import org.iespring1402.Baloot.models.User;
 import org.iespring1402.Baloot.models.views.CommodityDTO;
 import org.springframework.http.HttpStatus;

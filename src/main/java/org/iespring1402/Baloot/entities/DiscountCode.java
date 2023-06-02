@@ -1,8 +1,8 @@
 package org.iespring1402.Baloot.entities;
 
+import org.hibernate.annotations.NaturalId;
+
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 @Table(name = "discounts")
 public class DiscountCode {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @NaturalId
     private String discountCode;
     private double discount;
     private boolean deprecated;

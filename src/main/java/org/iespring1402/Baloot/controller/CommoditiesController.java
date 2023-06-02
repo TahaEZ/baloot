@@ -5,9 +5,13 @@ import java.util.HashMap;
 
 import org.iespring1402.Baloot.models.Baloot;
 import org.iespring1402.Baloot.models.CategoryFilter;
-import org.iespring1402.Baloot.models.Commodity;
+import org.iespring1402.Baloot.entities.Commodity;
+import org.iespring1402.Baloot.entities.DiscountCode;
 import org.iespring1402.Baloot.models.Provider;
 import org.iespring1402.Baloot.models.views.CommodityDTO;
+import org.iespring1402.Baloot.repositories.CommodityRepository;
+import org.iespring1402.Baloot.repositories.DiscountRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,6 +33,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class CommoditiesController {
     private Baloot balootInstance = Baloot.getInstance();
 
+    @Autowired
+    DiscountRepository discountRepository;
+
     @GetMapping("")
     public @ResponseBody Object list(
             @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
@@ -41,6 +48,9 @@ public class CommoditiesController {
         } else {
             allCommodities = balootInstance.getCommodities();
         }
+
+        DiscountCode discountCode = new DiscountCode("be_mola_ke_off_khorde", 0.5);
+        discountRepository.save(discountCode);
 
         PaginationController paginator = new PaginationController(allCommodities);
         returnResponse = paginator.paginateItems(pageSize, pageNo);
@@ -62,7 +72,7 @@ public class CommoditiesController {
         return availableCommodities;
     }
 
-    @GetMapping(value = "", params = {"searchType", "searchVal"})
+    @GetMapping(value = "", params = { "searchType", "searchVal" })
     public Object getCommoditiesByCategory(
             @PathParam("searchType") String searchType,
             @PathParam("searchVal") String searchVal,

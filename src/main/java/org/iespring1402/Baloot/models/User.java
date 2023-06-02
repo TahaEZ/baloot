@@ -4,6 +4,7 @@ import org.iespring1402.Baloot.models.views.CommodityDTO;
 import org.iespring1402.Baloot.response.FailedResponse;
 import org.iespring1402.Baloot.response.Response;
 import org.iespring1402.Baloot.response.SuccessfulResponse;
+import org.iespring1402.Baloot.entities.DiscountCode;
 
 import java.util.ArrayList;
 
@@ -64,7 +65,6 @@ public class User {
     public ArrayList<DiscountCode> getUsedDiscounts() {
         return usedDiscounts;
     }
-
 
     public Response addToBuyList(int commodityId) {
         return buyList.increase(commodityId);
