@@ -2,7 +2,6 @@ package org.iespring1402.Baloot.entities;
 
 import java.util.ArrayList;
 
-import org.hibernate.annotations.NaturalId;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -18,7 +17,6 @@ import jakarta.persistence.Table;
 public class User {
 
     @Id
-    @NaturalId
     public String username;
     public String password;
     public String email;
@@ -33,6 +31,10 @@ public class User {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_discounts", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "discount_code_id"))
     private ArrayList<DiscountCode> usedDiscounts;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "purchased_list")
+    private PurchasedList purchasedList;
 
     public String getUsername() {
         return username;
