@@ -29,13 +29,10 @@ public class User {
     private BuyList buyList;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "user_discounts", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "discount_code_id"))
+    @JoinTable(name = "used_discounts", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "discount_code_id"))
     private ArrayList<DiscountCode> usedDiscounts;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "purchased_list")
-    private PurchasedList purchasedList;
-
+    
     public String getUsername() {
         return username;
     }

@@ -2,7 +2,7 @@ package org.iespring1402.Baloot.entities;
 
 import java.util.ArrayList;
 
-
+import org.hibernate.annotations.NaturalId;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -22,6 +22,7 @@ public class CommodityDTO {
   
 
     @Id
+    @NaturalId
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
