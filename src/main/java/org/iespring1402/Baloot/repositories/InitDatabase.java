@@ -2,6 +2,7 @@ package org.iespring1402.Baloot.repositories;
 
 import java.util.ArrayList;
 
+import org.iespring1402.Baloot.entities.Comment;
 import org.iespring1402.Baloot.entities.Commodity;
 import org.iespring1402.Baloot.entities.DiscountCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 
 import org.springframework.boot.ApplicationArguments;
 import java.io.BufferedReader;
@@ -29,10 +29,12 @@ public class InitDatabase implements ApplicationRunner {
     @Autowired
     private CommodityDAO commodityDAO;
 
+    @Autowired
+    private CommentDAO commentDAO;
 
     private void getDiscounts() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        ArrayList<DiscountCode>discountCodes = new ArrayList<>();
+        ArrayList<DiscountCode> discountCodes = new ArrayList<>();
         String discountCodesJSON = fetchData("/api/discount");
         discountCodes = new ArrayList<>(Arrays.asList(mapper.readValue(discountCodesJSON, DiscountCode[].class)));
 
@@ -51,7 +53,18 @@ public class InitDatabase implements ApplicationRunner {
             this.commodityDAO.save(commodities.get(i));
         }
     }
-    
+
+    private void getComments() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayList<Comment> comments = new ArrayList<>();
+        String commentsJSON = fetchData("/api/comments");
+        comments = new ArrayList<>(Arrays.asList(mapper.readValue(commentsJSON, Comment[].class)));
+
+        for (Comment comment : comments) {
+            this.commentDAO.save(comment);
+        }
+    }
+
     private String fetchData(String path) {
         try {
             URL url = new URL(API_URL + path);
@@ -79,7 +92,6 @@ public class InitDatabase implements ApplicationRunner {
         }
     }
 
- 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         System.out.println("Initializing database ... ");
@@ -87,6 +99,9 @@ public class InitDatabase implements ApplicationRunner {
         getDiscounts();
         System.out.println("Getting Commodities... ");
         getCommodities();
-        
+        // comments in the external API are empty so we don't initialize comments in the
+        // database
+        // System.out.println("Getting Comments... ");
+        // getComments();
     }
 }
