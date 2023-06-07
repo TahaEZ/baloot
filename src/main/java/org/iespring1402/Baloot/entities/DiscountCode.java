@@ -49,4 +49,5 @@ public class DiscountCode {
         this.deprecated = deprecated;
     }
 
+
 }
