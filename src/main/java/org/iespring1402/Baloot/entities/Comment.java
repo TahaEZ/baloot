@@ -12,6 +12,7 @@ import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.Table;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Entity
@@ -30,7 +31,7 @@ public class Comment {
             @JoinColumn(name = "comment_id", referencedColumnName = "id") })
     @MapKeyColumn(name = "username")
     @Column(name = "vote")
-    private HashMap<String, Integer> votes;
+    private Map<String, Integer> votes;
 
     public Comment() {
         super();
