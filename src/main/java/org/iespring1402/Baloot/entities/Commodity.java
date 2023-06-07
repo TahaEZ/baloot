@@ -12,11 +12,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapKeyJoinColumn;
+import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.hibernate.annotations.OnDelete;
 
 @Entity
 @Table(name = "commodities")

@@ -2,6 +2,7 @@ package org.iespring1402.Baloot.repositories;
 
 import java.util.ArrayList;
 
+import org.iespring1402.Baloot.entities.Commodity;
 import org.iespring1402.Baloot.entities.DiscountCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
@@ -25,6 +26,9 @@ public class InitDatabase implements ApplicationRunner {
     @Autowired
     private DiscountDAO discountDao;
 
+    @Autowired
+    private CommodityDAO commodityDAO;
+
 
     private void getDiscounts() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
@@ -34,6 +38,17 @@ public class InitDatabase implements ApplicationRunner {
 
         for (int i = 0; i < discountCodes.size(); i++) {
             this.discountDao.save(discountCodes.get(i));
+        }
+    }
+
+    private void getCommodities() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayList<Commodity> commodities = new ArrayList<>();
+        String commoditiesJSON = fetchData("/api/v2/commodities");
+        commodities = new ArrayList<>(Arrays.asList(mapper.readValue(commoditiesJSON, Commodity[].class)));
+
+        for (int i = 0; i < commodities.size(); i++) {
+            this.commodityDAO.save(commodities.get(i));
         }
     }
     
@@ -70,5 +85,8 @@ public class InitDatabase implements ApplicationRunner {
         System.out.println("Initializing database ... ");
         System.out.println("Getting Discounts... ");
         getDiscounts();
+        System.out.println("Getting Commodities... ");
+        getCommodities();
+        
     }
 }
