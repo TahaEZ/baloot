@@ -1,8 +1,11 @@
 package org.iespring1402.Baloot.repositories;
 
-import org.iespring1402.Baloot.entities.DiscountCode;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.iespring1402.Baloot.models.DiscountCode;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface DiscountRepository extends JpaRepository<DiscountCode, String> {
+
+@Repository
+public interface DiscountRepository extends CrudRepository<DiscountCode, Long> {
 
 }
