@@ -33,12 +33,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class CommoditiesController {
     private Baloot balootInstance = Baloot.getInstance();
 
-    @Autowired
-    DiscountRepository discountRepository;
-
-    @Autowired
-    CommodityRepository commodityRepository;
-
     @GetMapping("")
     public @ResponseBody Object list(
             @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
@@ -52,12 +46,7 @@ public class CommoditiesController {
             allCommodities = balootInstance.getCommodities();
         }
 
-        for (Commodity comm : allCommodities) { //TODO: Remove these examples
-            commodityRepository.save(comm);
-        }
-
-        DiscountCode discountCode = new DiscountCode("be_mola_ke_off_khorde", 0.5);
-        discountRepository.save(discountCode);
+       
 
         PaginationController paginator = new PaginationController(allCommodities);
         returnResponse = paginator.paginateItems(pageSize, pageNo);

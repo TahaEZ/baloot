@@ -2,13 +2,13 @@ package org.iespring1402.Baloot.repositories;
 
 import java.util.ArrayList;
 
+import org.iespring1402.Baloot.entities.DiscountCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.iespring1402.Baloot.models.DiscountCode;
 
 import org.springframework.boot.ApplicationArguments;
 import java.io.BufferedReader;
