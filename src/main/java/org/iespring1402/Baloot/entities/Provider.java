@@ -1,6 +1,7 @@
 package org.iespring1402.Baloot.entities;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -26,7 +27,8 @@ public class Provider {
             @JoinColumn(name = "provider_id", referencedColumnName = "id") })
     @MapKeyColumn(name = "commodity_id")
     @Column(name = "commodity_rating")
-    private HashMap<Integer, Float> ratings;
+    private Map<Integer, Float> ratings;
+    @Column(length = 500)
     private String image;
 
     public Provider() {
@@ -71,7 +73,7 @@ public class Provider {
         return registryDate;
     }
 
-    public HashMap<Integer, Float> getRatings() {
+    public Map<Integer, Float> getRatings() {
         return ratings;
     }
 

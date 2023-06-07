@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.iespring1402.Baloot.entities.Comment;
 import org.iespring1402.Baloot.entities.Commodity;
 import org.iespring1402.Baloot.entities.DiscountCode;
+import org.iespring1402.Baloot.entities.Provider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -31,6 +32,9 @@ public class InitDatabase implements ApplicationRunner {
 
     @Autowired
     private CommentDAO commentDAO;
+
+    @Autowired
+    private ProviderDAO providerDAO;
 
     private void getDiscounts() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
@@ -62,6 +66,17 @@ public class InitDatabase implements ApplicationRunner {
 
         for (Comment comment : comments) {
             this.commentDAO.save(comment);
+        }
+    }
+
+    private void getProviders() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayList<Provider> providers = new ArrayList<>();
+        String providersJson = fetchData("/api/v2/providers");
+        providers = new ArrayList<>(Arrays.asList(mapper.readValue(providersJson, Provider[].class)));
+
+        for (Provider provider : providers) {
+            this.providerDAO.save(provider);
         }
     }
 
@@ -103,5 +118,7 @@ public class InitDatabase implements ApplicationRunner {
         // database
         // System.out.println("Getting Comments... ");
         // getComments();
+        System.out.println("Getting Providers... ");
+        getProviders();
     }
 }
