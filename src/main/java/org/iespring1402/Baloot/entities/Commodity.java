@@ -6,6 +6,7 @@ import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,9 +32,9 @@ public class Commodity {
     private int providerId;
     private int price;
 
-    @ElementCollection
-    @CollectionTable(name = "categories", joinColumns = @JoinColumn(name = "commodity_id"))
-    @Column(name = "categories")
+    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "category", joinColumns = @JoinColumn(name = "category_id"))
+    @Column(name = "category", nullable = false)
     private List<String> categories;
     private float rating;
     private int inStock;
