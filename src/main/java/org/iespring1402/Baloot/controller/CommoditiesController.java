@@ -2,6 +2,7 @@ package org.iespring1402.Baloot.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.iespring1402.Baloot.models.Baloot;
 import org.iespring1402.Baloot.models.CategoryFilter;
@@ -9,6 +10,8 @@ import org.iespring1402.Baloot.entities.Commodity;
 import org.iespring1402.Baloot.entities.DiscountCode;
 import org.iespring1402.Baloot.models.Provider;
 import org.iespring1402.Baloot.models.views.CommodityDTO;
+import org.iespring1402.Baloot.repositories.CommentDAO;
+import org.iespring1402.Baloot.repositories.CommodityDAO;
 import org.iespring1402.Baloot.repositories.CommodityRepository;
 import org.iespring1402.Baloot.repositories.DiscountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("api/v1/commodities")
 @CrossOrigin
 public class CommoditiesController {
+    @Autowired
+    private CommodityDAO commodityDao;
+
+    @Autowired
+    private CommodityRepository commodityRepo;
+
     private Baloot balootInstance = Baloot.getInstance();
 
     @GetMapping("")
@@ -76,6 +85,7 @@ public class CommoditiesController {
             @RequestParam(value = "pageSize", defaultValue = "12") Integer pageSize,
             @RequestParam(value = "available", defaultValue = "false") Boolean availableCommodities) {
         ArrayList<Commodity> allCommodities = new ArrayList<>();
+        List<Commodity> result = new ArrayList<>();
         HashMap<String, Object> filteredCommoditiesList = new HashMap<>();
         ArrayList<Commodity> filteredWithStock = new ArrayList<>();
         if (availableCommodities == true) {
@@ -90,7 +100,8 @@ public class CommoditiesController {
             if (searchType.equals("category")) {
                 CategoryFilter filter = new CategoryFilter(searchVal);
                 System.out.println(searchVal);
-                filteredWithStock = filter.applyFilter(allCommodities);
+                result = commodityDao.findByCategory(searchVal);
+                // filteredWithStock = filter.applyFilter(allCommodities);
             } else if (searchType.equals("name")) {
 
                 for (Commodity commodity : allCommodities) {
@@ -108,11 +119,11 @@ public class CommoditiesController {
                     }
                 }
             }
-            if (filteredWithStock.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Didn't find any Commodities.");
-            }
+            // if (filteredWithStock.isEmpty()) {
+            //     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Didn't find any Commodities.");
+            // }
         }
-        PaginationController paginator = new PaginationController(filteredWithStock);
+        PaginationController paginator = new PaginationController((ArrayList<Commodity>)result);
         filteredCommoditiesList = paginator.paginateItems(pageSize, pageNo);
         if (filteredCommoditiesList.size() == 1) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Page Number.");

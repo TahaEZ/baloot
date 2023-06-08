@@ -137,5 +137,6 @@ public class InitDatabase implements ApplicationRunner {
         getProviders();
         System.out.println("Getting Users... ");
         getUsers();
+        System.out.println("Initialization completed. ");
     }
 }
