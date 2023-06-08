@@ -12,4 +12,8 @@ public class CommentDAO {
     public void save(Comment comment) {
         repo.save(comment);
     }
+
+    public Comment findById(String commentId) {
+        return repo.findById(commentId).get();
+    }
 }
