@@ -6,6 +6,7 @@ import org.iespring1402.Baloot.entities.Comment;
 import org.iespring1402.Baloot.entities.Commodity;
 import org.iespring1402.Baloot.entities.DiscountCode;
 import org.iespring1402.Baloot.entities.Provider;
+import org.iespring1402.Baloot.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -35,6 +36,9 @@ public class InitDatabase implements ApplicationRunner {
 
     @Autowired
     private ProviderDAO providerDAO;
+    
+    @Autowired
+    private UserDAO userDAO;
 
     private void getDiscounts() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
@@ -80,6 +84,17 @@ public class InitDatabase implements ApplicationRunner {
         }
     }
 
+    private void getUsers() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayList<User> users = new ArrayList<>();
+        String userJSON = fetchData("/api/users");
+        users = new ArrayList<>(Arrays.asList(mapper.readValue(userJSON, User[].class)));
+
+        for (User user : users) {
+            this.userDAO.save(user);
+        }
+    }
+
     private String fetchData(String path) {
         try {
             URL url = new URL(API_URL + path);
@@ -120,5 +135,7 @@ public class InitDatabase implements ApplicationRunner {
         // getComments();
         System.out.println("Getting Providers... ");
         getProviders();
+        System.out.println("Getting Users... ");
+        getUsers();
     }
 }

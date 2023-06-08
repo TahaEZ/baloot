@@ -1,7 +1,7 @@
 package org.iespring1402.Baloot.entities;
 
 import java.util.ArrayList;
-
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -30,8 +30,11 @@ public class User {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "used_discounts", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "discount_code_id"))
-    private ArrayList<DiscountCode> usedDiscounts;
+    private List<DiscountCode> usedDiscounts;
 
+    @ManyToMany
+    @JoinTable(name = "purchased_list", joinColumns = @JoinColumn(name = "USER_ID"), inverseJoinColumns = @JoinColumn(name = "purchased_item_id"))
+    private List<CommodityDTO> purchasedItems = new ArrayList<>();
     
     public String getUsername() {
         return username;
@@ -61,7 +64,10 @@ public class User {
         return buyList;
     }
 
-    public ArrayList<DiscountCode> getUsedDiscounts() {
+    public List<CommodityDTO> getPurchasedItems() {
+        return purchasedItems;
+    }
+    public List<DiscountCode> getUsedDiscounts() {
         return usedDiscounts;
     }
 
@@ -95,6 +101,10 @@ public class User {
 
     public void setUsedDiscounts(ArrayList<DiscountCode> usedDiscounts) {
         this.usedDiscounts = usedDiscounts;
+    }
+
+    public void setPurchasedItems(List<CommodityDTO> purchasedItems) {
+        this.purchasedItems = purchasedItems;
     }
 
     @Override
