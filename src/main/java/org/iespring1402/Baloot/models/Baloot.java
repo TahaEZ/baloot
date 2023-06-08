@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.iespring1402.Baloot.entities.DiscountCode;
 import org.iespring1402.Baloot.entities.Commodity;
+import org.iespring1402.Baloot.entities.Comment;
 import org.iespring1402.Baloot.models.views.CommodityDTO;
 import org.iespring1402.Baloot.repositories.CommodityRepository;
 import org.iespring1402.Baloot.repositories.DiscountRepository;

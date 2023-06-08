@@ -55,7 +55,7 @@ public class Provider {
         ratings.put(commodityId, rating);
     }
 
-    public void updateProvider(String name, String registryDate, HashMap<Integer, Float> ratings) {
+    public void updateProvider(String name, String registryDate, Map<Integer, Float> ratings) {
         this.name = name;
         this.registryDate = registryDate;
         this.ratings = ratings;
