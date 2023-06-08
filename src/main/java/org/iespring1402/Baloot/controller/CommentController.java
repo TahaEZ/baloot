@@ -24,7 +24,7 @@ public class CommentController {
     @GetMapping(value = "")
     @ResponseBody
     public Object getComments(@RequestParam(value = "commodityId") int commodityId) {
-        ArrayList<Comment> comments = balootInstance.getFilteredCommentsByCommodityId(commodityId);
+        ArrayList<Comment> comments = (ArrayList<Comment>) commentDAO.findByCommodityId(commodityId);
         ArrayList<HashMap<String, Object>> result = new ArrayList<>();
 
         for (Comment comment : comments) {
