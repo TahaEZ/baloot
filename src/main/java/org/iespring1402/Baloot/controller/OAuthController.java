@@ -38,16 +38,21 @@ public class OAuthController {
         User user = getUserDetails(access_token); // TODO: save user to database or update an existing one
         Map<String, Object> authResponse = new HashMap();
 
-        AuthToken authToken = new AuthToken(Baloot.SECRET_KEY, Baloot.ISSUER);
-        authResponse.put("token", authToken.getToken());
-        // try {
-        // AuthToken.validateToken(authToken.getToken(), Baloot.SECRET_KEY,
-        // Baloot.ISSUER);
-        // } catch (RuntimeException e) {
-        // return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        // } TODO: we should write this code in filter to validate tokens
+        if (user != null) {
+            AuthToken authToken = new AuthToken(Baloot.SECRET_KEY, Baloot.ISSUER);
+            authResponse.put("token", authToken.getToken());
+            return ResponseEntity.status(HttpStatus.OK).body(authResponse);
 
-        return ResponseEntity.status(HttpStatus.OK).body(authResponse);
+            // try {
+            // AuthToken.validateToken(authToken.getToken(), Baloot.SECRET_KEY,
+            // Baloot.ISSUER);
+            // } catch (RuntimeException e) {
+            // return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            // } TODO: we should write this code in filter to validate tokens
+
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Code");
+        }
     }
 
     private User getUserDetails(String accessToken) {
