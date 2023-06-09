@@ -24,6 +24,9 @@ import java.util.ArrayList;
 
 public class Baloot {
     private static final String API_URL = "http://5.253.25.110:5000";
+    public static final String SECRET_KEY = "baloot2023-baloot2023-baloot2023";
+    public static final String ISSUER = "http://baloot.com";
+
     private static Baloot instance;
     private String currentUser;
     private ArrayList<User> users;
