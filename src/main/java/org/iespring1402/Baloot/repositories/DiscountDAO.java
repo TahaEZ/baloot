@@ -13,5 +13,9 @@ public class DiscountDAO {
     public void save(DiscountCode discount) {
         repo.save(discount);
     }
+    public boolean isValid(String code)
+    {
+       return repo.existsByDiscountCode(code);
+    }
 
 }

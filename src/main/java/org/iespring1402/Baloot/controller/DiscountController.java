@@ -2,6 +2,8 @@ package org.iespring1402.Baloot.controller;
 
 import org.iespring1402.Baloot.models.Baloot;
 import org.iespring1402.Baloot.models.User;
+import org.iespring1402.Baloot.repositories.DiscountDAO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 public class DiscountController {
     private Baloot balootInstance = Baloot.getInstance();
+    @Autowired
+    DiscountDAO discountDAO;
 
     @GetMapping(value = "")
     @ResponseBody
@@ -31,7 +35,7 @@ public class DiscountController {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         }
-        if (balootInstance.discountCodeValidityCheck(code)) {
+        if (discountDAO.isValid(code)) {
             if (user.isDiscountCodeUsed(code)) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Discount used before!");
             } else {

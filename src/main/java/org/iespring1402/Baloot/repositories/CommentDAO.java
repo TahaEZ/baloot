@@ -1,5 +1,7 @@
 package org.iespring1402.Baloot.repositories;
 
+import java.util.List;
+
 import org.iespring1402.Baloot.entities.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,5 +17,9 @@ public class CommentDAO {
 
     public Comment findById(String commentId) {
         return repo.findById(commentId).get();
+    }
+    public List<Comment> findByCommodityId(int commodityId)
+    {
+        return repo.findByCommodityId(commodityId);
     }
 }
