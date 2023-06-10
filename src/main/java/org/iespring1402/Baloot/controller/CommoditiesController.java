@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -46,7 +47,12 @@ public class CommoditiesController {
     public @ResponseBody Object list(
             @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
             @RequestParam(value = "pageSize", defaultValue = "12") Integer pageSize,
-            @RequestParam(value = "available", defaultValue = "false") Boolean availableCommodities) {
+            @RequestParam(value = "available", defaultValue = "false") Boolean availableCommodities,
+            @RequestAttribute boolean unauthorized) {
+
+        if (unauthorized) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
+        }
         HashMap<String, Object> returnResponse = new HashMap<>();
         ArrayList<Commodity> allCommodities = new ArrayList<>();
         if (availableCommodities == true) {
@@ -54,8 +60,6 @@ public class CommoditiesController {
         } else {
             allCommodities = balootInstance.getCommodities();
         }
-
-       
 
         PaginationController paginator = new PaginationController(allCommodities);
         returnResponse = paginator.paginateItems(pageSize, pageNo);
@@ -83,7 +87,12 @@ public class CommoditiesController {
             @PathParam("searchVal") String searchVal,
             @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
             @RequestParam(value = "pageSize", defaultValue = "12") Integer pageSize,
-            @RequestParam(value = "available", defaultValue = "false") Boolean availableCommodities) {
+            @RequestParam(value = "available", defaultValue = "false") Boolean availableCommodities,
+            @RequestAttribute boolean unauthorized) {
+
+        if (unauthorized) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
+        }
         ArrayList<Commodity> allCommodities = new ArrayList<>();
         List<Commodity> result = new ArrayList<>();
         HashMap<String, Object> filteredCommoditiesList = new HashMap<>();
@@ -120,10 +129,11 @@ public class CommoditiesController {
                 }
             }
             // if (filteredWithStock.isEmpty()) {
-            //     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Didn't find any Commodities.");
+            // return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Didn't find any
+            // Commodities.");
             // }
         }
-        PaginationController paginator = new PaginationController((ArrayList<Commodity>)result);
+        PaginationController paginator = new PaginationController((ArrayList<Commodity>) result);
         filteredCommoditiesList = paginator.paginateItems(pageSize, pageNo);
         if (filteredCommoditiesList.size() == 1) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Page Number.");
@@ -135,7 +145,11 @@ public class CommoditiesController {
 
     @GetMapping(value = "/{id}")
     @ResponseBody
-    public Object getCommodityById(@PathVariable("id") int id) {
+    public Object getCommodityById(@PathVariable("id") int id, @RequestAttribute boolean unauthorized) {
+        if (unauthorized) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
+        }
+
         Commodity commodity = balootInstance.findCommodityById(id);
         if (commodity == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Commodity Not Found.");
@@ -152,7 +166,12 @@ public class CommoditiesController {
 
     @GetMapping(value = "", params = "providerId")
     @ResponseBody
-    public Object getCommodityByProviderId(@PathParam("providerId") int providerId) {
+    public Object getCommodityByProviderId(@PathParam("providerId") int providerId,
+            @RequestAttribute boolean unauthorized) {
+        if (unauthorized) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
+        }
+
         ArrayList<Commodity> commodities = balootInstance.findCommoditiesByProviderId(providerId);
         if (commodities.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("This provider didn't provide any commodity.");
@@ -162,7 +181,11 @@ public class CommoditiesController {
 
     @PostMapping(value = "")
     @ResponseBody
-    public Object addCommodity(@RequestBody Commodity commodity) {
+    public Object addCommodity(@RequestBody Commodity commodity, @RequestAttribute boolean unauthorized) {
+        if (unauthorized) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
+        }
+
         if (balootInstance.findCommodityById(commodity.getId()).getId() == commodity.getId()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Duplicate was occurred!");
         } else {
@@ -173,7 +196,11 @@ public class CommoditiesController {
 
     @PostMapping(value = "/{id}/ratings")
     @ResponseBody
-    public Object rateCommodity(@PathVariable("id") int id, @RequestParam String username, int rate) {
+    public Object rateCommodity(@PathVariable("id") int id, @RequestParam String username, int rate,
+            @RequestAttribute boolean unauthorized) {
+        if (unauthorized) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
+        }
 
         if (rate >= 1 && rate <= 10) {
             try {

@@ -13,7 +13,6 @@ import org.iespring1402.Baloot.models.AuthToken;
 import org.iespring1402.Baloot.models.Baloot;
 import org.iespring1402.Baloot.models.User;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,14 +41,6 @@ public class OAuthController {
             AuthToken authToken = new AuthToken(Baloot.SECRET_KEY, Baloot.ISSUER);
             authResponse.put("token", authToken.getToken());
             return ResponseEntity.status(HttpStatus.OK).body(authResponse);
-
-            // try {
-            // AuthToken.validateToken(authToken.getToken(), Baloot.SECRET_KEY,
-            // Baloot.ISSUER);
-            // } catch (RuntimeException e) {
-            // return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-            // } TODO: we should write this code in filter to validate tokens
-
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Code");
         }

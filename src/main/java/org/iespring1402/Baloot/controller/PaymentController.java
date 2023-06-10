@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,7 +25,12 @@ public class PaymentController {
     @ResponseBody
     public Object validityCheck(
             @RequestParam(value = "discountCode", required = false) String code,
-            @PathVariable String username) {
+            @PathVariable String username, @RequestAttribute boolean unauthorized) {
+
+        if (unauthorized) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
+        }
+
         User user = balootInstance.findUserByUsername(username);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
@@ -40,47 +46,45 @@ public class PaymentController {
                 } else {
 
                     DiscountCode discountCode = balootInstance.findDiscountCodeByCode(code);
-                    double totalCost = ((user.getBuyList().totalCost()) * (100 - discountCode.getDiscount()))/100;
-                    
-                    System.out.println(discountCode.getDiscount()/100);
+                    double totalCost = ((user.getBuyList().totalCost()) * (100 - discountCode.getDiscount())) / 100;
+
+                    System.out.println(discountCode.getDiscount() / 100);
                     System.out.println(totalCost);
-                    if(user.getCredit() < totalCost)
-                    {
+                    if (user.getCredit() < totalCost) {
                         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Insufficient credit!");
                     }
                     user.addToUsedDiscounts(discountCode);
-                    for(CommodityDTO commodity : balootInstance.getBuyList(username)){
+                    for (CommodityDTO commodity : balootInstance.getBuyList(username)) {
                         user.addToPurchasedList(commodity);
                         balootInstance.quantityToChangeCommodityInStock(commodity.getId(), -commodity.getQuantity());
                         user.removeItemFromBuyListCompletely(commodity.getId());
                     }
                     user.setCredit(user.getCredit() - totalCost);
-                    
+
                     return ResponseEntity.status(HttpStatus.OK).body(null);
 
                 }
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid discount code not found!");
             }
-        }
-        else{
+        } else {
 
-                DiscountCode discountCode = balootInstance.findDiscountCodeByCode(code);
-                double totalCost = user.getBuyList().totalCost();
-                if (user.getCredit() < totalCost) {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Insufficient credit!");
-                }
-                user.addToUsedDiscounts(discountCode);
-                for (CommodityDTO commodity : balootInstance.getBuyList(username)) {
-                    user.addToPurchasedList(commodity);
-                    balootInstance.quantityToChangeCommodityInStock(commodity.getId(), -commodity.getQuantity());
-                    user.removeItemFromBuyListCompletely(commodity.getId());
-                }
-                user.setCredit(user.getCredit()-totalCost);
-                return ResponseEntity.status(HttpStatus.OK).body(null);
-
+            DiscountCode discountCode = balootInstance.findDiscountCodeByCode(code);
+            double totalCost = user.getBuyList().totalCost();
+            if (user.getCredit() < totalCost) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Insufficient credit!");
             }
-        
+            user.addToUsedDiscounts(discountCode);
+            for (CommodityDTO commodity : balootInstance.getBuyList(username)) {
+                user.addToPurchasedList(commodity);
+                balootInstance.quantityToChangeCommodityInStock(commodity.getId(), -commodity.getQuantity());
+                user.removeItemFromBuyListCompletely(commodity.getId());
+            }
+            user.setCredit(user.getCredit() - totalCost);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+
+        }
+
     }
 
 }

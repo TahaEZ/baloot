@@ -1,9 +1,6 @@
 package org.iespring1402.Baloot.models;
 
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.security.MessageDigest;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 

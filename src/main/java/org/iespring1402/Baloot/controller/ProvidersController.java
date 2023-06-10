@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,7 +22,11 @@ public class ProvidersController {
 
     @GetMapping(value = "/{providerId}")
     @ResponseBody
-    public Object getProviderById(@PathVariable("providerId") int providerId) {
+    public Object getProviderById(@PathVariable("providerId") int providerId, @RequestAttribute boolean unauthorized) {
+        if (unauthorized) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
+        }
+
         Provider provider = balootInstance.findProviderByProviderId(providerId);
         if (provider == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("provider not found!");
@@ -32,7 +37,10 @@ public class ProvidersController {
 
     @PostMapping(value = "")
     @ResponseBody
-    public Object addProvider(@RequestBody Provider provider) {
+    public Object addProvider(@RequestBody Provider provider, @RequestAttribute boolean unauthorized) {
+        if (unauthorized) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
+        }
 
         if (balootInstance.findProviderByProviderId(provider.getId()).getId() == provider.getId()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Duplicate was occurred!");
