@@ -23,7 +23,12 @@ public class CommentController {
 
     @GetMapping(value = "")
     @ResponseBody
-    public Object getComments(@RequestParam(value = "commodityId") int commodityId) {
+    public Object getComments(@RequestParam(value = "commodityId") int commodityId,
+            @RequestAttribute boolean unauthorized) {
+        if (unauthorized) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
+        }
+
         ArrayList<Comment> comments = (ArrayList<Comment>) commentDAO.findByCommodityId(commodityId);
         ArrayList<HashMap<String, Object>> result = new ArrayList<>();
 
@@ -47,7 +52,11 @@ public class CommentController {
 
     @PostMapping(value = "")
     @ResponseBody
-    public Object submitComment(@RequestBody Comment comment) {
+    public Object submitComment(@RequestBody Comment comment, @RequestAttribute boolean unauthorized) {
+        if (unauthorized) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
+        }
+
         Response addCommentRes = balootInstance.addComment(comment.getUsername(), comment.getCommodityId(),
                 comment.getText());
         if (addCommentRes.success) {
@@ -60,7 +69,11 @@ public class CommentController {
     @PostMapping(value = "/{commentId}")
     @ResponseBody
     public Object voteComment(@PathVariable("commentId") String commentId, @RequestParam(value = "vote") int vote,
-            @RequestParam(value = "username") String username) {
+            @RequestParam(value = "username") String username, @RequestAttribute boolean unauthorized) {
+        if (unauthorized) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
+        }
+
         Response voteCommentRes = balootInstance.voteComment(username, commentId, vote);
         if (voteCommentRes.success) {
             return ResponseEntity.status(HttpStatus.OK).body(null);

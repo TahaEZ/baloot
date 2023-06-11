@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -29,7 +29,11 @@ public class UsersController {
 
     @GetMapping(value = "/{username}")
     @ResponseBody
-    public Object getUserByUsername(@PathVariable("username") String username) {
+    public Object getUserByUsername(@PathVariable("username") String username, @RequestAttribute boolean unauthorized) {
+        if (unauthorized) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
+        }
+
         User user = balootInstance.findUserByUsername(username);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
@@ -40,21 +44,33 @@ public class UsersController {
 
     @GetMapping(value = "/{username}/buyList")
     @ResponseBody
-    public Object getBuyListByUsername(@PathVariable("username") String username) {
+    public Object getBuyListByUsername(@PathVariable("username") String username,
+            @RequestAttribute boolean unauthorized) {
+
+        if (unauthorized) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
+        }
+
         User user = balootInstance.findUserByUsername(username);
         HashMap<String, Object> buylist = new HashMap<>();
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         } else {
             buylist.put("buylist", balootInstance.getBuyList(username));
-            buylist.put("totalCost",balootInstance.findUserByUsername(username).getBuyList().totalCost());
+            buylist.put("totalCost", balootInstance.findUserByUsername(username).getBuyList().totalCost());
             return buylist;
         }
     }
 
     @PostMapping(value = "/{username}/buyList")
     @ResponseBody
-    public Object addBuyListItemByUsername(@PathVariable("username") String username, @RequestParam int commodityId) {
+    public Object addBuyListItemByUsername(@PathVariable("username") String username, @RequestParam int commodityId,
+            @RequestAttribute boolean unauthorized) {
+
+        if (unauthorized) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
+        }
+
         User user = balootInstance.findUserByUsername(username);
         HashMap<String, Object> response = new HashMap<>();
         if (user == null) {
@@ -81,7 +97,13 @@ public class UsersController {
 
     @DeleteMapping(value = "/{username}/buyList")
     @ResponseBody
-    public Object deleteBuyListItemByUsername(@PathVariable("username") String username, @RequestParam int commodityId) {
+    public Object deleteBuyListItemByUsername(@PathVariable("username") String username,
+            @RequestParam int commodityId, @RequestAttribute boolean unauthorized) {
+
+        if (unauthorized) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
+        }
+
         HashMap<String, Object> response = new HashMap<>();
         User user = balootInstance.findUserByUsername(username);
         if (user == null) {
@@ -105,20 +127,33 @@ public class UsersController {
 
     @GetMapping(value = "/{username}/purchasedList")
     @ResponseBody
-    public Object getPurchasedListByUsername(@PathVariable("username") String username) {
+    public Object getPurchasedListByUsername(@PathVariable("username") String username,
+            @RequestAttribute boolean unauthorized) {
+
+        if (unauthorized) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
+        }
+
         User user = balootInstance.findUserByUsername(username);
         HashMap<String, Object> purchasedList = new HashMap<>();
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         } else {
-            purchasedList.put("purchasedList", balootInstance.findUserByUsername(username).getPurchasedList().getPurchasedItems());
+            purchasedList.put("purchasedList",
+                    balootInstance.findUserByUsername(username).getPurchasedList().getPurchasedItems());
             return purchasedList;
         }
     }
 
     @PostMapping(value = "/{username}")
     @ResponseBody
-    public Object addBuyListItemByUsername(@PathVariable("username") String username, @RequestParam long creditToAdd) {
+    public Object addBuyListItemByUsername(@PathVariable("username") String username, @RequestParam long creditToAdd,
+            @RequestAttribute boolean unauthorized) {
+
+        if (unauthorized) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
+        }
+
         User user = balootInstance.findUserByUsername(username);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
