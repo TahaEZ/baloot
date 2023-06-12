@@ -1,9 +1,19 @@
 package org.iespring1402.Baloot.controller;
 
 import org.iespring1402.Baloot.models.Baloot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.iespring1402.Baloot.entities.BuyList;
+import org.iespring1402.Baloot.entities.Commodity;
+import org.iespring1402.Baloot.entities.CommodityDTO;
 import org.iespring1402.Baloot.entities.DiscountCode;
-import org.iespring1402.Baloot.models.User;
-import org.iespring1402.Baloot.models.views.CommodityDTO;
+import org.iespring1402.Baloot.entities.User;
+import org.iespring1402.Baloot.repositories.CommodityDAO;
+import org.iespring1402.Baloot.repositories.DiscountDAO;
+import org.iespring1402.Baloot.repositories.UserDAO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,6 +30,14 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 public class PaymentController {
     private Baloot balootInstance = Baloot.getInstance();
+    @Autowired
+    UserDAO userDAO;
+
+    @Autowired
+    DiscountDAO discountDAO;
+
+    @Autowired
+    CommodityDAO commodityDAO;
 
     @PostMapping(value = "/{username}")
     @ResponseBody
@@ -31,7 +49,7 @@ public class PaymentController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
         }
 
-        User user = balootInstance.findUserByUsername(username);
+        User user = userDAO.getUserByUsername(username);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         }
@@ -40,12 +58,12 @@ public class PaymentController {
         }
         if (code != null) {
 
-            if (balootInstance.discountCodeValidityCheck(code)) {
-                if (user.isDiscountCodeUsed(code)) {
+            if (discountDAO.isValid(code)) {
+                if (userDAO.isDiscountCodeUsedByUsername(username, code)) {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Discount used before!");
                 } else {
 
-                    DiscountCode discountCode = balootInstance.findDiscountCodeByCode(code);
+                    DiscountCode discountCode = discountDAO.findDiscountCodeByCode(code);
                     double totalCost = ((user.getBuyList().totalCost()) * (100 - discountCode.getDiscount())) / 100;
 
                     System.out.println(discountCode.getDiscount() / 100);
@@ -54,7 +72,7 @@ public class PaymentController {
                         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Insufficient credit!");
                     }
                     user.addToUsedDiscounts(discountCode);
-                    for (CommodityDTO commodity : balootInstance.getBuyList(username)) {
+                    for (CommodityDTO commodity : getBuyListAsList(user.getBuyList())) {
                         user.addToPurchasedList(commodity);
                         balootInstance.quantityToChangeCommodityInStock(commodity.getId(), -commodity.getQuantity());
                         user.removeItemFromBuyListCompletely(commodity.getId());
@@ -69,22 +87,38 @@ public class PaymentController {
             }
         } else {
 
-            DiscountCode discountCode = balootInstance.findDiscountCodeByCode(code);
+            DiscountCode discountCode = discountDAO.findDiscountCodeByCode(code);
             double totalCost = user.getBuyList().totalCost();
             if (user.getCredit() < totalCost) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Insufficient credit!");
             }
             user.addToUsedDiscounts(discountCode);
-            for (CommodityDTO commodity : balootInstance.getBuyList(username)) {
+            for (CommodityDTO commodity : getBuyListAsList(user.getBuyList())) {
                 user.addToPurchasedList(commodity);
                 balootInstance.quantityToChangeCommodityInStock(commodity.getId(), -commodity.getQuantity());
                 user.removeItemFromBuyListCompletely(commodity.getId());
             }
             user.setCredit(user.getCredit() - totalCost);
+            userDAO.save(user);
             return ResponseEntity.status(HttpStatus.OK).body(null);
 
         }
 
+    }
+
+    public ArrayList<CommodityDTO> getBuyListAsList(BuyList buyList) {
+            HashMap<Integer, Integer> buylist = buyList.getItems();
+            ArrayList<CommodityDTO> result = new ArrayList<>();
+            for (HashMap.Entry<Integer, Integer> item : buylist.entrySet()) {
+                Commodity commodity = commodityDAO.findCommodityById(item.getKey());
+
+                CommodityDTO buylistItem = new CommodityDTO(commodity.getId(), commodity.getName(),
+                        commodity.getProviderId(), commodity.getPrice(), commodity.getCategories(),
+                        commodity.getRating(), commodity.getInStock(), item.getValue(), commodity.getImage());
+
+                result.add(buylistItem);
+            }
+            return result;
     }
 
 }

@@ -1,7 +1,6 @@
 package org.iespring1402.Baloot.repositories;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.iespring1402.Baloot.entities.Commodity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,5 +17,9 @@ public class CommodityDAO {
     public List <Commodity> findByCategory(String category) {
         return repo.findByCategories(category);
         
+    }
+    public Commodity findCommodityById(int id)
+    {
+        return repo.findById(id);
     }
 }

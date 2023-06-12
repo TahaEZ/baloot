@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface CommodityRepository extends CrudRepository<Commodity, Long> {
 List<Commodity> findByCategories(String categories);
-
+Commodity findById(int id);
 }

@@ -3,6 +3,10 @@ package org.iespring1402.Baloot.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.iespring1402.Baloot.response.FailedResponse;
+import org.iespring1402.Baloot.response.Response;
+import org.iespring1402.Baloot.response.SuccessfulResponse;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -35,6 +39,45 @@ public class User {
     @ManyToMany
     @JoinTable(name = "purchased_list", joinColumns = @JoinColumn(name = "USER_ID"), inverseJoinColumns = @JoinColumn(name = "purchased_item_id"))
     private List<CommodityDTO> purchasedItems = new ArrayList<>();
+    
+    public void updateUser(String password, String email, String birthDate, String address, double credit) {
+        this.password = password;
+        this.email = email;
+        this.birthDate = birthDate;
+        this.address = address;
+        this.credit = credit;
+    }
+
+    public Response addCredit(long creditToAdd) {
+        if (creditToAdd <= 0)
+            return new FailedResponse("Invalid credit value!");
+        credit += creditToAdd;
+        return new SuccessfulResponse();
+    }
+
+    public Response addToUsedDiscounts(DiscountCode discount) {
+        usedDiscounts.add(discount);
+        return new SuccessfulResponse();
+    }
+
+    public Response addToBuyList(int commodityId) {
+        return buyList.increase(commodityId);
+    }
+
+
+    public Response addToPurchasedList(CommodityDTO commodity) {
+        purchasedItems.add(commodity);
+        return new SuccessfulResponse();
+    }
+
+    public Response removeFromBuyList(int commodityId) {
+        return buyList.decrease(commodityId);
+    }
+
+    public Response removeItemFromBuyListCompletely(int commodityId) {
+        buyList.getItems().remove(commodityId);
+        return new SuccessfulResponse();
+    }
     
     public String getUsername() {
         return username;

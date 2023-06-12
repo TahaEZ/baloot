@@ -1,6 +1,7 @@
 package org.iespring1402.Baloot.entities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.annotations.NaturalId;
 
@@ -38,6 +39,11 @@ public class CommodityDTO {
     private Integer quantity;
     private String image;
 
+    
+
+    public CommodityDTO(int id2, String name2, int providerId2, int price2, List<String> categories2, float rating2,
+            int inStock2, Integer value, String image2) {
+    }
     public ArrayList<String> getCategories() {
         return categories;
     }

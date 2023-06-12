@@ -43,6 +43,7 @@ public class BuyList {
         isDiscountActive = false;
     }
 
+
     public Response increase(int commodityId) {
 
         for (HashMap.Entry<Integer, Integer> item : items.entrySet()) {

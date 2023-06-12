@@ -1,7 +1,6 @@
 package org.iespring1402.Baloot.controller;
 
 import org.iespring1402.Baloot.entities.Provider;
-import org.iespring1402.Baloot.models.Baloot;
 import org.iespring1402.Baloot.repositories.ProviderDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
