@@ -1,5 +1,9 @@
 package org.iespring1402.Baloot.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.iespring1402.Baloot.models.AuthToken;
 import org.iespring1402.Baloot.models.Baloot;
 import org.iespring1402.Baloot.models.User;
 import org.springframework.http.HttpStatus;
@@ -22,10 +26,19 @@ public class LoginController {
     public Object credentialsCheck(@RequestParam String username, String password) {
         User user = balootInstance.findUserByUsername(username);
         if (user == null || !user.getPassword().equals(password)) {
+
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid username or password!");
         } else {
-            balootInstance.setCurrentUser(username);
-            return ResponseEntity.status(HttpStatus.OK).body(user);
+            Map<String, Object> authResponse = new HashMap();
+            try {
+                balootInstance.setCurrentUser(username);
+                AuthToken authToken = new AuthToken(Baloot.SECRET_KEY, Baloot.ISSUER, user.getUsername());
+                authResponse.put("token", authToken.getToken());
+                authResponse.put("user", user);
+                return ResponseEntity.status(HttpStatus.OK).body(authResponse);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred!");
+            }
         }
     }
 
