@@ -1,7 +1,9 @@
 package org.iespring1402.Baloot.controller;
 
+import org.iespring1402.Baloot.entities.Provider;
 import org.iespring1402.Baloot.models.Baloot;
-import org.iespring1402.Baloot.models.Provider;
+import org.iespring1402.Baloot.repositories.ProviderDAO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,7 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/providers")
 @CrossOrigin
 public class ProvidersController {
-    private Baloot balootInstance = Baloot.getInstance();
+    @Autowired
+    ProviderDAO providerDAO;
 
     @GetMapping(value = "/{providerId}")
     @ResponseBody
@@ -27,7 +30,8 @@ public class ProvidersController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
         }
 
-        Provider provider = balootInstance.findProviderByProviderId(providerId);
+        Provider provider = providerDAO.findById(providerId);
+
         if (provider == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("provider not found!");
         } else {
@@ -42,12 +46,12 @@ public class ProvidersController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
         }
 
-        if (balootInstance.findProviderByProviderId(provider.getId()).getId() == provider.getId()) {
+        if (providerDAO.checkIfExist(provider.getId())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Duplicate was occurred!");
         }
 
         else {
-            balootInstance.addProvider(provider);
+            providerDAO.save(provider);
             return provider;
         }
 
