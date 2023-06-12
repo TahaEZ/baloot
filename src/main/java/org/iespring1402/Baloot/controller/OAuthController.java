@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("api/v1/oauth")
 @CrossOrigin
 public class OAuthController {
+    private Baloot balootInstance = Baloot.getInstance();
+
     @GetMapping(value = "")
     @ResponseBody
     public Object OAuthenticate(@RequestParam String code) throws Exception {
@@ -38,8 +40,11 @@ public class OAuthController {
         Map<String, Object> authResponse = new HashMap();
 
         if (user != null) {
-            AuthToken authToken = new AuthToken(Baloot.SECRET_KEY, Baloot.ISSUER);
+            String username = user.getUsername();
+            balootInstance.setCurrentUser(username);
+            AuthToken authToken = new AuthToken(Baloot.SECRET_KEY, Baloot.ISSUER, username);
             authResponse.put("token", authToken.getToken());
+            authResponse.put("user", user);
             return ResponseEntity.status(HttpStatus.OK).body(authResponse);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Code");

@@ -12,7 +12,7 @@ import io.jsonwebtoken.security.Keys;
 public class AuthToken {
     private String token;
 
-    public AuthToken(String keyString, String issuer) throws Exception {
+    public AuthToken(String keyString, String issuer, String username) throws Exception {
         Date today = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(today);
@@ -25,11 +25,12 @@ public class AuthToken {
                 .setIssuer(issuer)
                 .setIssuedAt(today)
                 .setExpiration(nextDay)
+                .claim("username", username)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public static void validateToken(String token, String keyString, String issuer) throws Exception {
+    public static Claims validateToken(String token, String keyString, String issuer) throws Exception {
         Key key = Keys.hmacShaKeyFor(keyString.getBytes());
         Claims claims = Jwts.parserBuilder().setSigningKey(key)
                 .build().parseClaimsJws(token).getBody();
@@ -41,6 +42,8 @@ public class AuthToken {
         if (!claims.getIssuer().equals(issuer)) {
             throw new RuntimeException("Invalid issuer claim.");
         }
+
+        return claims;
     }
 
     public String getToken() {

@@ -15,6 +15,8 @@ import org.iespring1402.Baloot.models.Baloot;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import io.jsonwebtoken.Claims;
+
 @Component
 @Order(1)
 public class JwtFilter implements Filter {
@@ -37,7 +39,9 @@ public class JwtFilter implements Filter {
                 final String token = authHeader.substring(6);
 
                 try {
-                    AuthToken.validateToken(token, Baloot.SECRET_KEY, Baloot.ISSUER);
+                    Claims claims = AuthToken.validateToken(token, Baloot.SECRET_KEY, Baloot.ISSUER);
+                    httpRequest.setAttribute("claims", claims);
+
                 } catch (Exception e) {
                     httpRequest.setAttribute("unauthorized", true);
                 }
