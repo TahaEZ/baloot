@@ -12,8 +12,15 @@ public class UserDAO {
     public void save(User user) {
         repo.save(user);
     }
+
     public boolean isDiscountCodeUsedByUsername(String username , String code)
     {
-        return repo.existsByUsernameContainingUsedDiscounts(username, code);
+        return repo.existsByUsernameAndUsedDiscountsCode(username, code);
     }
+
+    public User getUserByUsername(String username)
+    {
+        return repo.findByUsername(username);
+    }
+
 }

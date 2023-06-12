@@ -1,9 +1,5 @@
 package org.iespring1402.Baloot.entities;
-
-import org.hibernate.annotations.NaturalId;
-
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -48,6 +44,4 @@ public class DiscountCode {
     public void setDeprecated(boolean deprecated) {
         this.deprecated = deprecated;
     }
-
-
 }
