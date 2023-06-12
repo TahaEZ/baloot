@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface DiscountRepository extends CrudRepository<DiscountCode, Long> {
    boolean existsByDiscountCode(String code);
-   DiscountCode findByCode(String code);
+   DiscountCode findByDiscountCode(String code);
 }

@@ -19,6 +19,6 @@ public class DiscountDAO {
     }
 
     public DiscountCode findDiscountCodeByCode(String code) {
-        return repo.findByCode(code);
+        return repo.findByDiscountCode(code);
     }
 }
