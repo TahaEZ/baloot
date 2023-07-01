@@ -19,7 +19,6 @@ public class CommentController {
     @Autowired
     CommentDAO commentDAO;
 
-    private Baloot balootInstance = Baloot.getInstance();
 
     @GetMapping(value = "")
     @ResponseBody
@@ -57,13 +56,8 @@ public class CommentController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
         }
 
-        Response addCommentRes = balootInstance.addComment(comment.getUsername(), comment.getCommodityId(),
-                comment.getText());
-        if (addCommentRes.success) {
-            return ResponseEntity.status(HttpStatus.OK).body(null);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(addCommentRes.data);
-        }
+        commentDAO.save(comment);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @PostMapping(value = "/{commentId}")
@@ -74,11 +68,13 @@ public class CommentController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
         }
 
-        Response voteCommentRes = balootInstance.voteComment(username, commentId, vote);
-        if (voteCommentRes.success) {
+        Comment comment = commentDAO.findByIdAndUsername(commentId,username);
+        if (comment != null &&  2 > vote && vote > -2) {
+            comment.voteComment(username, vote);
+            commentDAO.save(comment);
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(voteCommentRes.data);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Comment Not Found!");
         }
     }
 }

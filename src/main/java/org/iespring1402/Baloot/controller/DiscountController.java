@@ -1,8 +1,8 @@
 package org.iespring1402.Baloot.controller;
 
-import org.iespring1402.Baloot.models.Baloot;
-import org.iespring1402.Baloot.models.User;
+import org.iespring1402.Baloot.entities.User;
 import org.iespring1402.Baloot.repositories.DiscountDAO;
+import org.iespring1402.Baloot.repositories.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/discounts")
 @CrossOrigin
 public class DiscountController {
-    private Baloot balootInstance = Baloot.getInstance();
     @Autowired
     DiscountDAO discountDAO;
+
+    @Autowired
+    UserDAO userDAO;
 
     @GetMapping(value = "")
     @ResponseBody
@@ -31,16 +33,17 @@ public class DiscountController {
         if (unauthorized) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
         }
-        User user = balootInstance.findUserByUsername(username);
+        User user = userDAO.getUserByUsername(username);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
-        }
-        if (discountDAO.isValid(code)) {
-            if (user.isDiscountCodeUsed(code)) {
+        } 
+        if (discountDAO.isValid(code)){
+            if(userDAO.isDiscountCodeUsedByUsername(username, code))
+            {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Discount used before!");
             } else {
 
-                return balootInstance.findDiscountCodeByCode(code);
+                return discountDAO.findDiscountCodeByCode(code);
             }
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid discount code not found!");

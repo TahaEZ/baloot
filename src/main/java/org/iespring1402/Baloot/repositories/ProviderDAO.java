@@ -12,4 +12,12 @@ public class ProviderDAO {
     public void save(Provider provider) {
         repo.save(provider);
     }
+
+    public Provider findById(int id){
+        return repo.findById(id);
+    } 
+    public boolean checkIfExist(int id)
+    {
+        return repo.existsById(id);
+    }
 }
