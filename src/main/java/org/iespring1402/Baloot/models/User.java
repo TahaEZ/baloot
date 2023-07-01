@@ -154,4 +154,8 @@ public class User {
     public void setCredit(double credit) {
         this.credit = credit;
     }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
