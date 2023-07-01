@@ -25,7 +25,7 @@ public class LoginController {
     @ResponseBody
     public Object credentialsCheck(@RequestParam String username, String password) {
         User user = balootInstance.findUserByUsername(username);
-        if (user == null || !user.getPassword().equals(password)) {
+        if (user == null || !user.getPassword().equals(User.hashPassword(password))) {
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid username or password!");
         } else {
