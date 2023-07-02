@@ -10,6 +10,9 @@ import java.util.ArrayList;
 
 import static java.util.Objects.isNull;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class User {
     public String username;
     public String password;
@@ -32,7 +35,7 @@ public class User {
 
     public User(String username, String password, String email, String birthDate, String address, long credit) {
         this.username = username;
-        this.password = password;
+        this.password = hashPassword(password);
         this.email = email;
         this.birthDate = birthDate;
         this.address = address;
@@ -43,11 +46,29 @@ public class User {
     }
 
     public void updateUser(String password, String email, String birthDate, String address, double credit) {
-        this.password = password;
+        this.password = hashPassword(password);
         this.email = email;
         this.birthDate = birthDate;
         this.address = address;
         this.credit = credit;
+    }
+
+    public static String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+            byte[] hashedPassword = md.digest(password.getBytes());
+
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedPassword) {
+                sb.append(String.format("%02x", b));
+            }
+            String hashedPasswordString = sb.toString();
+
+            return hashedPasswordString;
+        } catch (NoSuchAlgorithmException e) {
+            return null;
+        }
     }
 
     public Response addCredit(long creditToAdd) {
@@ -132,5 +153,9 @@ public class User {
 
     public void setCredit(double credit) {
         this.credit = credit;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

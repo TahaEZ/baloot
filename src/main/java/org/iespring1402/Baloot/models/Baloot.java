@@ -46,6 +46,9 @@ public class Baloot {
         try {
             String usersJson = fetchData("/api/users");
             users = new ArrayList<>(Arrays.asList(mapper.readValue(usersJson, User[].class)));
+            for (User user : users) {
+                user.setPassword(User.hashPassword(user.getPassword()));
+            }
             String providersJson = fetchData("/api/v2/providers");
             providers = new ArrayList<>(Arrays.asList(mapper.readValue(providersJson, Provider[].class)));
             String commoditiesJson = fetchData("/api/v2/commodities");
