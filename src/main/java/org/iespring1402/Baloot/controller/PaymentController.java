@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/payment")
 @CrossOrigin
 public class PaymentController {
-    private Baloot balootInstance = Baloot.getInstance();
     @Autowired
     UserDAO userDAO;
 
@@ -74,10 +73,15 @@ public class PaymentController {
                     user.addToUsedDiscounts(discountCode);
                     for (CommodityDTO commodity : getBuyListAsList(user.getBuyList())) {
                         user.addToPurchasedList(commodity);
-                        balootInstance.quantityToChangeCommodityInStock(commodity.getId(), -commodity.getQuantity());
-                        user.removeItemFromBuyListCompletely(commodity.getId());
+                        boolean succeed = updateCommodityInstock(commodity.getId(), commodity.getQuantity());
+                        if (succeed == false) {
+                            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                    .body("Insufficient number of Instock!");
+
+                        }                        user.removeItemFromBuyListCompletely(commodity.getId());
                     }
                     user.setCredit(user.getCredit() - totalCost);
+                    userDAO.save(user);
 
                     return ResponseEntity.status(HttpStatus.OK).body(null);
 
@@ -95,7 +99,12 @@ public class PaymentController {
             user.addToUsedDiscounts(discountCode);
             for (CommodityDTO commodity : getBuyListAsList(user.getBuyList())) {
                 user.addToPurchasedList(commodity);
-                balootInstance.quantityToChangeCommodityInStock(commodity.getId(), -commodity.getQuantity());
+                boolean succeed = updateCommodityInstock(commodity.getId(), commodity.getQuantity());
+                if(succeed == false)
+                {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Insufficient number of Instock!");
+
+                }
                 user.removeItemFromBuyListCompletely(commodity.getId());
             }
             user.setCredit(user.getCredit() - totalCost);
@@ -120,5 +129,15 @@ public class PaymentController {
             }
             return result;
     }
-
+    public boolean updateCommodityInstock(int commodityId , int quantity)
+    {
+        Commodity commodityToChangeInstock = commodityDAO.findCommodityById(commodityId);
+        if(quantity > commodityToChangeInstock.getInStock())
+        {
+            return false;
+        }
+        commodityToChangeInstock.setInStock(commodityToChangeInstock.getInStock() - quantity);
+        commodityDAO.save(commodityToChangeInstock);
+        return true;
+    }
 }

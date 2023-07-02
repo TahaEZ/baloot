@@ -10,4 +10,5 @@ import java.util.List;
 public interface CommodityRepository extends CrudRepository<Commodity, Long> {
 List<Commodity> findByCategories(String categories);
 Commodity findById(int id);
+
 }
