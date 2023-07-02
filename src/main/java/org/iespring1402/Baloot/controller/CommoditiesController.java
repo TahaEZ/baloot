@@ -8,12 +8,13 @@ import org.iespring1402.Baloot.models.Baloot;
 import org.iespring1402.Baloot.models.CategoryFilter;
 import org.iespring1402.Baloot.entities.Commodity;
 import org.iespring1402.Baloot.entities.DiscountCode;
-import org.iespring1402.Baloot.models.Provider;
+import org.iespring1402.Baloot.entities.Provider;
 import org.iespring1402.Baloot.models.views.CommodityDTO;
 import org.iespring1402.Baloot.repositories.CommentDAO;
 import org.iespring1402.Baloot.repositories.CommodityDAO;
 import org.iespring1402.Baloot.repositories.CommodityRepository;
 import org.iespring1402.Baloot.repositories.DiscountRepository;
+import org.iespring1402.Baloot.repositories.ProviderDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,7 @@ public class CommoditiesController {
     private CommodityDAO commodityDao;
 
     @Autowired
-    private CommodityRepository commodityRepo;
+    private ProviderDAO providerDAO;
 
     private Baloot balootInstance = Baloot.getInstance();
 
@@ -54,14 +55,14 @@ public class CommoditiesController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
         }
         HashMap<String, Object> returnResponse = new HashMap<>();
-        ArrayList<Commodity> allCommodities = new ArrayList<>();
+        List<Commodity> allCommodities = new ArrayList<>();
         if (availableCommodities == true) {
-            allCommodities = listAvailableCommodities(balootInstance.getCommodities());
+            allCommodities = commodityDao.getAvailableCommodities();
         } else {
-            allCommodities = balootInstance.getCommodities();
+            allCommodities = commodityDao.getAllCommodities();
         }
 
-        PaginationController paginator = new PaginationController(allCommodities);
+        PaginationController paginator = new PaginationController((ArrayList<Commodity>)allCommodities);
         returnResponse = paginator.paginateItems(pageSize, pageNo);
         if (returnResponse.size() == 1) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Page Number.");
@@ -71,15 +72,7 @@ public class CommoditiesController {
 
     }
 
-    private ArrayList<Commodity> listAvailableCommodities(ArrayList<Commodity> commodities) {
-        ArrayList<Commodity> availableCommodities = new ArrayList<>();
-        for (Commodity commodity : commodities) {
-            if (commodity.isInStock()) {
-                availableCommodities.add(commodity);
-            }
-        }
-        return availableCommodities;
-    }
+   
 
     @GetMapping(value = "", params = { "searchType", "searchVal" })
     public Object getCommoditiesByCategory(
@@ -93,40 +86,23 @@ public class CommoditiesController {
         if (unauthorized) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
         }
-        ArrayList<Commodity> allCommodities = new ArrayList<>();
         List<Commodity> result = new ArrayList<>();
         HashMap<String, Object> filteredCommoditiesList = new HashMap<>();
-        ArrayList<Commodity> filteredWithStock = new ArrayList<>();
-        if (availableCommodities == true) {
-            allCommodities = listAvailableCommodities(balootInstance.getCommodities());
-        } else {
-            allCommodities = balootInstance.getCommodities();
-        }
+        
         if (searchVal.equals("category") || searchVal.equals("name") || searchVal.equals("provider")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid search.");
         } else {
 
             if (searchType.equals("category")) {
-                CategoryFilter filter = new CategoryFilter(searchVal);
                 System.out.println(searchVal);
-                result = commodityDao.findByCategory(searchVal);
+                result = commodityDao.findByCategory(searchVal,availableCommodities);
                 // filteredWithStock = filter.applyFilter(allCommodities);
             } else if (searchType.equals("name")) {
 
-                for (Commodity commodity : allCommodities) {
-                    if (commodity.getName().toLowerCase().contains(searchVal.toLowerCase())) {
-                        filteredWithStock.add(commodity);
-                    }
-                }
+                result = commodityDao.findCommodityByName(searchVal , availableCommodities);
+
             } else if (searchType.equals("provider")) {
-                ArrayList<Provider> foundProviders = balootInstance.searchProviderByName(searchVal);
-                for (Provider provider : foundProviders) {
-                    for (Commodity commodity : allCommodities) {
-                        if (commodity.getProviderId() == provider.getId()) {
-                            filteredWithStock.add(commodity);
-                        }
-                    }
-                }
+                result = commodityDao.getCommoditiesByProviderName(searchVal , availableCommodities);
             }
             // if (filteredWithStock.isEmpty()) {
             // return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Didn't find any
@@ -150,12 +126,12 @@ public class CommoditiesController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
         }
 
-        Commodity commodity = balootInstance.findCommodityById(id);
+        Commodity commodity = commodityDao.findCommodityById(id);
         if (commodity == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Commodity Not Found.");
         }
         CommodityDTO result;
-        Provider provider = balootInstance.findProviderByProviderId(commodity.getProviderId());
+        Provider provider = providerDAO.findById(commodity.getProviderId());
         ArrayList<Commodity> suggestedCommodities = balootInstance.getSuggestedCommodities(commodity.getId());
         System.out.println(suggestedCommodities.size());
         result = new CommodityDTO(commodity.getId(), commodity.getName(), provider.getId(), provider.getName(),
