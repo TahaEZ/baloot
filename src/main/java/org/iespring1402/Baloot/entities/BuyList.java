@@ -19,6 +19,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Table(name = "buylists")
@@ -31,7 +32,7 @@ public class BuyList {
             @JoinColumn(name = "buylist_id", referencedColumnName = "id") })
     @MapKeyColumn(name = "item_id")
     @Column(name = "item_quantity")
-    private HashMap<Integer, Integer> items;
+    private Map<Integer, Integer> items = new HashMap<Integer, Integer>();
     private boolean isDiscountActive;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -46,7 +47,7 @@ public class BuyList {
 
     public Response increase(int commodityId) {
 
-        for (HashMap.Entry<Integer, Integer> item : items.entrySet()) {
+        for (Map.Entry<Integer, Integer> item : items.entrySet()) {
             if (item.getKey() == commodityId) {
                 item.setValue(item.getValue() + 1);
                 return new SuccessfulResponse();
@@ -58,7 +59,7 @@ public class BuyList {
 
     public Response decrease(int commodityId) {
 
-        for (HashMap.Entry<Integer, Integer> item : items.entrySet()) {
+        for (Map.Entry<Integer, Integer> item : items.entrySet()) {
             if (item.getKey() == commodityId) {
                 if (item.getValue() - 1 == 0) {
                     items.remove(item.getKey());
@@ -110,7 +111,7 @@ public class BuyList {
         return total;
     }
 
-    public HashMap<Integer, Integer> getItems() {
+    public Map<Integer, Integer> getItems() {
         return items;
     }
 }

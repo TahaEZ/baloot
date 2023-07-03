@@ -2,6 +2,7 @@ package org.iespring1402.Baloot.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.iespring1402.Baloot.models.Baloot;
 import org.iespring1402.Baloot.entities.BuyList;
@@ -109,7 +110,7 @@ public class UsersController {
     }
     
     public ArrayList<CommodityDTO> getBuyListAsList(BuyList buyList) {
-        HashMap<Integer, Integer> buylist = buyList.getItems();
+        Map<Integer, Integer> buylist = buyList.getItems();
         ArrayList<CommodityDTO> result = new ArrayList<>();
         for (HashMap.Entry<Integer, Integer> item : buylist.entrySet()) {
             Commodity commodity = commodityDAO.findCommodityById(item.getKey());

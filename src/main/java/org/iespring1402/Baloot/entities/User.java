@@ -61,6 +61,9 @@ public class User {
     }
 
     public Response addToBuyList(int commodityId) {
+        if (this.buyList == null) {
+            this.buyList = new BuyList();
+        }
         return buyList.increase(commodityId);
     }
 
