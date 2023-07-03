@@ -38,4 +38,5 @@ List<Commodity> findByProviderName(@Param("providerName")String ProviderName);
 @Query("SELECT c  FROM Commodity c JOIN Provider p ON c.providerId = p.id WHERE p.name = :providerName AND c.inStock > 0")
 List<Commodity> findAvailablesByProviderName(@Param("providerName") String ProviderName);
 
+List<Commodity> findByProviderId(int providerId);
 }

@@ -51,4 +51,9 @@ public class CommodityDAO {
         }
         return repo.findByName(name);
     }
+
+    public List<Commodity> getCommodityByProviderId(int provideId)
+    {
+        return repo.findByProviderId(provideId);
+    }
 }

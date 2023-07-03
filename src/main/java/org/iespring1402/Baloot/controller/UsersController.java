@@ -7,7 +7,9 @@ import org.iespring1402.Baloot.models.Baloot;
 import org.iespring1402.Baloot.entities.Commodity;
 import org.iespring1402.Baloot.models.User;
 import org.iespring1402.Baloot.models.views.CommodityDTO;
+import org.iespring1402.Baloot.repositories.UserDAO;
 import org.iespring1402.Baloot.response.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,6 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 public class UsersController {
     private Baloot balootInstance = Baloot.getInstance();
+
+    @Autowired
+    private UserDAO userDAO;
 
     @GetMapping(value = "/{username}")
     @ResponseBody

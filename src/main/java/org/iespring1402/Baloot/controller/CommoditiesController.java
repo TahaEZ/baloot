@@ -1,6 +1,7 @@
 package org.iespring1402.Baloot.controller;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -9,12 +10,17 @@ import org.iespring1402.Baloot.models.CategoryFilter;
 import org.iespring1402.Baloot.entities.Commodity;
 import org.iespring1402.Baloot.entities.DiscountCode;
 import org.iespring1402.Baloot.entities.Provider;
+import org.iespring1402.Baloot.entities.User;
 import org.iespring1402.Baloot.models.views.CommodityDTO;
 import org.iespring1402.Baloot.repositories.CommentDAO;
 import org.iespring1402.Baloot.repositories.CommodityDAO;
 import org.iespring1402.Baloot.repositories.CommodityRepository;
 import org.iespring1402.Baloot.repositories.DiscountRepository;
 import org.iespring1402.Baloot.repositories.ProviderDAO;
+import org.iespring1402.Baloot.repositories.UserDAO;
+import org.iespring1402.Baloot.response.FailedResponse;
+import org.iespring1402.Baloot.response.Response;
+import org.iespring1402.Baloot.response.SuccessfulResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +48,9 @@ public class CommoditiesController {
     @Autowired
     private ProviderDAO providerDAO;
 
-    private Baloot balootInstance = Baloot.getInstance();
+    @Autowired
+    private UserDAO userDAO;
+
 
     @GetMapping("")
     public @ResponseBody Object list(
@@ -132,12 +140,39 @@ public class CommoditiesController {
         }
         CommodityDTO result;
         Provider provider = providerDAO.findById(commodity.getProviderId());
-        ArrayList<Commodity> suggestedCommodities = balootInstance.getSuggestedCommodities(commodity.getId());
+        ArrayList<Commodity> suggestedCommodities = getSuggestedCommodities(commodity.getId());
         System.out.println(suggestedCommodities.size());
         result = new CommodityDTO(commodity.getId(), commodity.getName(), provider.getId(), provider.getName(),
                 commodity.getPrice(), commodity.getCategories(), commodity.getRating(), commodity.getInStock(),
                 suggestedCommodities, commodity.getRatings().keySet().size(), commodity.getImage());
         return result;
+    }
+
+    public ArrayList<Commodity> getSuggestedCommodities(int commodityId) {
+        ArrayList<Commodity> suggestedCommodities = new ArrayList<>(commodityDao.getAllCommodities());
+        Commodity commodity = commodityDao.findCommodityById(commodityId);
+        if (commodity == null) {
+            return null;
+        } else {
+            Comparator<Commodity> comparator = (commodity1, commodity2) -> {
+                List<String> currentCategories = commodity.getCategories();
+                int is_in_similar_category1 = commodity1.getCategories().containsAll(currentCategories) ? 1 : 0;
+                int is_in_similar_category2 = commodity2.getCategories().containsAll(currentCategories) ? 1 : 0;
+                float score1 = is_in_similar_category1 * 11 + commodity1.getRating();
+                float score2 = is_in_similar_category2 * 11 + commodity2.getRating();
+                return Float.compare(score2, score1);
+            };
+            suggestedCommodities.sort(comparator);
+            for (int i = 0; i < suggestedCommodities.size(); i++) {
+                if (suggestedCommodities.get(i).getId() == commodity.getId()) {
+                    suggestedCommodities.remove(i);
+                    break;
+                }
+            }
+            suggestedCommodities = new ArrayList<>(suggestedCommodities.subList(0, 4));
+            return suggestedCommodities;
+        }
+
     }
 
     @GetMapping(value = "", params = "providerId")
@@ -148,7 +183,7 @@ public class CommoditiesController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
         }
 
-        ArrayList<Commodity> commodities = balootInstance.findCommoditiesByProviderId(providerId);
+        List<Commodity> commodities = commodityDao.getCommodityByProviderId(providerId);
         if (commodities.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("This provider didn't provide any commodity.");
         }
@@ -162,10 +197,10 @@ public class CommoditiesController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
         }
 
-        if (balootInstance.findCommodityById(commodity.getId()).getId() == commodity.getId()) {
+        if (commodityDao.findCommodityById(commodity.getId()).getId() == commodity.getId()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Duplicate was occurred!");
         } else {
-            balootInstance.addCommodity(commodity);
+            commodityDao.save(commodity);
             return commodity;
         }
     }
@@ -180,10 +215,10 @@ public class CommoditiesController {
 
         if (rate >= 1 && rate <= 10) {
             try {
-                if (balootInstance.findUserByUsername(username) == null) {
+                if (userDAO.getUserByUsername(username) == null) {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User Not Found!");
                 }
-                balootInstance.rateCommodity(username, id, rate);
+                rateCommodity(username, id, rate);
 
             } catch (Exception e) {
 
@@ -194,6 +229,34 @@ public class CommoditiesController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
+    }
+
+    public Response rateCommodity(String username, int commodityId, int score) {
+        Commodity commodity = commodityDao.findCommodityById(commodityId);
+        if (commodity != null) {
+            User user = userDAO.getUserByUsername(username);
+            if (user != null) {
+                int providerId = commodity.getProviderId();
+                Provider provider = providerDAO.findById(providerId);
+                if (provider != null) {
+                    if (score >= 1 && score <= 10) {
+                        commodity.addRating(username, score);
+
+                        float commodityRating = commodity.getRating();
+                        provider.addRating(commodityId, commodityRating);
+                        commodityDao.save(commodity);
+
+                        return new SuccessfulResponse();
+                    } else {
+                        return new FailedResponse("Score must be an integer from 1 to 10!");
+                    }
+                } else
+                    return new FailedResponse("No provider found for this commodity!");
+            } else {
+                return new FailedResponse("No user found with this username!");
+            }
+        } else
+            return new FailedResponse("No commodity found with this commodity id!");
     }
 
 }
