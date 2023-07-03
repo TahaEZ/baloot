@@ -10,10 +10,11 @@ import java.util.List;
 
 @Repository
 public interface CommodityRepository extends CrudRepository<Commodity, Long> {
+@Query("SELECT c FROM Commodity c WHERE ?1 MEMBER OF c.categories")
 List<Commodity> findByCategories(String categories);
 
-@Query("SELECT * FROM Commodity c JOIN Category cat WHERE c.in_stock > 0 AND c.category =: category")
-List<Commodity> findAvailablesByCategories(@Param("category")String categories);
+@Query("select c from Commodity c where ?1 member of c.categories and c.inStock > 0")
+List<Commodity> findAvailablesByCategories(@Param("categories")String categories);
 
 Commodity findById(int id);
 @Override
@@ -23,18 +24,18 @@ default List<Commodity> findAll() {
 }
 
 
-@Query("SELECT * FROM Commodity c WHERE c.in_stock > 0")
+@Query("SELECT c FROM Commodity c WHERE c.inStock > 0")
 List<Commodity> availableCommodities();
 
 List<Commodity> findByName(String name);
 
-@Query("SELECT c FROM Commodity c WHERE c.name = :name AND c.in_stock > 0")
+@Query("SELECT c  FROM Commodity c WHERE c.name = :name AND c.inStock > 0")
 List<Commodity> findByNameIfAvailable(@Param("name") String name);
 
-@Query("SELECT c FROM Commodity c JOIN Provider p ON c.providerId = p.id WHERE p.name = :providerName")
+@Query("SELECT c  FROM Commodity c JOIN Provider p ON c.providerId = p.id WHERE p.name = :providerName")
 List<Commodity> findByProviderName(@Param("providerName")String ProviderName);
 
-@Query("SELECT c FROM Commodity c JOIN Provider p ON c.providerId = p.id WHERE p.name = :providerName AND c.in_stock > 0")
+@Query("SELECT c  FROM Commodity c JOIN Provider p ON c.providerId = p.id WHERE p.name = :providerName AND c.inStock > 0")
 List<Commodity> findAvailablesByProviderName(@Param("providerName") String ProviderName);
 
 }
