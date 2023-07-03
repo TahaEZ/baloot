@@ -91,6 +91,7 @@ public class InitDatabase implements ApplicationRunner {
         users = new ArrayList<>(Arrays.asList(mapper.readValue(userJSON, User[].class)));
 
         for (User user : users) {
+            user.setPassword(User.hashPassword(user.getPassword()));
             this.userDAO.save(user);
         }
     }

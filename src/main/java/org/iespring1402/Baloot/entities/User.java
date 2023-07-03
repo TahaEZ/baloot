@@ -6,13 +6,17 @@ import java.util.List;
 import org.iespring1402.Baloot.response.FailedResponse;
 import org.iespring1402.Baloot.response.Response;
 import org.iespring1402.Baloot.response.SuccessfulResponse;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -32,22 +36,40 @@ public class User {
     @JoinColumn(name = "buy_list_id")
     private BuyList buyList;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "used_discounts", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "discount_code_id"))
     private List<DiscountCode> usedDiscounts;
 
-    @ManyToMany
-    @JoinTable(name = "purchased_list", joinColumns = @JoinColumn(name = "USER_ID"), inverseJoinColumns = @JoinColumn(name = "purchased_item_id"))
+    @OneToMany
+    @Column(name = "purchasedItems")
     private List<CommodityDTO> purchasedItems = new ArrayList<>();
     
+    
     public void updateUser(String password, String email, String birthDate, String address, double credit) {
-        this.password = password;
+        this.password = hashPassword(password);
         this.email = email;
         this.birthDate = birthDate;
         this.address = address;
         this.credit = credit;
     }
 
+    public static String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+            byte[] hashedPassword = md.digest(password.getBytes());
+
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedPassword) {
+                sb.append(String.format("%02x", b));
+            }
+            String hashedPasswordString = sb.toString();
+
+            return hashedPasswordString;
+        } catch (NoSuchAlgorithmException e) {
+            return null;
+        }
+    }
     public Response addCredit(long creditToAdd) {
         if (creditToAdd <= 0)
             return new FailedResponse("Invalid credit value!");

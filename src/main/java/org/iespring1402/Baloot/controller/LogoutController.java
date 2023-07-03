@@ -25,12 +25,8 @@ public class LogoutController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing authorization");
         }
 
-        if (balootInstance.getCurrentUser().equals(username)) {
-            balootInstance.setCurrentUser("");
+        
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(null);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nobody has signed in.");
-        }
     }
 
 }

@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/users")
 @CrossOrigin
 public class UsersController {
-    private Baloot balootInstance = Baloot.getInstance();
 
     @Autowired
     private UserDAO userDAO;
@@ -68,7 +67,7 @@ public class UsersController {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         } else {
-            buylist.put("buylist", user.getBuyList());
+            buylist.put("buylist", getBuyListAsList(user.getBuyList()) );
             buylist.put("totalCost", user.getBuyList().totalCost());
             return buylist;
         }

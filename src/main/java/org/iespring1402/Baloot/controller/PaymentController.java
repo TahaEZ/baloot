@@ -98,6 +98,7 @@ public class PaymentController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Insufficient credit!");
             }
             user.addToUsedDiscounts(discountCode);
+             
             for (CommodityDTO commodity : getBuyListAsList(user.getBuyList())) {
                 user.addToPurchasedList(commodity);
                 boolean succeed = updateCommodityInstock(commodity.getId(), commodity.getQuantity());

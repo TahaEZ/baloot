@@ -23,7 +23,6 @@ public class CommodityDTO {
   
 
     @Id
-    @NaturalId
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
@@ -33,7 +32,7 @@ public class CommodityDTO {
     @ElementCollection
     @CollectionTable(name = "categories", joinColumns = @JoinColumn(name = "commodity_id"))
     @Column(name = "categories")
-    private ArrayList<String> categories;
+    private List<String> categories;
     private Float rating;
     private Integer inStock;
     private Integer quantity;
@@ -43,8 +42,18 @@ public class CommodityDTO {
 
     public CommodityDTO(int id2, String name2, int providerId2, int price2, List<String> categories2, float rating2,
             int inStock2, Integer value, String image2) {
+                id = id2;
+                name = name2;
+                providerId = providerId2;
+                price = price2;
+                categories = categories2;
+                rating = rating2;
+                inStock = inStock2;
+                image = image2;
+                quantity = value;
+
     }
-    public ArrayList<String> getCategories() {
+    public List<String> getCategories() {
         return categories;
     }
     public Integer getId() {
